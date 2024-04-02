@@ -20,7 +20,4 @@ app.use("/api/client", require("./routes/clients"));
 app.use("/api/service", require("./routes/services"));
 app.use("/api/bot", require("./routes/botSettings"));
 
-startTelegramBot();
-startTelegramBot("7186363861:AAFcRSg_xQaBvtyxGnR4F-aO0MUPpGFmnCI");
-
 module.exports = app;
