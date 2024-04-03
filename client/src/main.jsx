@@ -2,10 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home } from "./pages/home/Home";
-import "./index.css";
 import { Login } from "./pages/login/Login";
 import { Regitser } from "./pages/register/Register";
+import { BotSetting } from "./pages/botSetting/BotSetting";
 import { PrivateRoute } from "./components/privateRoutes/PrivateRoutes";
+import "./index.css";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,14 @@ const router = createBrowserRouter([
   {
     path: "/calendar",
     element: <div>Calendar</div>,
+  },
+  {
+    path: "/bot-setting",
+    element: <PrivateRoute path="/bot-setting" element={<BotSetting />} />,
+  },
+  {
+    path: "*",
+    element: <div>404</div>,
   },
 ]);
 

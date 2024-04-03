@@ -1,11 +1,11 @@
 import { Wrapper } from "../../components/wrapper/Wrapper";
 import { InputForAuth } from "../../components/inputForAuth/InputForAuth";
-import { AuthButton } from "../../components/authButton/AuthButton";
 import { Link, useNavigate } from "react-router-dom";
 import icon from "/icons/header_icon.svg";
 import styles from "./Register.module.css";
 import { useEffect, useState } from "react";
 import { register } from "../../modules/api_requests";
+import { GradientButton } from "../../components/gradientButton/GradientButton";
 
 export const Regitser = () => {
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ export const Regitser = () => {
           />
         </div>
         <div className={styles.spaceButton}>
-          <AuthButton
+          <GradientButton
             buttonName={"Зарегистрироваться"}
             onClick={() => {
               register(userData).then(() => {

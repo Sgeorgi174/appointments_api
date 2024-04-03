@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ControlButton } from "../../components/controlButton/ControlButton";
 import { Header } from "../../components/header/Header";
 import { Wrapper } from "../../components/wrapper/Wrapper";
@@ -8,10 +9,18 @@ export const Home = () => {
     <Wrapper wrapperClass={"wrapperForMobile"}>
       <Header firstLetter={"Ю"} />
       <div className={styles.buttons}>
-        <ControlButton buttonName={"Мои записи"} />
-        <ControlButton buttonName={"Настроить бота"} />
-        <ControlButton buttonName={"Настройка услуг"} />
-        <ControlButton buttonName={"Расписание"} />
+        <Link>
+          <ControlButton buttonName={"Мои записи"} />
+        </Link>
+        <Link to="/bot-setting">
+          <ControlButton buttonName={"Настроить бота"} />
+        </Link>
+        <Link>
+          <ControlButton buttonName={"Расписание"} />
+        </Link>
+        <Link>
+          <ControlButton buttonName={"Услуги"} />
+        </Link>
       </div>
     </Wrapper>
   );
