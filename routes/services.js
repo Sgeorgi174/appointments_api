@@ -1,6 +1,6 @@
 const express = require("express");
 const { add } = require("../controllers/services");
-var router = express.Router();
+const router = express.Router();
 
 router.post("/add", add);
 
