@@ -14,6 +14,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
+app.use(express.static(path.join(__dirname, "client", "dist")));
+
+// Обработка всех запросов, отличных от статических файлов, направляется на index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
+
 app.use("/api/appointment", require("./routes/appointments"));
 app.use("/api/user", require("./routes/users"));
 app.use("/api/client", require("./routes/clients"));
