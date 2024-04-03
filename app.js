@@ -20,4 +20,16 @@ app.use("/api/client", require("./routes/clients"));
 app.use("/api/service", require("./routes/services"));
 app.use("/api/bot", require("./routes/botSettings"));
 
+const port = process.env.PORT || 3000;
+
+// Указываем порт, на котором сервер будет слушать запросы
+const server = app.listen(port, () => {
+  console.log(`Сервер Express запущен и слушает порт ${port}`);
+});
+
+// Обработка ошибок, которые могут возникнуть при запуске сервера
+server.on("error", (error) => {
+  console.error("Ошибка при запуске сервера:", error.message);
+});
+
 module.exports = app;
