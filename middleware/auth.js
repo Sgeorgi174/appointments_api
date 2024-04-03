@@ -4,6 +4,8 @@ const { prisma } = require("../prisma/prisma_client");
 const auth = async (req, res, next) => {
   let token = req.headers.authorization?.split(" ")[1];
 
+  console.log(process.env.JWT_SECRET);
+
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
   const user = await prisma.user.findUnique({
