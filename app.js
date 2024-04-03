@@ -20,7 +20,7 @@ app.use("/api/client", require("./routes/clients"));
 app.use("/api/service", require("./routes/services"));
 app.use("/api/bot", require("./routes/botSettings"));
 
-const port = process.env.PORT || 3000;
+const port = parseInt(process.env.PORT) || 3000;
 
 // Указываем порт, на котором сервер будет слушать запросы
 const server = app.listen(port, () => {
