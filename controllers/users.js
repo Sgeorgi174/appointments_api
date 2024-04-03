@@ -80,7 +80,7 @@ const register = async (req, res) => {
       email: user.email,
       firstName,
       lastName,
-      token: jwt.sign({ id: user.id }, secret, { expiresIn: "30d" }),
+      token: jwt.sign({ id: user.id }, secret, { expiresIn: "2d" }),
     });
   } else {
     return res.status(400).json({ message: "Неудалось создать пользователя" });
