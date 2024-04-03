@@ -31,7 +31,8 @@ body {
   font-weight: 400;
 }
 
-input {
+input,
+textarea {
   outline: none;
   border: none;
 }

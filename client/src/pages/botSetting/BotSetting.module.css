@@ -20,8 +20,21 @@
   margin-bottom: 75px;
 }
 
-.setiingBox {
+.inputBox {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.settingBox {
+  border-radius: 15px;
+  background: rgba(232, 231, 231, 0.36);
+  padding: 13px 23px;
+  width: 307px;
+}
+
+.settingText {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
 }

@@ -1,7 +1,10 @@
 .input {
+  width: 283px;
   font-size: 20px;
   font-weight: 500;
   line-height: 30px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 
   padding: 5px 20px;
   border-radius: 15px;
@@ -15,4 +18,20 @@
   color: rgb(148, 148, 148);
 
   font-family: "Poppins", sans-serif;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.2); /* Прозрачный красный фон */
+}
+
+.errorText {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  color: rgb(243, 80, 80);
+  font-size: 14px;
 }
