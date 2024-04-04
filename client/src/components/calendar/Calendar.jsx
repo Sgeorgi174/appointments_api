@@ -1,18 +1,6 @@
 import { useState } from "react";
 import styles from "./Calendar.module.css";
-
-// const events = [
-//   { id: 4, month: "2024-04", day: "4", hour: "11:00", isAvailable: true },
-//   { id: 4, month: "2024-04", day: "4", hour: "12:00", isAvailable: false },
-//   { id: 4, month: "2024-04", day: "4", hour: "13:00", isAvailable: false },
-//   { id: 4, month: "2024-04", day: "5", hour: "12:00", isAvailable: false },
-//   { id: 4, month: "2024-04", day: "4", hour: "10:00", isAvailable: false },
-//   { id: 4, month: "2024-04", day: "4", hour: "10:00", isAvailable: false },
-//   { id: 4, month: "2024-04", day: "4", hour: "10:00", isAvailable: false },
-//   { id: 4, month: "2024-04", day: "4", hour: "10:00", isAvailable: false },
-//   { id: 4, month: "2024-04", day: "4", hour: "10:00", isAvailable: false },
-//   { id: 4, month: "2024-04", day: "4", hour: "10:00", isAvailable: false },
-// ];
+import AvailableHours from "../availableHours/AvailableHours";
 
 const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -128,6 +116,7 @@ const Calendar = () => {
         </thead>
         <tbody>{renderCalendar()}</tbody>
       </table>
+      <AvailableHours selectedDate={selectedDate} />
     </div>
   );
 };

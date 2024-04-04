@@ -1,20 +1,36 @@
+import { useState } from "react";
 import styles from "./AvailableHours.module.css";
 
-const AvailableHours = ({ availableHours, selectedHours, onHourClick }) => {
-  return (
-    <div className={styles.availableHours}>
-      {availableHours.map((hour) => (
-        <button
-          key={hour}
-          className={`${styles.hour} ${
-            selectedHours.includes(hour) ? styles.activeHour : ""
-          }`}
-          onClick={() => onHourClick(hour)}
-          disabled={!availableHours.includes(hour)}
+const AvailableHours = ({ selectedDate }) => {
+  const [selectedHour, setSelectedHour] = useState(null);
+
+  // Обработчик клика на час
+  const handleHourClick = (hour) => {
+    setSelectedHour(hour);
+  };
+  const generateHours = () => {
+    const hours = [];
+    for (let hour = 9; hour <= 18; hour++) {
+      const isSelected = selectedHour === hour;
+      hours.push(
+        <div
+          key={`hour-${hour}`}
+          className={`${styles.hour} ${isSelected ? styles.selectedHour : ""}`}
+          onClick={() => handleHourClick(hour)}
         >
           {hour}:00
-        </button>
-      ))}
+        </div>
+      );
+    }
+    return hours;
+  };
+
+  return (
+    <div className={styles.clockContainer}>
+      <h3 className={styles.clockHeader}>
+        Расписание на {selectedDate.toLocaleDateString("ru")}
+      </h3>
+      <div className={styles.clock}>{generateHours()}</div>
     </div>
   );
 };
