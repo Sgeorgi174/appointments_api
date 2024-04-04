@@ -11,21 +11,24 @@ datasource db {
 }
 
 model User {
-  id          Int               @id @default(autoincrement())
-  firstName   String
-  lastName    String
-  email       String
-  password    String
-  botSettings UserBotSettings[]
+  id           Int                @id @default(autoincrement())
+  firstName    String
+  email        String
+  password     String
+  botSettings  UserBotSettings[]
+  appointments Appointment[]
+  services     Services[]
+  availability HourAvailability[]
+  hours        Hour[]
 }
 
 model UserBotSettings {
-  id      Int    @id @default(autoincrement())
-  botToken   String
-  botName String
-  address String
-  user    User   @relation(fields: [userId], references: [id])
-  userId  Int
+  id       Int    @id @default(autoincrement())
+  botToken String
+  botName  String
+  address  String
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int
 }
 
 model Client {
@@ -47,6 +50,8 @@ model Appointment {
   serviceId   Int // ID услуги
   serviceName String
   duration    Int
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
 }
 
 model Services {
@@ -56,12 +61,26 @@ model Services {
   price        Int
   duration     Int // Длительность услуги
   appointments Appointment[]
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int
 }
 
-model Availability {
-  id          Int     @id @default(autoincrement())
-  month       String // Месяц в формате YYYY-MM
-  day         Int // День месяца
-  hour        Int // Час в сутках (от 0 до 23)
-  isAvailable Boolean // Статус доступности
+// Определение модели доступности часов
+model HourAvailability {
+  id     Int      @id @default(autoincrement())
+  date   DateTime @unique
+  hours  Hour[] // Связь с моделью часов
+  User   User     @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+// Определение модели часа
+model Hour {
+  id             Int              @id @default(autoincrement())
+  hour           Int
+  isAvailable    Boolean
+  availability   HourAvailability @relation(fields: [availabilityId], references: [id])
+  availabilityId Int
+  User           User             @relation(fields: [userId], references: [id])
+  userId         Int
 }

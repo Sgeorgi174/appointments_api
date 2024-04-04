@@ -1,0 +1,32 @@
+/* ClockComponent.module.css */
+
+.clockContainer {
+  margin-top: 20px;
+}
+
+.clock {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hour {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.selectedHour {
+  background-color: lightblue;
+}
+
+.inactive {
+  background-color: rgb(143, 84, 84);
+}

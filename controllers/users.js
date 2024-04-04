@@ -5,98 +5,136 @@ const jwt = require("jsonwebtoken");
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res
-      .status(400)
-      .json({ message: "Пожалуйста, заполните обязательные поля" });
-  }
+  try {
+    // Проверка обязательных полей
+    if (!email || !password) {
+      throw new Error("Пожалуйста, заполните обязательные поля");
+    }
 
-  const user = await prisma.user.findFirst({
-    where: {
-      email,
-    },
-  });
+    // Проверка формата email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Некорректный формат email" });
+    }
 
-  const secret = process.env.JWT_SECRET;
+    // Поиск пользователя в базе данных
+    const user = await prisma.user.findFirst({
+      where: { email },
+    });
 
-  const isPasswordCorrect =
-    user && (await bcrypt.compare(password, user.password));
+    if (!user) {
+      throw new Error("Пользователь с таким email не найден");
+    }
 
-  if (user && isPasswordCorrect && secret) {
+    // Проверка правильности пароля
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      throw new Error("Неверный пароль");
+    }
+
+    // Создание JWT токена
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error("Не удалось получить секретный ключ для JWT");
+    }
+
+    const token = jwt.sign({ id: user.id }, secret, { expiresIn: "30d" });
+
+    // Отправка ответа с данными пользователя и токеном
     res.status(200).json({
       id: user.id,
       email: user.email,
       name: user.name,
-      token: jwt.sign({ id: user.id }, secret, { expiresIn: "30d" }),
+      token,
     });
-  } else {
-    return res.status(400).json({ message: "Неверный логин или пароль" });
+  } catch (error) {
+    console.error("Error during login:", error.message);
+    res.status(400).json({ message: error.message });
   }
-  // try {
-
-  // } catch {
-  //   res.status(400).json({ message: "Что-то пошло не так" });
-  // }
 };
 
 const register = async (req, res) => {
-  const { email, firstName, password, lastName } = req.body;
+  const { email, firstName, password } = req.body;
 
-  if (!email || !password || !firstName || !lastName) {
-    return res
-      .status(400)
-      .json({ message: "Пожалуйста, заполните обязательные поля" });
-  }
+  try {
+    // Проверка обязательных полей
+    if (!email || !password || !firstName) {
+      throw new Error("Пожалуйста, заполните обязательные поля");
+    }
 
-  const registeredUser = await prisma.user.findFirst({
-    where: {
-      email,
-    },
-  });
+    // Проверка формата email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Некорректный формат email" });
+    }
 
-  if (registeredUser) {
-    return res
-      .status(400)
-      .json({ message: "Пользователь, с таким email уже существует" });
-  }
+    // Проверка длины пароля
+    if (password.length < 8) {
+      throw new Error("Пароль должен быть не менее 8 символов");
+    }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+    // Проверка наличия пользователя с таким email
+    const registeredUser = await prisma.user.findFirst({
+      where: { email },
+    });
 
-  const user = await prisma.user.create({
-    data: {
-      email,
-      firstName,
-      lastName,
-      password: hashedPassword,
-    },
-  });
+    if (registeredUser) {
+      throw new Error("Пользователь с таким email уже существует");
+    }
 
-  const secret = process.env.JWT_SECRET;
+    // Хеширование пароля
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  if (user && secret) {
+    // Создание пользователя
+    const user = await prisma.user.create({
+      data: {
+        email,
+        firstName,
+        password: hashedPassword,
+      },
+    });
+
+    // Генерация JWT токена
+    const secret = process.env.JWT_SECRET;
+    if (!user || !secret) {
+      throw new Error("Не удалось создать пользователя");
+    }
+
+    const token = jwt.sign({ id: user.id }, secret, { expiresIn: "2d" });
+
+    // Отправка ответа с данными пользователя и токеном
     res.status(201).json({
       id: user.id,
       email: user.email,
-      firstName,
-      lastName,
-      token: jwt.sign({ id: user.id }, secret, { expiresIn: "2d" }),
+      firstName: user.firstName,
+      token,
     });
-  } else {
-    return res.status(400).json({ message: "Неудалось создать пользователя" });
+  } catch (error) {
+    console.error("Error registering user:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
 const getUser = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+    });
 
-  const user = await prisma.user.findFirst({
-    where: {
-      id: parseInt(id),
-    },
-  });
+    if (!user) {
+      throw new Error("Пользователь не найден");
+    }
 
-  return res.status(200).json(req.user.id);
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error.message);
+    return res
+      .status(500)
+      .json({ message: "Ошибка при получении данных пользователя" });
+  }
 };
 
 module.exports = {

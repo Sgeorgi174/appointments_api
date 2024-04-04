@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 app.use("/api/appointment", require("./routes/appointments"));
 app.use("/api/user", require("./routes/users"));
 app.use("/api/client", require("./routes/clients"));
+app.use("/api/timetable", require("./routes/timetable"));
 app.use("/api/service", require("./routes/services"));
 app.use("/api/bot/setting", require("./routes/botSettings"));
 app.use("/api/bot", require("./routes/bot"));
