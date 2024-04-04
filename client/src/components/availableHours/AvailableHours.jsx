@@ -1,17 +1,14 @@
 import styles from "./AvailableHours.module.css";
 
-const AvailableHours = ({ selectedDate, handleHourClick, currentDay }) => {
+const AvailableHours = ({ handleHourClick, currentDay }) => {
   console.log(currentDay);
   return (
     <div className={styles.clockContainer}>
-      <h3 className={styles.clockHeader}>
-        Расписание на {selectedDate.toLocaleDateString("ru")}
-      </h3>
       <div className={styles.clock}>
-        {currentDay.map((hour) => {
+        {currentDay.map((hour, index) => {
           return (
             <div
-              key={currentDay.id}
+              key={index}
               className={`${styles.hour} ${
                 !hour.isAvailable ? styles.inactive : ""
               }`}

@@ -1,4 +1,4 @@
-const BASE_URL = "http://мои-записи.рф/api/user";
+const BASE_URL = "http://localhost:8000/api/user";
 
 const fetchData = async (url, method, data) => {
   try {

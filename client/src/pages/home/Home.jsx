@@ -15,7 +15,7 @@ export const Home = () => {
         <Link to="/bot-setting">
           <ControlButton buttonName={"Настроить бота"} />
         </Link>
-        <Link>
+        <Link to="/schedule">
           <ControlButton buttonName={"Расписание"} />
         </Link>
         <Link>

@@ -22,10 +22,6 @@
   width: 14.28%; /* Устанавливаем ширину каждой ячейки на 1/7 часть ширины таблицы */
 }
 
-.activeDay {
-  background-color: lightblue;
-}
-
 .emptyCell {
   padding: 10px;
   width: 14.28%; /* Устанавливаем ширину каждой пустой ячейки на 1/7 часть ширины таблицы */
@@ -51,6 +47,25 @@
   pointer-events: none; /* Отключаем события клика на пустых ячейках */
 }
 
-.inactive {
-  background-color: rgb(143, 84, 84);
+.availableDate {
+  background-color: rgb(
+    0,
+    126,
+    0
+  ); /* или любой другой цвет для доступных дат */
+}
+
+.unavailableDate {
+  background-color: red; /* или любой другой цвет для недоступных дат */
+}
+
+.pastDate {
+  background-color: red; /* Любой цвет для прошедших дней */
+}
+
+.activeDay {
+  /* Установка свойств с помощью веса специфичности */
+  background-color: lightblue;
+  color: black;
+  font-weight: bold;
 }

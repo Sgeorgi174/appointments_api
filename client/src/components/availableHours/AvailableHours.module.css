@@ -28,5 +28,7 @@
 }
 
 .inactive {
-  background-color: rgb(143, 84, 84);
+  background-color: #ebeaea;
+  pointer-events: none;
+  color: #0000002d;
 }

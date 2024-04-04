@@ -31,7 +31,7 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [schedule, setSchedule] = useState([]);
   const [currentDay, setCurrentDay] = useState([]);
-  const [dateColor, setDateColor] = useState({});
+  const [dateClass, setDateClass] = useState({});
 
   useEffect(() => {
     response()
@@ -44,12 +44,14 @@ const Calendar = () => {
   }, []);
 
   useEffect(() => {
-    const colorMap = {};
+    const classMap = {};
     schedule.forEach((day) => {
       const allUnavailable = day.hours.every((hour) => !hour.isAvailable);
-      colorMap[sliceDate(day.date)] = allUnavailable ? "red" : "inherit";
+      classMap[sliceDate(day.date)] = allUnavailable
+        ? styles.unavailableDate
+        : styles.availableDate;
     });
-    setDateColor(colorMap);
+    setDateClass(classMap);
   }, [schedule]);
 
   const handleHourClick = (hour) => {
@@ -58,14 +60,17 @@ const Calendar = () => {
 
   const handleDayClick = (date) => {
     setSelectedDate(date);
+    const dateString = sliceDate(date); // Получаем строку даты для сравнения
     const availableDay = schedule.find(
-      (object) => object.date.slice(0, 10) === sliceDate(date)
+      (object) => sliceDate(object.date) === dateString // Сравниваем строки дат
     );
     setCurrentDay(availableDay ? availableDay.hours : []);
   };
 
   const renderCalendar = () => {
-    const today = new Date();
+    const todayWithoutTime = new Date();
+    todayWithoutTime.setHours(0, 0, 0, 0);
+
     const daysInMonth = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth() + 1,
@@ -89,17 +94,21 @@ const Calendar = () => {
         selectedDate.getMonth(),
         day
       );
-      const isPast = date < today && !isSameDay(date, today);
-      const isSelected = date.toDateString() === selectedDate.toDateString();
       const dateString = sliceDate(date);
-      const cellStyle = {
-        backgroundColor: isPast ? "#ccc" : dateColor[dateString] || "inherit",
-      };
+      const isSelected = date.toDateString() === selectedDate.toDateString();
+      const dateWithoutTime = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      );
+      const isPast = dateWithoutTime < todayWithoutTime; // Проверяем, является ли день прошедшим
+      const cellClassName = `${styles.dayCell} ${
+        isSelected ? styles.activeDay : ""
+      } ${dateClass[dateString] || ""} ${isPast ? styles.pastDate : ""}`; // Добавляем класс для прошедших дней
       days.push(
         <td
           key={`day-${day}`}
-          className={`${styles.dayCell} ${isSelected ? styles.activeDay : ""}`}
-          style={cellStyle}
+          className={cellClassName}
           onClick={() => handleDayClick(date)}
         >
           {day}
@@ -127,20 +136,11 @@ const Calendar = () => {
     return rows;
   };
 
-  // Функция для проверки, являются ли две даты одним и тем же днем
-  const isSameDay = (date1, date2) => {
-    return (
-      date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate()
-    );
-  };
-
   const handlePrevMonth = () => {
     const prevMonth = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth() - 1,
-      selectedDate.getDate() // Оставляем день таким же, как в текущей дате
+      selectedDate.getDate()
     );
     const today = new Date();
     if (prevMonth >= new Date(today.getFullYear(), today.getMonth(), 1)) {
@@ -189,7 +189,6 @@ const Calendar = () => {
       </table>
       <AvailableHours
         currentDay={currentDay}
-        selectedDate={selectedDate}
         handleHourClick={handleHourClick}
       />
     </div>
