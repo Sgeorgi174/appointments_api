@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Calendar.module.css";
 import AvailableHours from "../availableHours/AvailableHours";
-<<<<<<< HEAD
 
 const sliceDate = (date) => {
   const dateString = date;
@@ -27,8 +26,6 @@ const response = async () => {
 
   return data;
 };
-=======
->>>>>>> cdf2c10558295bb33f88a23a4d7e3cf131e5e0ef
 
 const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -190,15 +187,11 @@ const Calendar = () => {
         </thead>
         <tbody>{renderCalendar()}</tbody>
       </table>
-<<<<<<< HEAD
       <AvailableHours
         currentDay={currentDay}
         selectedDate={selectedDate}
         handleHourClick={handleHourClick}
       />
-=======
-      <AvailableHours selectedDate={selectedDate} />
->>>>>>> cdf2c10558295bb33f88a23a4d7e3cf131e5e0ef
     </div>
   );
 };
