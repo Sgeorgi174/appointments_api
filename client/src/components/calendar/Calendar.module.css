@@ -1,0 +1,48 @@
+.calendarContainer {
+  width: 100%;
+  padding: 50px 25px 0 25px;
+}
+
+.calendar {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.weekday {
+  text-align: center;
+  padding: 10px;
+  width: 14.28%; /* Устанавливаем ширину каждого дня недели на 1/7 часть ширины таблицы */
+}
+
+.dayCell {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  width: 14.28%; /* Устанавливаем ширину каждой ячейки на 1/7 часть ширины таблицы */
+}
+
+.activeDay {
+  background-color: lightblue;
+}
+
+.emptyCell {
+  padding: 10px;
+  width: 14.28%; /* Устанавливаем ширину каждой пустой ячейки на 1/7 часть ширины таблицы */
+}
+
+.header {
+  text-align: center;
+  padding: 10px 0;
+  font-size: 20px;
+}
+
+.calendarContainer table {
+  width: 100%;
+  text-align: center;
+}
+
+.switchButton {
+  width: 30px; /* Уменьшим ширину кнопок */
+  margin: 0 10px; /* Добавим отступы между кнопками и заголовком */
+}

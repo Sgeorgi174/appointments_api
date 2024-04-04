@@ -133,9 +133,16 @@ const getTomorrow = async (req, res) => {
   }
 };
 
+const getTime = async (req, res) => {
+  const event = await prisma.availability.findMany();
+
+  return res.status(200).json(event);
+};
+
 module.exports = {
   addAppointment,
   createCalendar,
   getToday,
   getTomorrow,
+  getTime,
 };

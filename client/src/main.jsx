@@ -7,6 +7,7 @@ import { Regitser } from "./pages/register/Register";
 import { BotSetting } from "./pages/botSetting/BotSetting";
 import { PrivateRoute } from "./components/privateRoutes/PrivateRoutes";
 import "./index.css";
+import { Schedule } from "./pages/schedule/Schedule";
 
 const router = createBrowserRouter([
   {
@@ -22,8 +23,8 @@ const router = createBrowserRouter([
     element: <Regitser />,
   },
   {
-    path: "/calendar",
-    element: <div>Calendar</div>,
+    path: "/schedule",
+    element: <Schedule />,
   },
   {
     path: "/bot-setting",
