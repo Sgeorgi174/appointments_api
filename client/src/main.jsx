@@ -24,7 +24,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/schedule",
-    element: <Schedule />,
+    element: <PrivateRoute path="/schedule" element={<Schedule />} />,
   },
   {
     path: "/bot-setting",

@@ -1,34 +1,39 @@
 /* ClockComponent.module.css */
 
 .clockContainer {
-  margin-top: 20px;
+  margin-top: 30px;
+  max-width: 355px;
 }
 
 .clock {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.row {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
 .hour {
-  border: 1px solid #ccc;
-  padding: 10px;
+  border: 1px solid #333;
   text-align: center;
   font-size: 1rem;
   cursor: pointer;
+  border-radius: 15px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background-color: transparent;
+  width: 70px;
+  padding: 5px 0 5px 0;
+
+  font-weight: 500;
 }
 
 .selectedHour {
-  background-color: lightblue;
+  background-color: #333;
+  color: #fff;
+  font-weight: 800;
 }
 
 .inactive {
-  background-color: #ebeaea;
+  background-color: #ddd;
   pointer-events: none;
   color: #0000002d;
 }

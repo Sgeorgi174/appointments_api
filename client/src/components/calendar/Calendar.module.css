@@ -1,71 +1,78 @@
 .calendarContainer {
   width: 100%;
-  padding: 50px 25px 0 25px;
+  padding: 50px 10px 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.calendar {
-  width: 100%;
-  border-collapse: collapse;
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
 }
 
 .weekday {
   text-align: center;
   padding: 10px;
-  width: 14.28%; /* Устанавливаем ширину каждого дня недели на 1/7 часть ширины таблицы */
 }
 
 .dayCell {
   text-align: center;
-  padding: 10px;
+  padding: 8px 0px;
   cursor: pointer;
-  border: 1px solid #ccc;
-  width: 14.28%; /* Устанавливаем ширину каждой ячейки на 1/7 часть ширины таблицы */
 }
 
 .emptyCell {
   padding: 10px;
-  width: 14.28%; /* Устанавливаем ширину каждой пустой ячейки на 1/7 часть ширины таблицы */
 }
+
+/* calendar HEADER */
 
 .header {
   text-align: center;
   padding: 10px 0;
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 36px;
 }
 
-.calendarContainer table {
-  width: 100%;
-  text-align: center;
+.headerBox {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .switchButton {
-  width: 30px; /* Уменьшим ширину кнопок */
-  margin: 0 10px; /* Добавим отступы между кнопками и заголовком */
-}
-
-.emptyCell {
-  pointer-events: none; /* Отключаем события клика на пустых ячейках */
+  background-color: transparent;
 }
 
 .availableDate {
-  background-color: rgb(
-    0,
-    126,
-    0
-  ); /* или любой другой цвет для доступных дат */
+  background-color: inherit;
 }
 
 .unavailableDate {
-  background-color: red; /* или любой другой цвет для недоступных дат */
-}
-
-.pastDate {
-  background-color: red; /* Любой цвет для прошедших дней */
+  background-color: #d04e70;
+  color: #fff;
+  border-radius: 35px;
+  pointer-events: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .activeDay {
-  /* Установка свойств с помощью веса специфичности */
-  background-color: lightblue;
-  color: black;
+  background-color: #409fb5;
+  color: #fff;
   font-weight: bold;
+  border-radius: 30px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.arrowIcon {
+  border-radius: 50px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.arrowIcon_left {
+  transform: rotate(180deg);
 }

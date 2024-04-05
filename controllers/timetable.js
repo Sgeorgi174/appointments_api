@@ -1,14 +1,18 @@
 const { prisma } = require("../prisma/prisma_client");
 
 const generateSchedule = async (req, res) => {
-  const { startHour, endHour } = req.body;
+  const { startHour, endHour, weekdays } = req.body;
   const userId = req.user.id;
 
   const start = parseInt(startHour);
   const end = parseInt(endHour);
 
   try {
-    if (startHour === undefined || endHour === undefined) {
+    if (
+      startHour === undefined ||
+      endHour === undefined ||
+      weekdays === undefined
+    ) {
       throw new Error("Не заполнены обязательные поля");
     }
 
@@ -57,7 +61,13 @@ const generateSchedule = async (req, res) => {
 
       const hours = [];
       for (let hour = start; hour <= end; hour++) {
-        hours.push({ hour, isAvailable: true, userId });
+        // Проверяем, является ли текущий день недели в списке выбранных для установки isAvailable в false
+        const weekday = date.getDay(); // 0 (воскресенье) - 6 (суббота)
+        if (weekdays.includes(weekday.toString())) {
+          hours.push({ hour, isAvailable: false, userId });
+        } else {
+          hours.push({ hour, isAvailable: true, userId });
+        }
       }
 
       await prisma.hourAvailability.create({
@@ -110,16 +120,25 @@ const deleteSchedule = async (req, res) => {
 };
 
 const getSchedule = async (req, res) => {
-  const userId = req.user.id;
+  try {
+    const userId = req.user.id;
 
-  const schedule = await prisma.hourAvailability.findMany({
-    where: {
-      userId,
-    },
-    include: { hours: true },
-  });
+    const schedule = await prisma.hourAvailability.findMany({
+      where: {
+        userId,
+      },
+      include: { hours: true },
+    });
 
-  return res.status(200).json(schedule);
+    if (!schedule) {
+      return res.status(404).json({ error: "Schedule not found" });
+    }
+
+    return res.status(200).json(schedule);
+  } catch (error) {
+    console.error("Error fetching schedule:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 const getDaySchedule = async (req, res) => {

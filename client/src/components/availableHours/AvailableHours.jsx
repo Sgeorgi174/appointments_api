@@ -1,21 +1,28 @@
+import { useState } from "react";
 import styles from "./AvailableHours.module.css";
 
-const AvailableHours = ({ handleHourClick, currentDay }) => {
-  console.log(currentDay);
+const AvailableHours = ({ currentDay }) => {
+  const [selectedHour, setSelectedHour] = useState("");
+
+  const handleHourClick = (hour, index) => {
+    console.log(`Clicked hour: ${hour}`);
+    setSelectedHour(index);
+  };
+
   return (
     <div className={styles.clockContainer}>
       <div className={styles.clock}>
         {currentDay.map((hour, index) => {
           return (
-            <div
+            <button
               key={index}
               className={`${styles.hour} ${
                 !hour.isAvailable ? styles.inactive : ""
-              }`}
-              onClick={() => handleHourClick(hour)}
+              } ${selectedHour === index ? styles.selectedHour : ""}`}
+              onClick={() => handleHourClick(hour.id, index)} //можно отдавать по айди
             >
               {hour.hour}:00
-            </div>
+            </button>
           );
         })}
       </div>

@@ -1,21 +1,40 @@
-const BASE_URL = "http://localhost:8000/api/user";
+const BASE_URL = "http://localhost:8000/api";
 
-const fetchData = async (url, method, data) => {
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  return token;
+};
+
+const fetchData = async ({ url, method, data, token }) => {
   try {
-    const response = await fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    let response;
+    if (data) {
+      response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // добавляем токен в заголовок Authorization
+        },
+        body: JSON.stringify(data),
+      });
+    } else {
+      response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // добавляем токен в заголовок Authorization
+        },
+      });
+    }
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
 
     const responseData = await response.json();
-    localStorage.setItem("token", responseData.token);
+    if (data) {
+      localStorage.setItem("token", responseData.token);
+    }
 
     return responseData;
   } catch (error) {
@@ -25,11 +44,17 @@ const fetchData = async (url, method, data) => {
 };
 
 export const login = async (loginData) => {
-  const url = `${BASE_URL}/login`;
-  return fetchData(url, "POST", loginData);
+  const url = `${BASE_URL}/user/login`;
+  return fetchData({ url, method: "POST", data: loginData });
 };
 
 export const register = async (registerData) => {
-  const url = `${BASE_URL}/register`;
-  return fetchData(url, "POST", registerData);
+  const url = `${BASE_URL}/user/register`;
+  return fetchData({ url, method: "POST", data: registerData });
+};
+
+export const getSchedule = async () => {
+  const url = `${BASE_URL}/timetable/get`;
+  const token = getToken(); // Получаем токен только в момент вызова запроса
+  return fetchData({ url, method: "GET", token });
 };
