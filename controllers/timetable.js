@@ -64,9 +64,9 @@ const generateSchedule = async (req, res) => {
         // Проверяем, является ли текущий день недели в списке выбранных для установки isAvailable в false
         const weekday = date.getDay(); // 0 (воскресенье) - 6 (суббота)
         if (weekdays.includes(weekday.toString())) {
-          hours.push({ hour, isAvailable: false, userId });
-        } else {
           hours.push({ hour, isAvailable: true, userId });
+        } else {
+          hours.push({ hour, isAvailable: false, userId });
         }
       }
 

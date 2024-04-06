@@ -1,0 +1,7 @@
+.loaderContainer {
+  margin-top: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* или любая другая высота, которую вы предпочитаете */
+}

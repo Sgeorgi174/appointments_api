@@ -1,0 +1,28 @@
+/* TimePicker.module.css */
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+select {
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  width: 100px;
+
+  border: none;
+  border-radius: 15px;
+  background: rgb(232, 231, 231);
+}
+
+/* Hover и Focus стили для select */
+select:hover,
+select:focus {
+  border-color: #999;
+}
+
+/* Изменение внешнего вида при фокусе */
+select:focus {
+  outline: none;
+}
