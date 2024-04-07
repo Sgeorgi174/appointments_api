@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "http://мои-записи.рф/api";
 
 const getToken = () => {
   const token = localStorage.getItem("token");
