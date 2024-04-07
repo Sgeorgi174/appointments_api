@@ -1,13 +1,13 @@
+import { useEffect, useState } from "react";
 import { Header } from "../../components/header/Header";
 import { Wrapper } from "../../components/wrapper/Wrapper";
 import { ServicesBox } from "../../components/servicesBox/ServicesBox";
 import { getServices } from "../../modules/api_requests";
 import { ServiceEditModal } from "../../components/serviceModule/ServiceEditModal";
-import { useEffect, useState } from "react";
-import iconAdd from "/icons/add.svg";
-import styles from "./Services.module.css";
 import { ServiceAddModal } from "../../components/serviceModule/ServiceAddModal";
 import { ServiceConfirmModal } from "../../components/serviceModule/ServiceConfirm";
+import iconAdd from "/icons/add.svg";
+import styles from "./Services.module.css";
 
 export const Services = () => {
   const [servicesData, setServicesData] = useState([

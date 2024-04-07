@@ -1,14 +1,22 @@
-import { useState } from "react";
 import styles from "./InputForAuth.module.css";
 
-export const InputForAuth = ({ placeHolder, type, setState }) => {
-  const [value, setValue] = useState("");
+export const InputForAuth = ({
+  placeHolder,
+  type,
+  data,
+  setData,
+  name,
+  value,
+  setIsError,
+}) => {
   const onChange = (event) => {
-    setValue(event.target.value);
-    setState(event.target.value);
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
+    setIsError(false);
   };
   return (
     <input
+      name={name}
       value={value}
       onChange={onChange}
       className={styles.input}

@@ -3,7 +3,7 @@ import { InputForAuth } from "../../components/inputForAuth/InputForAuth";
 import { Link, useNavigate } from "react-router-dom";
 import icon from "/icons/header_icon.svg";
 import styles from "./Register.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { register } from "../../modules/api_requests";
 import { GradientButton } from "../../components/gradientButton/GradientButton";
 
@@ -13,15 +13,8 @@ export const Regitser = () => {
     email: "",
     password: "",
     firstName: "",
-    lastName: "",
   });
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-
-  useEffect(() => {
-    setUserData({ email, password, firstName });
-  }, [email, password, firstName]);
+  const [isError, setIsError] = useState(false);
 
   return (
     <div>
@@ -30,19 +23,28 @@ export const Regitser = () => {
         <img className={styles.icon} src={icon} alt="icon" />
         <div className={styles.inputsGap}>
           <InputForAuth
-            setState={setEmail}
+            setIsError={setIsError}
+            setData={setUserData}
+            name={"email"}
+            data={userData}
             className={styles.input}
             type={"text"}
             placeHolder={"Email"}
           />
           <InputForAuth
-            setState={setPassword}
+            setIsError={setIsError}
+            setData={setUserData}
+            name={"password"}
+            data={userData}
             className={styles.input}
             type={"password"}
             placeHolder={"Пароль"}
           />
           <InputForAuth
-            setState={setFirstName}
+            setIsError={setIsError}
+            setData={setUserData}
+            name={"firstName"}
+            data={userData}
             className={styles.input}
             type={"text"}
             placeHolder={"Имя"}
@@ -51,11 +53,18 @@ export const Regitser = () => {
         <div className={styles.spaceButton}>
           <GradientButton
             buttonName={"Зарегистрироваться"}
+            isdDsabled={isError}
             onClick={() => {
-              register(userData).then((responseData) => {
-                localStorage.setItem("token", responseData.token);
-                navigate("/");
-              });
+              register(userData)
+                .then((responseData) => {
+                  localStorage.setItem("token", responseData.token);
+                  navigate("/");
+                })
+                .catch(() => {
+                  setIsError(true);
+                  setUserData({ email: "", password: "", firstName: "" });
+                  console.log("err");
+                });
             }}
           />
         </div>

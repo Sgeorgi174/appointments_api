@@ -30,3 +30,12 @@
   margin-top: 120px;
   color: #333;
 }
+
+.errorBox {
+  margin-bottom: 100px;
+}
+
+.error {
+  font-size: 10px;
+  color: red;
+}

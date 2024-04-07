@@ -29,9 +29,9 @@ const fetchData = async ({ url, method, data, token }) => {
 
     console.log(response);
 
-    // if (!response.ok) {
-    //   throw new Error("Network response was not ok");
-    // }
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
 
     const responseData = await response.json();
     console.log(responseData);
