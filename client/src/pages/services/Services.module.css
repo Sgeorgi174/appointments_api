@@ -5,3 +5,10 @@
   line-height: 30px;
   font-weight: 800;
 }
+
+.serviceBox {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

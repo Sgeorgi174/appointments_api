@@ -1,35 +1,39 @@
 import { Header } from "../../components/header/Header";
 import { Wrapper } from "../../components/wrapper/Wrapper";
-import styles from "./Services.module.css";
-
 import { ServicesBox } from "../../components/servicesBox/ServicesBox";
 import { useEffect, useState } from "react";
 import { deleteService, getServices } from "../../modules/api_requests";
+import { ServiceModal } from "../../components/serviceModule/ServiceModal";
+import styles from "./Services.module.css";
 
 export const Services = () => {
   const [servicesData, setServicesData] = useState([
     { name: "", price: 0, time: 0 },
   ]);
+  const [currentService, setCurrentService] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const deleteClick = (id) => {
     deleteService({ id });
     setServicesData(servicesData.filter((service) => service.id !== id));
   };
 
+  const editClick = (index) => {
+    setCurrentService(servicesData[index]);
+    setIsModalOpen(true);
+  };
+
   useEffect(() => {
     getServices().then((data) => {
       setServicesData(data);
-      console.log(data);
     });
-  }, []);
-
-  useEffect(() => {});
+  }, [isModalOpen]);
 
   return (
     <Wrapper wrapperClass={"wrapperForMobile"}>
       <Header firstLetter={"Г"} />
       <h2 className={styles.title}>Мои услуги</h2>
-      <div className={styles.servicesBox}>
+      <div className={styles.serviceBox}>
         {servicesData.map((el, index) => {
           return (
             <ServicesBox
@@ -40,10 +44,19 @@ export const Services = () => {
               deleteClick={() => {
                 deleteClick(el.id);
               }}
+              editClick={() => {
+                editClick(index);
+              }}
             />
           );
         })}
       </div>
+      <ServiceModal
+        setIsModalOpen={setIsModalOpen}
+        isOpen={isModalOpen}
+        handleClose={() => setIsModalOpen(false)}
+        currentService={currentService}
+      />
     </Wrapper>
   );
 };

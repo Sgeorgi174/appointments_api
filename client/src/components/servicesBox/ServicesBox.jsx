@@ -7,15 +7,15 @@ export const ServicesBox = ({ name, time, price, editClick, deleteClick }) => {
   return (
     <div className={styles.service}>
       <div className={styles.row}>
-        <img src={iconWorks} alt="works_icon" />
+        <img className={styles.icon} src={iconWorks} alt="works_icon" />
         <p className={styles.text}>{name}</p>
       </div>
       <div className={styles.row}>
-        <img src={iconTimer} alt="works_icon" />
+        <img className={styles.icon} src={iconTimer} alt="works_icon" />
         <p className={styles.text}>{time} мин</p>
       </div>
       <div className={styles.row}>
-        <img src={iconRuble} alt="works_icon" />
+        <img className={styles.icon} src={iconRuble} alt="works_icon" />
         <p className={styles.text}>{price} руб</p>
       </div>
       <div className={styles.rowButton}>

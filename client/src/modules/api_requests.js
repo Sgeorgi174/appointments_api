@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "http://мои-записи.рф/api";
 
 const getToken = () => {
   const token = localStorage.getItem("token");
@@ -77,4 +77,10 @@ export const deleteService = async (deletedData) => {
   const url = `${BASE_URL}/service/delete`;
   const token = getToken(); // Получаем токен только в момент вызова запроса
   return fetchData({ url, method: "PUT", data: deletedData, token });
+};
+
+export const editService = async (updateData) => {
+  const url = `${BASE_URL}/service/edit`;
+  const token = getToken();
+  return fetchData({ url, method: "PUT", data: updateData, token });
 };

@@ -1,5 +1,4 @@
 .service {
-  margin-top: 30px;
   width: 305px;
   border-radius: 15px;
   background: rgb(230, 230, 230);
@@ -8,19 +7,20 @@
   flex-direction: column;
   align-items: center;
 
-  padding: 25px;
+  padding: 10px;
 }
 
 .row {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 5px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   width: 100%;
+  height: 25px;
 }
 
 .rowButton {
-  margin-top: 10px;
+  margin-top: 5px;
   display: flex;
   justify-content: space-between;
 
@@ -28,9 +28,8 @@
 }
 
 .text {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 800;
-  line-height: 21px;
 }
 
 .button {
@@ -38,10 +37,14 @@
   background-color: #333;
   color: #fff;
 
-  font-size: 12px;
-  font-weight: 800;
+  font-size: 10px;
+  font-weight: 700;
   line-height: 18px;
   border-radius: 9px;
 
   background: rgb(0, 0, 0);
+}
+
+.icon {
+  width: 21px;
 }
