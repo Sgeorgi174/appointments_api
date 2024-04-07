@@ -14,7 +14,13 @@ export const Header = ({ firstLetter }) => {
           <div className={styles.avatar}>
             <p className={styles.avatarText}>{firstLetter}</p>
           </div>
-          <Link className={styles.link}>
+          <Link
+            onClick={() => {
+              localStorage.removeItem("token");
+            }}
+            to="/login"
+            className={styles.link}
+          >
             <img
               className={styles.iconLogout}
               src={iconLogout}
