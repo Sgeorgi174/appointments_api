@@ -8,7 +8,7 @@ const WeekdaysCheckbox = ({ selectedDays, handleChange }) => {
           className={styles.checkboxInput}
           type="checkbox"
           name="monday"
-          checked={selectedDays.includes(1)}
+          checked={selectedDays.includes("1")}
           onChange={handleChange}
         />
         ПН
@@ -18,7 +18,7 @@ const WeekdaysCheckbox = ({ selectedDays, handleChange }) => {
           className={styles.checkboxInput}
           type="checkbox"
           name="tuesday"
-          checked={selectedDays.includes(2)}
+          checked={selectedDays.includes("2")}
           onChange={handleChange}
         />
         ВТ
@@ -28,7 +28,7 @@ const WeekdaysCheckbox = ({ selectedDays, handleChange }) => {
           className={styles.checkboxInput}
           type="checkbox"
           name="wednesday"
-          checked={selectedDays.includes(3)}
+          checked={selectedDays.includes("3")}
           onChange={handleChange}
         />
         СР
@@ -38,7 +38,7 @@ const WeekdaysCheckbox = ({ selectedDays, handleChange }) => {
           className={styles.checkboxInput}
           type="checkbox"
           name="thursday"
-          checked={selectedDays.includes(4)}
+          checked={selectedDays.includes("4")}
           onChange={handleChange}
         />
         ЧТ
@@ -48,7 +48,7 @@ const WeekdaysCheckbox = ({ selectedDays, handleChange }) => {
           className={styles.checkboxInput}
           type="checkbox"
           name="friday"
-          checked={selectedDays.includes(5)}
+          checked={selectedDays.includes("5")}
           onChange={handleChange}
         />
         ПТ
@@ -58,7 +58,7 @@ const WeekdaysCheckbox = ({ selectedDays, handleChange }) => {
           className={styles.checkboxInput}
           type="checkbox"
           name="saturday"
-          checked={selectedDays.includes(6)}
+          checked={selectedDays.includes("6")}
           onChange={handleChange}
         />
         СБ
@@ -68,7 +68,7 @@ const WeekdaysCheckbox = ({ selectedDays, handleChange }) => {
           className={styles.checkboxInput}
           type="checkbox"
           name="sunday"
-          checked={selectedDays.includes(0)}
+          checked={selectedDays.includes("0")}
           onChange={handleChange}
         />
         ВС

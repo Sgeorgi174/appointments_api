@@ -7,7 +7,7 @@ const {
 } = require("../controllers/timetable");
 const router = express.Router();
 
-router.get("/generate", auth, generateSchedule);
+router.post("/generate", auth, generateSchedule);
 router.delete("/delete", auth, deleteSchedule);
 router.get("/get", auth, getSchedule);
 router.get("/getDay");

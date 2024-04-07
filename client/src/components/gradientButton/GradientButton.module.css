@@ -14,3 +14,8 @@
     rgb(37, 207, 253) 97.046%
   );
 }
+
+.disabled {
+  background: gray;
+  pointer-events: none;
+}

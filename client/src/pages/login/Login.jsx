@@ -35,7 +35,8 @@ export const Login = () => {
           <GradientButton
             buttonName={"Войти"}
             onClick={() => {
-              login(loginData).then(() => {
+              login(loginData).then((responseData) => {
+                localStorage.setItem("token", responseData.token);
                 navigate("/");
               });
             }}

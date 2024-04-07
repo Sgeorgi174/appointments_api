@@ -33,7 +33,7 @@ export const Schedule = () => {
         setIsLoading(false);
       }
     });
-  }, []);
+  }, [created]);
 
   return (
     <Wrapper wrapperClass={"wrapperForMobile"}>
@@ -43,7 +43,7 @@ export const Schedule = () => {
       ) : created ? (
         <Calendar data={userSchedule} />
       ) : (
-        <CreateCalendar isLoading={isLoading} setIsLoading={setIsLoading} />
+        <CreateCalendar setCreated={setCreated} setIsLoading={setIsLoading} />
       )}
     </Wrapper>
   );

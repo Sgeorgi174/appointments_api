@@ -3,26 +3,43 @@ import { GradientButton } from "../gradientButton/GradientButton";
 import styles from "./CreateCalendar.module.css";
 import WeekdaysCheckbox from "../weekdaysCheckbox/WeekdaysCheckbox";
 import TimePicker from "../timePicker/TimePicker";
+import { createSchedule } from "../../modules/api_requests";
 
-export const CreateCalendar = () => {
-  const [isСonfigured, setIsСonfigured] = useState(false);
+export const CreateCalendar = ({ setCreated, setIsLoading }) => {
+  const [isСonfigured, setIsСonfigured] = useState(true);
   const [selectedFirstTime, setSelectedFirstTime] = useState("10:00");
   const [selectedSecondTime, setSelectedSecondTime] = useState("10:00");
   const [selectedDays, setSelectedDays] = useState([]);
   const [settingData, setSettingData] = useState({});
+  const [isError, setIsError] = useState(false);
 
   const handleFirstTimeChange = (e) => {
     setSelectedFirstTime(e.target.value);
+    setIsError(false);
   };
 
   const handleSecondTimeChange = (e) => {
     setSelectedSecondTime(e.target.value);
+    setIsError(false);
   };
 
   const handleClick = () => {
-    // setIsСonfigured(!isСonfigured);
+    return setIsСonfigured(!isСonfigured);
+  };
 
-    console.log(settingData);
+  const handleCreateClick = () => {
+    createSchedule(settingData)
+      .then(() => {
+        setIsError(false);
+        setIsСonfigured(!isСonfigured);
+        setCreated(true);
+        setIsLoading(true);
+      })
+      .catch((e) => {
+        console.log(e.message);
+        setIsСonfigured(false);
+        setIsError(true);
+      });
   };
 
   useEffect(() => {
@@ -40,13 +57,13 @@ export const CreateCalendar = () => {
   const handleChange = (e) => {
     const { name, checked } = e.target;
     const dayIndex = {
-      monday: 1,
-      tuesday: 2,
-      wednesday: 3,
-      thursday: 4,
-      friday: 5,
-      saturday: 6,
-      sunday: 0,
+      monday: "1",
+      tuesday: "2",
+      wednesday: "3",
+      thursday: "4",
+      friday: "5",
+      saturday: "6",
+      sunday: "0",
     }[name];
 
     if (checked) {
@@ -96,10 +113,20 @@ export const CreateCalendar = () => {
               }}
             />
           </div>
+          <div className={styles.errorBox}>
+            <p className={styles.error}>
+              {isError ? (
+                `* (Дата завершения должна быть позже даты начала)`
+              ) : (
+                <br></br>
+              )}
+            </p>
+          </div>
           <GradientButton
+            isdDsabled={isError}
             buttonName={"Создать"}
             onClick={() => {
-              handleClick();
+              handleCreateClick();
             }}
           />
         </>

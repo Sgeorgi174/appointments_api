@@ -18,11 +18,10 @@ export const Regitser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
 
   useEffect(() => {
-    setUserData({ email, password, firstName, lastName });
-  }, [email, password, firstName, lastName]);
+    setUserData({ email, password, firstName });
+  }, [email, password, firstName]);
 
   return (
     <div>
@@ -48,18 +47,13 @@ export const Regitser = () => {
             type={"text"}
             placeHolder={"Имя"}
           />
-          <InputForAuth
-            setState={setLastName}
-            className={styles.input}
-            type={"text"}
-            placeHolder={"Фамилия"}
-          />
         </div>
         <div className={styles.spaceButton}>
           <GradientButton
             buttonName={"Зарегистрироваться"}
             onClick={() => {
-              register(userData).then(() => {
+              register(userData).then((responseData) => {
+                localStorage.setItem("token", responseData.token);
                 navigate("/");
               });
             }}

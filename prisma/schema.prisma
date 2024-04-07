@@ -33,15 +33,15 @@ model UserBotSettings {
 
 model Client {
   id           Int           @id @default(autoincrement())
-  telegramId   String        @unique
-  name         String
+  telegramId   String?        @unique
+  name         String?
+  telNumber     String?
   appointments Appointment[] // Клиент может иметь множество записей на прием
 }
 
 model Appointment {
   id          Int      @id @default(autoincrement())
-  month       String
-  day         Int
+  day         DateTime
   hour        Int
   client      Client   @relation(fields: [clientId], references: [id]) // Связь с клиентом по ID
   clientId    Int // ID клиента
@@ -57,7 +57,6 @@ model Appointment {
 model Services {
   id           Int           @id @default(autoincrement())
   name         String
-  description  String
   price        Int
   duration     Int // Длительность услуги
   appointments Appointment[]

@@ -9,7 +9,7 @@ export const Home = () => {
     <Wrapper wrapperClass={"wrapperForMobile"}>
       <Header firstLetter={"Ю"} />
       <div className={styles.buttons}>
-        <Link>
+        <Link to="/appointments">
           <ControlButton buttonName={"Мои записи"} />
         </Link>
         <Link to="/bot-setting">
@@ -18,7 +18,7 @@ export const Home = () => {
         <Link to="/schedule">
           <ControlButton buttonName={"Расписание"} />
         </Link>
-        <Link>
+        <Link to="/services">
           <ControlButton buttonName={"Услуги"} />
         </Link>
       </div>
