@@ -28,14 +28,23 @@ const fetchData = async ({ url, method, data, token }) => {
     }
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      // Если сервер вернул ошибку, выбрасываем новую ошибку с текстом ошибки
+      const errorResponseData = await response.text();
+      throw new Error(
+        `Server error: ${response.status} - ${errorResponseData}`
+      );
     }
 
-    const responseData = await response.json();
-
-    console.log(responseData);
-
-    return responseData;
+    // Проверяем тип контента ответа
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      // Если ответ JSON, разбираем его
+      const responseData = await response.json();
+      return responseData;
+    } else {
+      // Если не JSON, возвращаем текст ответа
+      return await response.text();
+    }
   } catch (error) {
     console.error("An error occurred:", error);
     throw error;
