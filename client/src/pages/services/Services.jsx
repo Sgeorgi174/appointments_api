@@ -1,38 +1,50 @@
 import { Header } from "../../components/header/Header";
 import { Wrapper } from "../../components/wrapper/Wrapper";
 import { ServicesBox } from "../../components/servicesBox/ServicesBox";
+import { getServices } from "../../modules/api_requests";
+import { ServiceEditModal } from "../../components/serviceModule/ServiceEditModal";
 import { useEffect, useState } from "react";
-import { deleteService, getServices } from "../../modules/api_requests";
-import { ServiceModal } from "../../components/serviceModule/ServiceModal";
+import iconAdd from "/icons/add.svg";
 import styles from "./Services.module.css";
+import { ServiceAddModal } from "../../components/serviceModule/ServiceAddModal";
+import { ServiceConfirmModal } from "../../components/serviceModule/ServiceConfirm";
 
 export const Services = () => {
   const [servicesData, setServicesData] = useState([
     { name: "", price: 0, time: 0 },
   ]);
   const [currentService, setCurrentService] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+  const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
 
-  const deleteClick = (id) => {
-    deleteService({ id });
-    setServicesData(servicesData.filter((service) => service.id !== id));
+  const deleteClick = (index) => {
+    setCurrentService(servicesData[index]);
+    setIsModalConfirmOpen(true);
   };
 
   const editClick = (index) => {
     setCurrentService(servicesData[index]);
-    setIsModalOpen(true);
+    setIsModalEditOpen(true);
   };
 
   useEffect(() => {
     getServices().then((data) => {
       setServicesData(data);
     });
-  }, [isModalOpen]);
+  }, [isModalEditOpen, isModalAddOpen, isModalConfirmOpen]);
 
   return (
     <Wrapper wrapperClass={"wrapperForMobile"}>
       <Header firstLetter={"Г"} />
-      <h2 className={styles.title}>Мои услуги</h2>
+      <div className={styles.titleBox}>
+        <h2 className={styles.title}>Мои услуги</h2>
+        <img
+          onClick={() => setIsModalAddOpen(true)}
+          className={styles.addButton}
+          src={iconAdd}
+        />
+      </div>
       <div className={styles.serviceBox}>
         {servicesData.map((el, index) => {
           return (
@@ -42,7 +54,7 @@ export const Services = () => {
               price={el.price}
               time={el.duration}
               deleteClick={() => {
-                deleteClick(el.id);
+                deleteClick(index);
               }}
               editClick={() => {
                 editClick(index);
@@ -51,11 +63,19 @@ export const Services = () => {
           );
         })}
       </div>
-      <ServiceModal
-        setIsModalOpen={setIsModalOpen}
-        isOpen={isModalOpen}
-        handleClose={() => setIsModalOpen(false)}
+      <ServiceEditModal
+        setIsModalOpen={setIsModalEditOpen}
+        isOpen={isModalEditOpen}
         currentService={currentService}
+      />
+      <ServiceAddModal
+        isOpen={isModalAddOpen}
+        setIsModalOpen={setIsModalAddOpen}
+      />
+      <ServiceConfirmModal
+        currentService={currentService}
+        isOpen={isModalConfirmOpen}
+        setIsModalOpen={setIsModalConfirmOpen}
       />
     </Wrapper>
   );

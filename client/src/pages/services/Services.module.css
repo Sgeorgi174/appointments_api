@@ -1,9 +1,19 @@
+.titleBox {
+  margin-top: 35px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .title {
-  margin-top: 70px;
   font-size: 20px;
-  font-weight: 700;
-  line-height: 30px;
   font-weight: 800;
+  margin-right: 25px;
+}
+
+.addButton {
+  position: absolute;
+  left: 150px;
 }
 
 .serviceBox {

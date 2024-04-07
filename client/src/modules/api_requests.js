@@ -1,4 +1,4 @@
-const BASE_URL = "http://мои-записи.рф/api";
+const BASE_URL = "http://localhost:8000/api";
 
 const getToken = () => {
   const token = localStorage.getItem("token");
@@ -84,4 +84,10 @@ export const editService = async (updateData) => {
   const url = `${BASE_URL}/service/edit`;
   const token = getToken();
   return fetchData({ url, method: "PUT", data: updateData, token });
+};
+
+export const addService = async (addData) => {
+  const url = `${BASE_URL}/service/add`;
+  const token = getToken();
+  return fetchData({ url, method: "POST", data: addData, token });
 };

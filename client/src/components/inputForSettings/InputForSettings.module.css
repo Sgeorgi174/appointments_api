@@ -2,7 +2,7 @@
   width: 283px;
   font-size: 20px;
   font-weight: 500;
-  line-height: 30px;
+
   word-wrap: break-word;
   overflow-wrap: break-word;
 
@@ -14,7 +14,6 @@
 .input::placeholder {
   font-size: 20px;
   font-weight: 500;
-  line-height: 30px;
   color: rgb(148, 148, 148);
 
   font-family: "Poppins", sans-serif;

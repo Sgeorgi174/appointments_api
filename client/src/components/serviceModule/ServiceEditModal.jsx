@@ -6,9 +6,8 @@ import styles from "./ServiceModal.module.css";
 import { useEffect, useState } from "react";
 import { editService } from "../../modules/api_requests";
 
-export const ServiceModal = ({
+export const ServiceEditModal = ({
   isOpen,
-  handleClose,
   currentService,
   setIsModalOpen,
 }) => {
@@ -39,7 +38,12 @@ export const ServiceModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay} onClick={handleClose}>
+    <div
+      className={styles.modalOverlay}
+      onClick={() => {
+        setIsModalOpen(false);
+      }}
+    >
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div onClick={(e) => e.stopPropagation()} className={styles.closeBox}>
           <img

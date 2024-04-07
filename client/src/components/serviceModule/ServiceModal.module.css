@@ -11,6 +11,7 @@
 }
 
 .modalContent {
+  width: 351px;
   background-color: white;
   padding: 20px;
   border-radius: 8px;
@@ -40,7 +41,7 @@
   width: 283px;
   font-size: 14px;
   font-weight: 500;
-  line-height: 30px;
+
   word-wrap: break-word;
   overflow-wrap: break-word;
   margin-left: 10px;
@@ -54,7 +55,6 @@
 .input::placeholder {
   font-size: 14px;
   font-weight: 500;
-  line-height: 30px;
   color: rgb(148, 148, 148);
 }
 
@@ -67,4 +67,11 @@
   font-size: 16px;
   font-weight: 700;
   border-radius: 15px;
+}
+
+.rowButton {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
 }
