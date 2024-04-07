@@ -134,6 +134,9 @@ const getSchedule = async (req, res) => {
       return res.status(404).json({ error: "Schedule not found" });
     }
 
+    // Устанавливаем заголовок "Content-Type" явно
+    res.setHeader("Content-Type", "application/json");
+
     return res.status(200).json(schedule);
   } catch (error) {
     console.error("Error fetching schedule:", error);
