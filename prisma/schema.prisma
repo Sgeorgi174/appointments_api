@@ -27,6 +27,7 @@ model UserBotSettings {
   botToken String
   botName  String
   address  String
+  imgUrl   String
   user     User   @relation(fields: [userId], references: [id])
   userId   Int
 }

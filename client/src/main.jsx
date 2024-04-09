@@ -10,6 +10,7 @@ import { Schedule } from "./pages/schedule/Schedule";
 import { Appointments } from "./pages/appointments/Appointments";
 import "./index.css";
 import { Services } from "./pages/services/Services";
+import { ScheduleID } from "./pages/scheduleID/ScheduleID";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: "/services",
     element: <PrivateRoute path="/services" element={<Services />} />,
+  },
+  {
+    path: "/schedule/:id",
+    element: <PrivateRoute path="/schedule/:id" element={<ScheduleID />} />,
   },
 
   {
