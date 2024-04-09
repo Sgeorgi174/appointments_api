@@ -2,15 +2,26 @@ const { Telegraf } = require("telegraf");
 const { prisma } = require("../prisma/prisma_client");
 
 const startBot = async (req, res) => {
+  const userId = req.user.id;
   const setting = await prisma.userBotSettings.findFirst({
     where: {
-      userId: req.user.id,
+      userId,
     },
   });
   console.log(setting);
 
   const BOT_TOKEN = setting.botToken;
+  const BOT_NAME = setting.botName;
+  const ADDRESS = setting.address;
+  const BOT_IMG = setting.imgUrl;
   const bot = new Telegraf(BOT_TOKEN);
+
+  // Установка имени и аватарки бота
+  await bot.telegram.setMyCommands([], {
+    // Устанавливаем имя бота
+    user_name: BOT_NAME,
+    // Устанавливаем аватарку бота
+  });
 
   bot.on("text", (ctx) => {
     ctx.reply("Привет! Это бот. Вот онлайн кнопка для вас:", {
@@ -19,7 +30,9 @@ const startBot = async (req, res) => {
           [
             {
               text: "Записаться",
-              web_app: { url: "https://1d91-176-226-199-180.ngrok-free.app" },
+              web_app: {
+                url: `http://localhost:8000/schedule/${userId} `,
+              },
             },
           ],
         ],

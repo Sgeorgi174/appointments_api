@@ -11,6 +11,7 @@ import { Appointments } from "./pages/appointments/Appointments";
 import "./index.css";
 import { Services } from "./pages/services/Services";
 import { ScheduleID } from "./pages/scheduleID/ScheduleID";
+import { App } from "./App";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/schedule/:id",
-    element: <PrivateRoute path="/schedule/:id" element={<ScheduleID />} />,
+    element: <ScheduleID />,
   },
 
   {
@@ -54,6 +55,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <RouterProvider router={router}>
+      <App />
+    </RouterProvider>
   </React.StrictMode>
 );
