@@ -5,10 +5,15 @@ const add = async (req, res) => {
   try {
     // Получаем данные о пользователе и другие поля из тела запроса
     const { botToken, botName, address } = req.body;
-    console.log(req.file);
 
     // Получаем путь к загруженному изображению
-    const imgUrl = req.file ? req.file.path : "";
+    let imgUrl = req.file ? req.file.path : "";
+
+    // Если загружено изображение, обрабатываем путь
+    if (req.file) {
+      // Удаляем часть пути '/root/appointments_api'
+      imgUrl = imgUrl.replace("/root/appointments_api", "");
+    }
 
     // Проверяем обязательные поля
     if (!botToken || !botName || !address) {
@@ -63,14 +68,6 @@ const edit = async (req, res) => {
 
       // Удаляем часть пути '/root/appointments_api'
       imgUrl = imgUrl.replace("/root/appointments_api", "");
-
-      // Удалить старый файл аватара, если он существует
-      const oldBotSettings = await prisma.userBotSettings.findUnique({
-        where: { id: parseInt(id) },
-      });
-      if (oldBotSettings.imgUrl) {
-        fs.unlinkSync(oldBotSettings.imgUrl);
-      }
     }
 
     // Обновляем настройки бота, включая imgUrl
@@ -79,6 +76,7 @@ const edit = async (req, res) => {
       data: { botToken, botName, address, imgUrl },
     });
 
+    // Отправляем обновленные настройки бота с клиента
     return res.status(200).json(updatedBotSettings);
   } catch (error) {
     console.error("Error updating bot settings:", error);
