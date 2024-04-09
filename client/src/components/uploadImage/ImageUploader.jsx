@@ -26,7 +26,6 @@ function ImageUploader({ name, botSetting, setBotSetting, handleSubmit }) {
         </label>
         {selectedImage && (
           <div>
-            <h2>Preview:</h2>
             <img
               src={selectedImage}
               alt="Selected"

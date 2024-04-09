@@ -50,8 +50,9 @@ export const BotSetting = () => {
     if (isCreated) {
       handleSubmit().then((formData) => {
         editSettings(formData)
-          .then(() => {
+          .then((data) => {
             setIsSaved(true);
+            setBotSetting(data);
           })
           .catch((e) => {
             console.log(e);
@@ -96,7 +97,10 @@ export const BotSetting = () => {
             <p className={styles.settingText}>Адрес : {botSetting.address}</p>
           </div>
           <div className={styles.settingBox}>
-            <img src={botSetting.imgUrl} />
+            <img
+              className={styles.previewImage}
+              src={`http://localhost:8000${botSetting.imgUrl}`}
+            />
           </div>
         </div>
       ) : (

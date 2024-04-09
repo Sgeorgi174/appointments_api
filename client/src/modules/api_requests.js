@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://мои-записи.рф/api";
+const BASE_URL = "http://localhost:8000/api";
 
 const getToken = () => {
   return localStorage.getItem("token");

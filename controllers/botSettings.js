@@ -1,4 +1,5 @@
 const { prisma } = require("../prisma/prisma_client");
+const path = require("path");
 const fs = require("fs");
 
 const add = async (req, res) => {
@@ -11,8 +12,14 @@ const add = async (req, res) => {
 
     // Если загружено изображение, обрабатываем путь
     if (req.file) {
+      console.log(imgUrl);
       // Удаляем часть пути '/root/appointments_api'
-      imgUrl = imgUrl.replace("/root/appointments_api", "");
+      // imgUrl = imgUrl.replace("/root/appointments_api", "");
+      imgUrl = imgUrl.replace(
+        "C:\\Users\\prots\\Desktop\\my-project\\Appointments_API",
+        ""
+      );
+      console.log(imgUrl);
     }
 
     // Проверяем обязательные поля
@@ -64,19 +71,31 @@ const edit = async (req, res) => {
 
     if (req.file) {
       // Если загружен новый файл аватара, обновляем imgUrl
-      imgUrl = req.file.path;
+      const rootDir = "C:\\Users\\prots\\Desktop\\my-project\\Appointments_API"; // Замените на корневую директорию вашего проекта
+      imgUrl = req.file.path.replace(rootDir, "");
 
-      // Удаляем часть пути '/root/appointments_api'
-      imgUrl = imgUrl.replace("/root/appointments_api", "");
+      // Получаем путь к существующему файлу из базы данных
+      const existingBotSettings = await prisma.userBotSettings.findUnique({
+        where: { id: parseInt(id) },
+      });
+
+      if (existingBotSettings && existingBotSettings.imgUrl) {
+        // Удаляем существующий файл перед записью нового
+        fs.unlinkSync(path.join(rootDir, existingBotSettings.imgUrl));
+      }
     }
 
     // Обновляем настройки бота, включая imgUrl
     const updatedBotSettings = await prisma.userBotSettings.update({
       where: { id: parseInt(id) },
-      data: { botToken, botName, address, imgUrl },
+      data: {
+        botToken,
+        botName,
+        address,
+        imgUrl: imgUrl,
+      },
     });
 
-    // Отправляем обновленные настройки бота с клиента
     return res.status(200).json(updatedBotSettings);
   } catch (error) {
     console.error("Error updating bot settings:", error);
