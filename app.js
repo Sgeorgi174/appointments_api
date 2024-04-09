@@ -14,6 +14,8 @@ app.use(cookieParser());
 app.use(cors());
 
 app.use(express.static(path.join(__dirname, "client", "dist")));
+const uploadsPath = path.join(__dirname, "uploads");
+app.use("/uploads", express.static(uploadsPath));
 
 // Обработка всех запросов, отличных от статических файлов, направляется на index.html
 app.get("/", (req, res) => {
