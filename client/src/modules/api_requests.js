@@ -1,93 +1,107 @@
-const BASE_URL = "http://мои-записи.рф/api";
+import axios from "axios";
+
+const BASE_URL = "http://localhost:8000/api";
 
 const getToken = () => {
-  const token = localStorage.getItem("token");
-  return token;
+  return localStorage.getItem("token");
 };
 
-const fetchData = async ({ url, method, data, token }) => {
+const sendRequest = async ({ method, url, data }) => {
   try {
-    let response;
-    if (data) {
-      response = await fetch(url, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // добавляем токен в заголовок Authorization
-        },
-        body: JSON.stringify(data),
-      });
-    } else {
-      response = await fetch(url, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // добавляем токен в заголовок Authorization
-        },
-      });
-    }
-
-    console.log(response);
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const responseData = await response.json();
-    console.log(responseData);
-
-    return responseData;
+    const response = await axios({
+      method,
+      url,
+      data,
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    return response.data;
   } catch (error) {
     console.error("An error occurred:", error);
     throw error;
   }
 };
 
-//USERS
 export const login = async (loginData) => {
-  const url = `${BASE_URL}/user/login`;
-  return fetchData({ url, method: "POST", data: loginData });
+  return sendRequest({
+    method: "POST",
+    url: `${BASE_URL}/user/login`,
+    data: loginData,
+  });
 };
 
 export const register = async (registerData) => {
-  const url = `${BASE_URL}/user/register`;
-  return fetchData({ url, method: "POST", data: registerData });
+  return sendRequest({
+    method: "POST",
+    url: `${BASE_URL}/user/register`,
+    data: registerData,
+  });
 };
 
-//SCHEDULE
 export const getSchedule = async () => {
-  const url = `${BASE_URL}/timetable/get`;
-  const token = getToken(); // Получаем токен только в момент вызова запроса
-  return fetchData({ url, method: "GET", token });
+  return sendRequest({ method: "GET", url: `${BASE_URL}/timetable/get` });
+};
+
+export const getCurrentSchedule = async (id) => {
+  return sendRequest({ method: "GET", url: `${BASE_URL}/timetable/get/${id}` });
 };
 
 export const createSchedule = async (createData) => {
-  const url = `${BASE_URL}/timetable/generate`;
-  const token = getToken(); // Получаем токен только в момент вызова запроса
-  return fetchData({ url, method: "POST", data: createData, token });
+  return sendRequest({
+    method: "POST",
+    url: `${BASE_URL}/timetable/generate`,
+    data: createData,
+  });
 };
 
-//SERVICE
 export const getServices = async () => {
-  const url = `${BASE_URL}/service/get`;
-  const token = getToken(); // Получаем токен только в момент вызова запроса
-  return fetchData({ url, method: "GET", token });
+  return sendRequest({ method: "GET", url: `${BASE_URL}/service/get` });
 };
 
 export const deleteService = async (deletedData) => {
-  const url = `${BASE_URL}/service/delete`;
-  const token = getToken(); // Получаем токен только в момент вызова запроса
-  return fetchData({ url, method: "PUT", data: deletedData, token });
+  return sendRequest({
+    method: "PUT",
+    url: `${BASE_URL}/service/delete`,
+    data: deletedData,
+  });
 };
 
 export const editService = async (updateData) => {
-  const url = `${BASE_URL}/service/edit`;
-  const token = getToken();
-  return fetchData({ url, method: "PUT", data: updateData, token });
+  return sendRequest({
+    method: "PUT",
+    url: `${BASE_URL}/service/edit`,
+    data: updateData,
+  });
 };
 
 export const addService = async (addData) => {
-  const url = `${BASE_URL}/service/add`;
-  const token = getToken();
-  return fetchData({ url, method: "POST", data: addData, token });
+  return sendRequest({
+    method: "POST",
+    url: `${BASE_URL}/service/add`,
+    data: addData,
+  });
+};
+
+export const createSettings = async (settingsData) => {
+  return sendRequest({
+    method: "POST",
+    url: `${BASE_URL}/bot/setting/add`,
+    data: settingsData,
+  });
+};
+
+export const getSettings = async () => {
+  return sendRequest({
+    method: "GET",
+    url: `${BASE_URL}/bot/setting/get`,
+  });
+};
+
+export const editSettings = async (settingsData) => {
+  return sendRequest({
+    method: "PUT",
+    url: `${BASE_URL}/bot/setting/edit`,
+    data: settingsData,
+  });
 };

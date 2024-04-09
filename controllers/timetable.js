@@ -141,35 +141,39 @@ const getSchedule = async (req, res) => {
   }
 };
 
-const getDaySchedule = async (req, res) => {
-  const { date } = req.body;
-  const userId = req.user.id;
+const getCurrentSchedule = async (req, res) => {
+  try {
+    const { userId } = req.params;
 
-  // Преобразование строки даты в объект Date
-  const parsedDate = new Date(date);
+    if (!userId) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-  // Проверка, является ли parsedDate действительным объектом Date
-  if (isNaN(parsedDate.getTime())) {
-    return res.status(400).json({ message: "Неверный формат даты" });
-  }
-
-  // Использование parsedDate в запросе к Prisma
-  const schedule = await prisma.hourAvailability.findMany({
-    where: {
-      date: parsedDate,
-      userId,
-      hours: {
-        userId,
+    const schedule = await prisma.hourAvailability.findMany({
+      where: {
+        userId: parseInt(userId),
       },
-    },
-  });
+      include: { hours: true },
+    });
 
-  return res.status(200).json(schedule);
+    if (!schedule) {
+      return res.status(404).json({ error: "Schedule not found" });
+    }
+
+    if (schedule.length === 0) {
+      return res.status(404).json({ error: "Мастер не создал расписание" });
+    }
+
+    return res.status(200).json(schedule);
+  } catch (error) {
+    console.error("Error fetching schedule:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 module.exports = {
   generateSchedule,
   deleteSchedule,
   getSchedule,
-  getDaySchedule,
+  getCurrentSchedule,
 };

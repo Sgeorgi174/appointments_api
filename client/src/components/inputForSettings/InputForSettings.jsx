@@ -1,13 +1,19 @@
 import { useState } from "react";
 import styles from "./InputForSettings.module.css";
 
-export const InputForSettings = ({ placeHolder, setState, type }) => {
-  const [value, setValue] = useState("");
+export const InputForSettings = ({
+  placeHolder,
+  value,
+  type,
+  setBotSetting,
+  name,
+  botSetting,
+}) => {
   const [error, setError] = useState(false);
 
   const onChange = (event) => {
-    setValue(event.target.value);
-    setState(event.target.value);
+    const { name, value } = event.target;
+    setBotSetting({ ...botSetting, [name]: value });
     setError(false); // Сброс ошибки при изменении значения
   };
 
@@ -20,6 +26,7 @@ export const InputForSettings = ({ placeHolder, setState, type }) => {
   return type ? (
     <div className={styles.inputWrapper}>
       <input
+        name={name}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
@@ -34,6 +41,7 @@ export const InputForSettings = ({ placeHolder, setState, type }) => {
   ) : (
     <div className={styles.inputWrapper}>
       <textarea
+        name={name}
         value={value}
         onChange={onChange}
         onBlur={onBlur}

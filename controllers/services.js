@@ -24,6 +24,16 @@ const getServices = async (req, res) => {
   return res.status(200).json(services);
 };
 
+const getCurrentServices = async (req, res) => {
+  const { userId } = req.params;
+
+  const services = await prisma.services.findMany({
+    where: { userId: parseInt(userId) },
+  });
+
+  return res.status(200).json(services);
+};
+
 const editService = async (req, res) => {
   const { name, price, duration, id } = req.body;
   const userId = req.user.id;
@@ -53,4 +63,10 @@ const deleteService = async (req, res) => {
   return res.status(200).json("Deleted");
 };
 
-module.exports = { addService, getServices, editService, deleteService };
+module.exports = {
+  addService,
+  getServices,
+  editService,
+  deleteService,
+  getCurrentServices,
+};
