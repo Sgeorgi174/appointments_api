@@ -61,6 +61,9 @@ const edit = async (req, res) => {
       // Если загружен новый файл аватара, обновляем imgUrl
       imgUrl = req.file.path;
 
+      // Удаляем часть пути '/root/appointments_api'
+      imgUrl = imgUrl.replace("/root/appointments_api", "");
+
       // Удалить старый файл аватара, если он существует
       const oldBotSettings = await prisma.userBotSettings.findUnique({
         where: { id: parseInt(id) },
