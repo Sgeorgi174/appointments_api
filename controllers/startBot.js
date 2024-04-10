@@ -16,13 +16,6 @@ const startBot = async (req, res) => {
   const BOT_IMG = setting.imgUrl;
   const bot = new Telegraf(BOT_TOKEN);
 
-  // Установка имени и аватарки бота
-  await bot.telegram.setMyCommands([], {
-    // Устанавливаем имя бота
-    user_name: BOT_NAME,
-    // Устанавливаем аватарку бота
-  });
-
   bot.on("text", (ctx) => {
     ctx.reply("Привет! Это бот. Вот онлайн кнопка для вас:", {
       reply_markup: {
@@ -31,7 +24,7 @@ const startBot = async (req, res) => {
             {
               text: "Записаться",
               web_app: {
-                url: `http://localhost:8000/schedule/${userId} `,
+                url: `https://sgeorgi174.github.io/food_delivery/ `,
               },
             },
           ],

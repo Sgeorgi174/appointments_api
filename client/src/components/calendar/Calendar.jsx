@@ -22,6 +22,7 @@ const Calendar = ({ data }) => {
   }, [data]);
 
   const handleDayClick = (date) => {
+    console.log(date);
     setSelectedDate(date);
     const dateString = sliceDate(date);
     const availableDay = data.find(
