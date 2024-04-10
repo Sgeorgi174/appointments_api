@@ -217,7 +217,7 @@ const changeHour = async (req, res) => {
 };
 
 const changeDay = async (req, res) => {
-  const { dayDate } = req.body;
+  const { dayDate, isAvailable } = req.body; // Добавлено получение isAvailable из тела запроса
   const userId = req.user.id;
 
   try {
@@ -246,7 +246,7 @@ const changeDay = async (req, res) => {
           id: hour.id,
         },
         data: {
-          isAvailable: !hour.isAvailable,
+          isAvailable: Boolean(isAvailable), // Используем значение из запроса
         },
       });
     });

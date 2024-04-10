@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import AvailableHours from "../availableHours/AvailableHours";
-import { sliceDate } from "../../utils/slicers";
 import { CalendarHeader } from "./CalendarHeader";
-import styles from "./Calendar.module.css";
 import { changeAvailabilityDay } from "../../modules/api_requests";
 import { changeType } from "../../utils/changeTypes";
+import { sliceDate } from "../../utils/slicers";
+import styles from "./Calendar.module.css";
 
 const Calendar = ({ data, isUser }) => {
   const [schedule, setSchedule] = useState([]);
@@ -48,8 +48,11 @@ const Calendar = ({ data, isUser }) => {
     });
   };
 
-  const handleClickChangeDay = (date) => {
-    changeAvailabilityDay({ dayDate: String(date) }).then((res) => {
+  const handleClickChangeDay = ({ date, isAvailableDay }) => {
+    changeAvailabilityDay({
+      dayDate: String(date),
+      isAvailable: isAvailableDay,
+    }).then((res) => {
       setSchedule(res);
       setIsAvailable(!isAvailable);
     });
@@ -141,7 +144,9 @@ const Calendar = ({ data, isUser }) => {
             className={`${styles.buttonChange}  ${
               isAvailable ? styles.buttonChange_disabled : ""
             }`}
-            onClick={() => handleClickChangeDay(selectedDate)}
+            onClick={() =>
+              handleClickChangeDay({ date: selectedDate, isAvailableDay: true })
+            }
           >
             Доступно
           </button>
@@ -149,7 +154,12 @@ const Calendar = ({ data, isUser }) => {
             className={`${styles.buttonChange} ${styles.buttonChange_un} ${
               isAvailable ? "" : styles.buttonChange_disabled
             }`}
-            onClick={() => handleClickChangeDay(selectedDate)}
+            onClick={() =>
+              handleClickChangeDay({
+                date: selectedDate,
+                isAvailableDay: false,
+              })
+            }
           >
             Недоступно
           </button>
