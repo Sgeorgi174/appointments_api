@@ -14,6 +14,8 @@ const options = {
   cert: fs.readFileSync("../../etc/ssl/xn----8sbucdawqnv.xn--p1ai.crt"),
 };
 
+console.log(options);
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
