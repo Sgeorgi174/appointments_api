@@ -4,6 +4,7 @@ import { sliceDate } from "../../utils/slicers";
 import { CalendarHeader } from "./CalendarHeader";
 import styles from "./Calendar.module.css";
 import { changeAvailabilityDay } from "../../modules/api_requests";
+import { changeType } from "../../utils/changeTypes";
 
 const Calendar = ({ data, isUser }) => {
   const [schedule, setSchedule] = useState([]);
@@ -37,12 +38,14 @@ const Calendar = ({ data, isUser }) => {
   const handleDayClick = (date, event) => {
     setSelectedDate(date);
 
-    if (event.target.className.includes("unavailableDate")) {
-      setIsAvailable(false);
-    } else {
-      setIsAvailable(true);
-    }
-    setTypeToChanges("date");
+    changeType({
+      date,
+      event,
+      className: "unavailableDate",
+      setTypeToChanges,
+      setIsAvailable,
+      type: "date",
+    });
   };
 
   const handleClickChangeDay = (date) => {

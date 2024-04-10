@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./AvailableHours.module.css";
 import { changeAvailabilityHour } from "../../modules/api_requests";
+import { changeType } from "../../utils/changeTypes";
 
 const AvailableHours = ({
   currentDay,
@@ -19,10 +20,16 @@ const AvailableHours = ({
     setSelectedHour("");
   }, [currentDay]);
 
-  const handleHourClick = (id, index) => {
-    console.log(`Clicked hour: ${id}`);
+  const handleHourClick = ({ event, id, index }) => {
     setSelectedHour({ id, index });
-    setTypeToChanges("time");
+
+    changeType({
+      event,
+      className: "inactive",
+      setTypeToChanges,
+      setIsAvailable,
+      type: "time",
+    });
   };
 
   const handleClickChangeHour = (id) => {
@@ -43,7 +50,9 @@ const AvailableHours = ({
                 className={`${styles.hour} ${
                   !hour.isAvailable ? styles.inactive : ""
                 } ${selectedHour.index === index ? styles.selectedHour : ""}`}
-                onClick={() => handleHourClick(hour.id, index)} //можно отдавать по айди
+                onClick={(event) =>
+                  handleHourClick({ event, id: hour.id, index })
+                } //можно отдавать по айди
               >
                 {hour.hour}:00
               </button>

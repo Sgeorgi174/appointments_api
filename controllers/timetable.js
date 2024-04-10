@@ -167,6 +167,7 @@ const getCurrentSchedule = async (req, res) => {
 
 const changeHour = async (req, res) => {
   const { id } = req.body;
+  const userId = req.user.id
 
   // Проверяем, был ли предоставлен id
   if (!id) {

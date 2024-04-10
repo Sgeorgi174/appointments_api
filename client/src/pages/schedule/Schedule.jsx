@@ -12,7 +12,6 @@ const createdOrNot = async () => {
     // Здесь исправлено на data.length
     return false;
   }
-  console.log(data);
   return data;
 };
 

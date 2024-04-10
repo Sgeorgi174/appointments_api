@@ -19,7 +19,6 @@ export const ServiceAddModal = ({ isOpen, setIsModalOpen }) => {
       ...prevState,
       [name]: value,
     }));
-    console.log(newService);
   };
 
   useEffect(() => {});

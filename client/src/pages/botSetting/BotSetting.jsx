@@ -46,7 +46,6 @@ export const BotSetting = () => {
   };
 
   const onClickSave = async () => {
-    console.log(isCreated);
     if (isCreated) {
       handleSubmit().then((formData) => {
         editSettings(formData)
@@ -73,15 +72,12 @@ export const BotSetting = () => {
         })
         .then(() => {
           setIsCreated(true);
-          console.log(isCreated);
         });
     }
   };
 
-  const onClickEdit = async () => {
+  const onClickEdit = () => {
     setIsSaved(false);
-    console.log(isCreated);
-    console.log(botSetting.id);
   };
 
   return (

@@ -35,8 +35,7 @@ export const CreateCalendar = ({ setCreated, setIsLoading }) => {
         setCreated(true);
         setIsLoading(true);
       })
-      .catch((e) => {
-        console.log(e.message);
+      .catch(() => {
         setIsСonfigured(false);
         setIsError(true);
       });
@@ -73,7 +72,6 @@ export const CreateCalendar = ({ setCreated, setIsLoading }) => {
         prevSelectedDays.filter((day) => day !== dayIndex)
       );
     }
-    console.log(selectedDays);
   };
 
   return (
