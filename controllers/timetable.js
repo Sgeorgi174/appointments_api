@@ -224,7 +224,7 @@ const changeDay = async (req, res) => {
     if (!dayDate) {
       return res.status(400).json({ message: "Укажите дату дня" });
     }
-
+    console.log(dayDate);
     const isoDate = formatDate(dayDate);
     console.log(isoDate);
 
