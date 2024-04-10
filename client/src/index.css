@@ -24,6 +24,10 @@ button {
   font-style: normal;
 }
 
+button:active {
+  transform: scale(1.1);
+}
+
 body {
   background-color: #f2f2f2;
   color: #333;

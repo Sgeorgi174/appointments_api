@@ -49,6 +49,8 @@
 
 .availableDate {
   background-color: inherit;
+  border-radius: 35px;
+  transition: background 0.3s ease;
 }
 
 .unavailableDate {
@@ -58,12 +60,21 @@
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
+.availableDate:hover {
+  background-color: #ececec;
+  border-radius: 35px;
+}
+
 .activeDay {
   background-color: #409fb5;
   color: #fff;
   font-weight: bold;
   border-radius: 30px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.activeDay:hover {
+  background-color: #347d8d;
 }
 
 .arrowIcon {
@@ -76,7 +87,7 @@
 
 .buttonsBox {
   margin-top: 25px;
-  width: 100%;
+  width: 321px;
   display: flex;
   justify-content: space-between;
   transition: all 0.5s ease;
@@ -94,8 +105,16 @@
   transition: all 0.5s ease;
 }
 
+.buttonChange:hover {
+  background-color: #347d8d;
+}
+
 .buttonChange_un {
   background-color: #d04e70;
+}
+
+.buttonChange_un:hover {
+  background-color: #a72f4f;
 }
 
 .buttonChange_disabled {

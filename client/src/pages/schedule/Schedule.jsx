@@ -18,8 +18,7 @@ const createdOrNot = async () => {
 export const Schedule = () => {
   const [created, setCreated] = useState(false);
   const [userSchedule, setUserSchedule] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setIsLoading(true);
     createdOrNot().then((res) => {
@@ -32,7 +31,7 @@ export const Schedule = () => {
         setIsLoading(false);
       }
     });
-  }, [created]);
+  }, []);
 
   return (
     <Wrapper wrapperClass={"wrapperForMobile"}>

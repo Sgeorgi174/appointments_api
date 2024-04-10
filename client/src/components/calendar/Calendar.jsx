@@ -12,7 +12,7 @@ const Calendar = ({ data, isUser }) => {
   const [currentDay, setCurrentDay] = useState([]);
   const [dateClass, setDateClass] = useState({});
   const [isAvailable, setIsAvailable] = useState(true);
-  const [typeToChanges, setTypeToChanges] = useState(null);
+  const [typeToChanges, setTypeToChanges] = useState("date");
 
   useEffect(() => {
     const classMap = {};
