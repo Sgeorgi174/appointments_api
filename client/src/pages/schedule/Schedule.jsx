@@ -41,7 +41,7 @@ export const Schedule = () => {
       {isLoading ? (
         <Loader />
       ) : created ? (
-        <Calendar data={userSchedule} />
+        <Calendar isUser={true} data={userSchedule} />
       ) : (
         <CreateCalendar setCreated={setCreated} setIsLoading={setIsLoading} />
       )}

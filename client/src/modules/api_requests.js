@@ -23,6 +23,7 @@ const sendRequest = async ({ method, url, data }) => {
   }
 };
 
+// AUTH
 export const login = async (loginData) => {
   return sendRequest({
     method: "POST",
@@ -39,6 +40,7 @@ export const register = async (registerData) => {
   });
 };
 
+//SCHEDULE
 export const getSchedule = async () => {
   return sendRequest({ method: "GET", url: `${BASE_URL}/timetable/get` });
 };
@@ -55,6 +57,23 @@ export const createSchedule = async (createData) => {
   });
 };
 
+export const changeAvailabilityDay = async (date) => {
+  return sendRequest({
+    method: "PUT",
+    url: `${BASE_URL}/timetable/changeDay`,
+    data: date,
+  });
+};
+
+export const changeAvailabilityHour = async (hourId) => {
+  return sendRequest({
+    method: "PUT",
+    url: `${BASE_URL}/timetable/changeHour`,
+    data: hourId,
+  });
+};
+
+//SERVICES
 export const getServices = async () => {
   return sendRequest({ method: "GET", url: `${BASE_URL}/service/get` });
 };
@@ -83,6 +102,7 @@ export const addService = async (addData) => {
   });
 };
 
+//BOT SETTINGS
 export const createSettings = async (settingsData) => {
   return sendRequest({
     method: "POST",

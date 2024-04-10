@@ -192,7 +192,7 @@ const changeHour = async (req, res) => {
 
   try {
     // Инвертируем значение isAvailable
-    const updatedHour = await prisma.hour.update({
+    await prisma.hour.update({
       where: {
         id: parseInt(id),
       },
@@ -201,7 +201,14 @@ const changeHour = async (req, res) => {
       },
     });
 
-    return res.status(200).json(updatedHour);
+    const schedule = await prisma.hourAvailability.findMany({
+      where: {
+        userId,
+      },
+      include: { hours: true },
+    });
+
+    return res.status(200).json(schedule);
   } catch (error) {
     console.error("Error updating hour:", error);
     return res.status(500).json({ message: "Ошибка при обновлении часа" });
@@ -210,6 +217,7 @@ const changeHour = async (req, res) => {
 
 const changeDay = async (req, res) => {
   const { dayDate } = req.body;
+  const userId = req.user.id;
 
   try {
     if (!dayDate) {
@@ -248,7 +256,14 @@ const changeDay = async (req, res) => {
     // Выполняем все обновления в рамках одной транзакции
     await prisma.$transaction(updates);
 
-    return res.status(200).json({ message: "Часы успешно обновлены" });
+    const schedule = await prisma.hourAvailability.findMany({
+      where: {
+        userId,
+      },
+      include: { hours: true },
+    });
+
+    return res.status(200).json(schedule);
   } catch (error) {
     console.error("Error changing day:", error);
     return res

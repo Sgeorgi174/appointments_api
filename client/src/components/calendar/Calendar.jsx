@@ -3,32 +3,53 @@ import AvailableHours from "../availableHours/AvailableHours";
 import { sliceDate } from "../../utils/slicers";
 import { CalendarHeader } from "./CalendarHeader";
 import styles from "./Calendar.module.css";
+import { changeAvailabilityDay } from "../../modules/api_requests";
 
-const Calendar = ({ data }) => {
+const Calendar = ({ data, isUser }) => {
+  const [schedule, setSchedule] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-
   const [currentDay, setCurrentDay] = useState([]);
   const [dateClass, setDateClass] = useState({});
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [typeToChanges, setTypeToChanges] = useState(null);
 
   useEffect(() => {
     const classMap = {};
-    data.forEach((day) => {
+    schedule.forEach((day) => {
       const allUnavailable = day.hours.every((hour) => !hour.isAvailable);
       classMap[sliceDate(day.date)] = allUnavailable
         ? styles.unavailableDate
         : styles.availableDate;
     });
     setDateClass(classMap);
-  }, [data]);
 
-  const handleDayClick = (date) => {
-    console.log(date);
-    setSelectedDate(date);
-    const dateString = sliceDate(date);
-    const availableDay = data.find(
+    const dateString = sliceDate(selectedDate);
+    const availableDay = schedule.find(
       (object) => sliceDate(object.date) === dateString
     );
     setCurrentDay(availableDay ? availableDay.hours : []);
+  }, [data, schedule, selectedDate]);
+
+  useEffect(() => {
+    setSchedule(data);
+  }, [data]);
+
+  const handleDayClick = (date, event) => {
+    setSelectedDate(date);
+
+    if (event.target.className.includes("unavailableDate")) {
+      setIsAvailable(false);
+    } else {
+      setIsAvailable(true);
+    }
+    setTypeToChanges("date");
+  };
+
+  const handleClickChangeDay = (date) => {
+    changeAvailabilityDay({ dayDate: String(date) }).then((res) => {
+      setSchedule(res);
+      setIsAvailable(!isAvailable);
+    });
   };
 
   const renderCalendar = () => {
@@ -75,7 +96,9 @@ const Calendar = ({ data }) => {
         <div
           key={`day-${day}`}
           className={cellClassName}
-          onClick={() => handleDayClick(date)}
+          onClick={(e) => {
+            handleDayClick(date, e);
+          }}
         >
           {day}
         </div>
@@ -105,7 +128,39 @@ const Calendar = ({ data }) => {
           {renderCalendar()}
         </div>
       </div>
-      <AvailableHours currentDay={currentDay} />
+      {isUser && (
+        <div
+          className={
+            typeToChanges === "date" ? styles.buttonsBox : styles.hidden
+          }
+        >
+          <button
+            className={`${styles.buttonChange}  ${
+              isAvailable ? styles.buttonChange_disabled : ""
+            }`}
+            onClick={() => handleClickChangeDay(selectedDate)}
+          >
+            Доступно
+          </button>
+          <button
+            className={`${styles.buttonChange} ${styles.buttonChange_un} ${
+              isAvailable ? "" : styles.buttonChange_disabled
+            }`}
+            onClick={() => handleClickChangeDay(selectedDate)}
+          >
+            Недоступно
+          </button>
+        </div>
+      )}
+      <AvailableHours
+        setSchedule={setSchedule}
+        setIsAvailable={setIsAvailable}
+        isUser={isUser}
+        isAvailable={isAvailable}
+        setTypeToChanges={setTypeToChanges}
+        typeToChanges={typeToChanges}
+        currentDay={currentDay}
+      />
     </>
   );
 };
