@@ -49,6 +49,7 @@ const Calendar = ({ data, isUser }) => {
   };
 
   const handleClickChangeDay = ({ date, isAvailableDay }) => {
+    console.log(date);
     changeAvailabilityDay({
       dayDate: String(date),
       isAvailable: isAvailableDay,
