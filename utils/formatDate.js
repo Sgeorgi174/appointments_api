@@ -1,10 +1,11 @@
 const formatDate = (date) => {
-  if (date instanceof Date) {
-    return date.toISOString();
-  } else {
-    // Предполагаем что date приходит в формате строки
-    return new Date(date).toISOString();
-  }
+  const jsDate = new Date(date);
+  console.log(jsDate, "jsData");
+  const isoDate = new Date(
+    Date.UTC(jsDate.getFullYear(), jsDate.getMonth(), jsDate.getDate())
+  ).toISOString();
+
+  return isoDate;
 };
 
 module.exports = { formatDate };
