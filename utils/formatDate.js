@@ -1,7 +1,7 @@
 const formatDate = (date) => {
-  const jsDate = new Date(date);
+  // const jsDate = new Date(date);
   const isoDate = new Date(
-    Date.UTC(jsDate.getFullYear(), jsDate.getMonth(), jsDate.getDate())
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
   ).toISOString();
 
   return isoDate;
