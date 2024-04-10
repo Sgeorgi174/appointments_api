@@ -226,6 +226,7 @@ const changeDay = async (req, res) => {
     }
 
     const isoDate = formatDate(dayDate);
+    console.log(isoDate);
 
     // Находим день по его дате с часами
     const day = await prisma.hourAvailability.findUnique({
