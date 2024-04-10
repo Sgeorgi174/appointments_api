@@ -167,7 +167,7 @@ const getCurrentSchedule = async (req, res) => {
 
 const changeHour = async (req, res) => {
   const { id } = req.body;
-  const userId = req.user.id
+  const userId = req.user.id;
 
   // Проверяем, был ли предоставлен id
   if (!id) {
@@ -226,7 +226,6 @@ const changeDay = async (req, res) => {
     }
 
     const isoDate = formatDate(dayDate);
-    console.log(isoDate);
 
     // Находим день по его дате с часами
     const day = await prisma.hourAvailability.findUnique({
@@ -235,8 +234,6 @@ const changeDay = async (req, res) => {
       },
       include: { hours: true },
     });
-
-    console.log(day);
 
     if (!day) {
       return res.status(404).json({ message: "День не найден" });
