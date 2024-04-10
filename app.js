@@ -43,8 +43,8 @@ https.createServer(options, app).listen(443, () => {
 });
 
 // Обработка ошибок, которые могут возникнуть при запуске сервера
-server.on("error", (error) => {
-  console.error("Ошибка при запуске сервера:", error.message);
-});
+// server.on("error", (error) => {
+//   console.error("Ошибка при запуске сервера:", error.message);
+// });
 
 module.exports = app;
