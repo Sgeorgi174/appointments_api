@@ -48,7 +48,9 @@ const AvailableHours = ({
               <button
                 key={index}
                 className={`${styles.hour} ${
-                  !hour.isAvailable ? styles.inactive : ""
+                  !hour.isAvailable
+                    ? `${styles.inactive} ${!isUser ? styles.disabled : ""}`
+                    : ""
                 } ${selectedHour.index === index ? styles.selectedHour : ""}`}
                 onClick={(event) =>
                   handleHourClick({ event, id: hour.id, index })

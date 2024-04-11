@@ -28,8 +28,15 @@ model UserBotSettings {
   botName  String
   address  String
   imgUrl   String
+  port     Int
   user     User   @relation(fields: [userId], references: [id])
   userId   Int
+}
+
+model Bots {
+  id       Int    @id @default(autoincrement())
+  exec     String
+  isActive Boolean?
 }
 
 model Client {

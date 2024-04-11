@@ -19,7 +19,7 @@ const Calendar = ({ data, isUser }) => {
     schedule.forEach((day) => {
       const allUnavailable = day.hours.every((hour) => !hour.isAvailable);
       classMap[sliceDate(day.date)] = allUnavailable
-        ? styles.unavailableDate
+        ? `${styles.unavailableDate} ${!isUser ? styles.disabled : ""}`
         : styles.availableDate;
     });
     setDateClass(classMap);
@@ -98,7 +98,11 @@ const Calendar = ({ data, isUser }) => {
       const isPast = dateWithoutTime < todayWithoutTime;
       const cellClassName = `${styles.dayCell} ${
         isSelected ? styles.activeDay : ""
-      } ${dateClass[dateString] || ""} ${isPast ? styles.unavailableDate : ""}`;
+      } ${dateClass[dateString] || ""} ${
+        isPast
+          ? `${styles.unavailableDate} ${!isUser ? styles.disabled : ""}`
+          : ""
+      }`;
       days.push(
         <div
           key={`day-${day}`}

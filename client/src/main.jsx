@@ -12,6 +12,7 @@ import "./index.css";
 import { Services } from "./pages/services/Services";
 import { ScheduleID } from "./pages/scheduleID/ScheduleID";
 import { App } from "./App";
+import { ClientPage } from "./pages/clientPage/ClientPage";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,10 @@ const router = createBrowserRouter([
     path: "/schedule/:id",
     element: <ScheduleID />,
   },
-
+  {
+    path: "/appointment/:id",
+    element: <ClientPage />,
+  },
   {
     path: "/bot-setting",
     element: <PrivateRoute path="/bot-setting" element={<BotSetting />} />,

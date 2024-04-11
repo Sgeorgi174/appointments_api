@@ -131,3 +131,7 @@
   background-color: gray;
   pointer-events: none;
 }
+
+.disabled {
+  pointer-events: none;
+}

@@ -1,6 +1,7 @@
 const { prisma } = require("../prisma/prisma_client");
 const path = require("path");
 const fs = require("fs");
+const { findAvailablePort } = require("../utils/findAvailablePort");
 
 const add = async (req, res) => {
   try {
@@ -29,12 +30,17 @@ const add = async (req, res) => {
         .json({ message: "Пожалуйста, заполните обязательные поля" });
     }
 
+    const port = await findAvailablePort();
+
+    console.log(port);
+
     // Создаем запись в базе данных
     const bot = await prisma.userBotSettings.create({
       data: {
         botToken,
         botName,
         address,
+        port,
         imgUrl,
         userId: req.user.id,
       },
@@ -49,7 +55,12 @@ const add = async (req, res) => {
 };
 
 const get = async (req, res) => {
-  const { userId } = req.user.id;
+  const userId = req.user.id;
+  console.log(userId);
+
+  if (!userId) {
+    return res.status(400).json({ messgae: "не авторизован" });
+  }
 
   const botSettings = await prisma.userBotSettings.findFirst({
     where: {

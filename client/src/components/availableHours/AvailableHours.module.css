@@ -77,6 +77,10 @@
   pointer-events: none;
 }
 
+.disabled {
+  pointer-events: none;
+}
+
 .hidden {
   margin-top: 25px;
   width: 100%;

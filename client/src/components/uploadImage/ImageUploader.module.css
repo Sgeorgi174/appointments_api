@@ -9,10 +9,7 @@
 }
 
 .previewImage {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  object-fit: cover;
+  max-width: 280px;
 }
 
 /* ImageUploader.module.css */

@@ -13,6 +13,7 @@
   border-radius: 25px;
   box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.5);
   padding: 35px 15px;
+  transition: all 0.3s ease;
 }
 
 .wrapperForMobile {
@@ -26,6 +27,14 @@
 .wrapperForMobile_auth {
   width: 90%;
   min-height: 684px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wrapperForMobile_step1 {
+  width: 90%;
+  min-height: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;

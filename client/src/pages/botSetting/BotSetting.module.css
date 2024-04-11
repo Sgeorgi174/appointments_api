@@ -13,7 +13,6 @@
 .setiingsBox {
   display: flex;
   flex-direction: column;
-  align-items: start;
   gap: 18px;
   margin-bottom: 75px;
 }
@@ -37,8 +36,5 @@
 }
 
 .previewImage {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
+  max-width: 280px;
 }

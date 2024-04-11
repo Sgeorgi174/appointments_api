@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://мои-записи.рф/api";
+const BASE_URL = "http://localhost:8000/api";
 
 const getToken = () => {
   return localStorage.getItem("token");
@@ -76,6 +76,10 @@ export const changeAvailabilityHour = async (hourId) => {
 //SERVICES
 export const getServices = async () => {
   return sendRequest({ method: "GET", url: `${BASE_URL}/service/get` });
+};
+
+export const getCurrentServices = async (id) => {
+  return sendRequest({ method: "GET", url: `${BASE_URL}/service/get/${id}` });
 };
 
 export const deleteService = async (deletedData) => {

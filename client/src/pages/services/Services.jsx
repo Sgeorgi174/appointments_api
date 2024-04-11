@@ -31,6 +31,7 @@ export const Services = () => {
   useEffect(() => {
     getServices().then((data) => {
       setServicesData(data);
+      console.log(data);
     });
   }, [isModalEditOpen, isModalAddOpen, isModalConfirmOpen]);
 
