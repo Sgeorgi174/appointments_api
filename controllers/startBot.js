@@ -24,7 +24,7 @@ const startBot = async (req, res) => {
             {
               text: "Записаться",
               web_app: {
-                url: `https://sgeorgi174.github.io/food_delivery/ `,
+                url: `https://мои-записи.рф/schedule/${userId}`,
               },
             },
           ],
