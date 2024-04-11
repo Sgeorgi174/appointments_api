@@ -1,22 +1,18 @@
 const { prisma } = require("../prisma/prisma_client");
 const { startOfDay, addDays, endOfYear } = require("date-fns");
-const { formatDate } = require("../utils/formatDate");
+const { formatDateYYYYMMDD } = require("../utils/formatDate");
 
 const generateSchedule = async (req, res) => {
-  const { startHour, endHour, weekdays } = req.body;
-  const userId = req.user.id;
-
-  const start = parseInt(startHour);
-  const end = parseInt(endHour);
-
   try {
-    if (
-      startHour === undefined ||
-      endHour === undefined ||
-      weekdays === undefined
-    ) {
+    const { startHour, endHour, weekdays } = req.body;
+    const userId = req.user.id;
+
+    if (![startHour, endHour, weekdays].every((param) => param !== undefined)) {
       throw new Error("Не заполнены обязательные поля");
     }
+
+    const start = parseInt(startHour);
+    const end = parseInt(endHour);
 
     if (isNaN(start) || isNaN(end)) {
       throw new Error("Неверный формат времени");
@@ -29,11 +25,10 @@ const generateSchedule = async (req, res) => {
     const currentDate = new Date();
     const endDate = endOfYear(currentDate);
 
-    // Генерация дат до конца года
     const dates = [];
     let currentDateCopy = startOfDay(currentDate);
     while (currentDateCopy <= endDate) {
-      dates.push(formatDate(currentDateCopy));
+      dates.push(formatDateYYYYMMDD(currentDateCopy));
       currentDateCopy = addDays(currentDateCopy, 1);
     }
 
@@ -41,49 +36,36 @@ const generateSchedule = async (req, res) => {
       throw new Error("Не удалось сгенерировать даты для расписания");
     }
 
-    // Получение всех записей о доступности часов для данного пользователя
     const existingAvailabilities = await prisma.hourAvailability.findMany({
-      where: {
-        userId: userId,
-      },
+      where: { userId },
     });
 
-    // Создание записей о доступности часов для каждой даты, если они еще не существуют
     for (const date of dates) {
       const existingAvailability = existingAvailabilities.find(
-        (availability) =>
-          availability.date.toISOString().split("T")[0] ===
-          new Date(date).toISOString().split("T")[0]
+        (availability) => availability.date === date
       );
 
-      // Если запись для текущей даты уже существует, пропускаем создание новой записи
-      if (existingAvailability) {
-        continue;
-      }
+      if (existingAvailability) continue;
 
       const hours = [];
       for (let hour = start; hour <= end; hour++) {
-        // Проверяем, является ли текущий день недели в списке выбранных для установки isAvailable в false
-        const weekday = new Date(date).getDay(); // 0 (воскресенье) - 6 (суббота)
-        if (weekdays.includes(weekday.toString())) {
-          hours.push({ hour, isAvailable: true, userId });
-        } else {
-          hours.push({ hour, isAvailable: false, userId });
-        }
+        const weekday = new Date(date).getDay();
+        hours.push({
+          hour,
+          isAvailable: weekdays.includes(weekday.toString()),
+          userId,
+        });
       }
 
       await prisma.hourAvailability.create({
         data: {
-          date,
+          date, // Оставляем дату как строку
           userId,
-          hours: {
-            createMany: {
-              data: hours,
-            },
-          },
+          hours: { createMany: { data: hours } },
         },
       });
     }
+
     return res.status(201).json({ message: "Календарь успешно создан" });
   } catch (error) {
     console.error("Error generating schedule:", error);
@@ -220,18 +202,17 @@ const changeDay = async (req, res) => {
   const { dayDate, isAvailable } = req.body; // Добавлено получение isAvailable из тела запроса
   const userId = req.user.id;
 
+  console.log(dayDate);
+
   try {
     if (!dayDate) {
       return res.status(400).json({ message: "Укажите дату дня" });
     }
-    console.log(dayDate);
-    const isoDate = formatDate(dayDate);
-    console.log(isoDate);
 
     // Находим день по его дате с часами
     const day = await prisma.hourAvailability.findUnique({
       where: {
-        date: isoDate,
+        date: dayDate,
       },
       include: { hours: true },
     });

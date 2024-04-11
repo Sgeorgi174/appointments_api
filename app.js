@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const https = require("https");
+const http = require("http");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
@@ -13,8 +14,6 @@ const options = {
   key: fs.readFileSync("../../etc/ssl/xn----8sbucdawqnv.xn--p1ai.key"),
   cert: fs.readFileSync("../../etc/ssl/xn----8sbucdawqnv.xn--p1ai.crt"),
 };
-
-console.log(options);
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -47,6 +46,14 @@ https.createServer(options, app).listen(443, () => {
 // Обработка ошибок, которые могут возникнуть при запуске сервера
 // server.on("error", (error) => {
 //   console.error("Ошибка при запуске сервера:", error.message);
+// });
+
+// Создаем HTTP-сервер и прослушиваем порт 8000
+// const server = http.createServer(app);
+// const PORT = process.env.PORT || 8000;
+
+// server.listen(PORT, () => {
+//   console.log(`Сервер запущен на порту ${PORT}`);
 // });
 
 module.exports = app;

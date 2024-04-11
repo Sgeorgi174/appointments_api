@@ -3,7 +3,7 @@ import AvailableHours from "../availableHours/AvailableHours";
 import { CalendarHeader } from "./CalendarHeader";
 import { changeAvailabilityDay } from "../../modules/api_requests";
 import { changeType } from "../../utils/changeTypes";
-import { sliceDate } from "../../utils/slicers";
+import { formatDateYYYYMMDD, sliceDate } from "../../utils/slicers";
 import styles from "./Calendar.module.css";
 
 const Calendar = ({ data, isUser }) => {
@@ -37,6 +37,7 @@ const Calendar = ({ data, isUser }) => {
 
   const handleDayClick = (date, event) => {
     setSelectedDate(date);
+    console.log(date);
 
     changeType({
       date,
@@ -49,9 +50,8 @@ const Calendar = ({ data, isUser }) => {
   };
 
   const handleClickChangeDay = ({ date, isAvailableDay }) => {
-    console.log(date);
     changeAvailabilityDay({
-      dayDate: String(date),
+      dayDate: formatDateYYYYMMDD(date),
       isAvailable: isAvailableDay,
     }).then((res) => {
       setSchedule(res);

@@ -68,7 +68,7 @@ model Services {
 // Определение модели доступности часов
 model HourAvailability {
   id     Int      @id @default(autoincrement())
-  date   DateTime @unique
+  date   String @unique
   hours  Hour[] // Связь с моделью часов
   User   User     @relation(fields: [userId], references: [id])
   userId Int

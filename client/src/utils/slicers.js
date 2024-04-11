@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export const sliceDate = (date) => {
   const dateString = date;
 
@@ -16,3 +18,8 @@ export const formattedDateForHeader = (date) => {
 
   return `${formattedMonth} ${year}`;
 };
+
+export function formatDateYYYYMMDD(date) {
+  const formatDate = format(date, "yyyy-MM-dd", { formatStr: "string" });
+  return String(formatDate);
+}
