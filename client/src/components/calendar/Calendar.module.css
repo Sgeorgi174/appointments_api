@@ -50,7 +50,6 @@
 .availableDate {
   background-color: inherit;
   border-radius: 35px;
-  transition: background 0.3s ease;
 }
 
 .unavailableDate {

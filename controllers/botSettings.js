@@ -1,48 +1,40 @@
 const { prisma } = require("../prisma/prisma_client");
-const path = require("path");
-const fs = require("fs");
 const { findAvailablePort } = require("../utils/findAvailablePort");
+const { uploadFile } = require("../utils/uploadFile");
 
 const add = async (req, res) => {
   try {
-    // Получаем данные о пользователе и другие поля из тела запроса
-    const { botToken, botName, address } = req.body;
-
-    // Получаем путь к загруженному изображению
-    let imgUrl = req.file ? req.file.path : "";
-
-    // Если загружено изображение, обрабатываем путь
-    if (req.file) {
-      console.log(imgUrl);
-      // Удаляем часть пути '/root/appointments_api'
-      // imgUrl = imgUrl.replace("/root/appointments_api", "");
-      imgUrl = imgUrl.replace(
-        "C:\\Users\\prots\\Desktop\\my-project\\Appointments_API",
-        ""
-      );
-      console.log(imgUrl);
-    }
+    const { botToken, address, greetingText, notificationText } = req.body;
+    const userId = req.user.id;
 
     // Проверяем обязательные поля
-    if (!botToken || !botName || !address) {
+    if (!botToken || !address || !notificationText || !greetingText) {
       return res
         .status(400)
         .json({ message: "Пожалуйста, заполните обязательные поля" });
     }
 
-    const port = await findAvailablePort();
-
-    console.log(port);
+    // Настройка промисов для выполнения параллельных запросов
+    const [port, addressFileUrl, greetingFileUrl, notificationFileUrl] =
+      await Promise.all([
+        findAvailablePort(),
+        uploadFile(req.files["addressFile"], userId),
+        uploadFile(req.files["greetingFile"], userId),
+        uploadFile(req.files["notificationFile"], userId),
+      ]);
 
     // Создаем запись в базе данных
     const bot = await prisma.userBotSettings.create({
       data: {
         botToken,
-        botName,
         address,
         port,
-        imgUrl,
-        userId: req.user.id,
+        greetingText,
+        notificationText,
+        addressFileUrl,
+        greetingFileUrl,
+        notificationFileUrl,
+        userId,
       },
     });
 
@@ -56,7 +48,6 @@ const add = async (req, res) => {
 
 const get = async (req, res) => {
   const userId = req.user.id;
-  console.log(userId);
 
   if (!userId) {
     return res.status(400).json({ messgae: "не авторизован" });
@@ -77,40 +68,36 @@ const get = async (req, res) => {
 
 const edit = async (req, res) => {
   try {
-    const { botToken, botName, address, id } = req.body;
-    let imgUrl = "";
+    const data = req.body;
+    const userId = req.user.id;
+    const { id } = req.body;
 
-    if (req.file) {
-      // Если загружен новый файл аватара, обновляем imgUrl
-      const rootDir = "C:\\Users\\prots\\Desktop\\my-project\\Appointments_API"; // Замените на корневую директорию вашего проекта
-      imgUrl = req.file.path.replace(rootDir, "");
-
-      // Получаем путь к существующему файлу из базы данных
-      const existingBotSettings = await prisma.userBotSettings.findUnique({
-        where: { id: parseInt(id) },
-      });
-
-      if (existingBotSettings && existingBotSettings.imgUrl) {
-        // Удаляем существующий файл перед записью нового
-        fs.unlinkSync(path.join(rootDir, existingBotSettings.imgUrl));
-      }
-    }
-
-    // Обновляем настройки бота, включая imgUrl
-    const updatedBotSettings = await prisma.userBotSettings.update({
-      where: { id: parseInt(id) },
-      data: {
-        botToken,
-        botName,
-        address,
-        imgUrl: imgUrl,
+    // Находим запись в базе данных по botId и userId
+    let bot = await prisma.userBotSettings.findFirst({
+      where: {
+        id: parseInt(id),
+        userId,
       },
     });
 
-    return res.status(200).json(updatedBotSettings);
+    if (!bot) {
+      return res.status(404).json({ message: "Бот не найден" });
+    }
+
+    // Обновляем поля записи
+    bot = await prisma.userBotSettings.update({
+      where: {
+        id: parseInt(id),
+        userId,
+      },
+      data: { ...data, id: parseInt(id) },
+    });
+
+    // Отправляем ответ с обновленным ботом
+    return res.status(200).json(bot);
   } catch (error) {
-    console.error("Error updating bot settings:", error);
-    return res.status(500).json({ error: "Error updating bot settings" });
+    console.error("Error editing bot settings:", error);
+    return res.status(500).json({ error: "Error editing bot settings" });
   }
 };
 

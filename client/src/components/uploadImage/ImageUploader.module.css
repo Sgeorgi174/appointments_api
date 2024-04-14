@@ -1,39 +1,7 @@
-/* ImageUploader.module.css */
-
-.imageUploader {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.previewImage {
-  max-width: 280px;
-}
-
-/* ImageUploader.module.css */
-
-.fileInput {
-  display: none; /* Скрываем оригинальный input */
-}
-
-.customButton {
+.uploadBox {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 35px;
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
-  cursor: pointer;
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-/* Опциональные стили при наведении */
-.customButton:hover {
-  background-color: #45a049;
+  margin-top: 25px;
+  min-height: 100px;
+  min-width: 320px;
 }

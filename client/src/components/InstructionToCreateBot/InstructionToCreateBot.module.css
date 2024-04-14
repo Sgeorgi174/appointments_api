@@ -1,0 +1,100 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  width: 270px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.title span {
+  font-weight: 800;
+}
+
+.instructionsBox {
+  margin-top: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  gap: 15px;
+}
+
+.instructionBox {
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  row-gap: 7px;
+  border: 1px solid #5e5df0;
+  border-radius: 15px;
+}
+
+.textRow {
+  display: flex;
+}
+
+.textSpan {
+  font-size: 11px;
+  font-weight: 800;
+  width: 13px;
+}
+
+.text {
+  width: 300px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.text span {
+  font-weight: 800;
+}
+
+.img {
+  margin-left: 15px;
+  width: 250px;
+  border-radius: 15px;
+}
+
+.confirmText {
+  margin-top: 30px;
+  width: 345px;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.checkboxContainer {
+  margin: 35px 0 15px 0;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+.checkboxLabel {
+  justify-self: start;
+  display: flex;
+  align-items: center;
+}
+
+.checkboxLabel::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+}
+
+input[type="checkbox"]:checked + .checkboxLabel::before {
+  background-color: #5e5df0;
+  transition: all 0.3s ease;
+}

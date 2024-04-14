@@ -4,8 +4,26 @@ const { auth } = require("../middleware/auth");
 const upload = require("../middleware/upload");
 var router = express.Router();
 
-router.post("/add", auth, upload.single("file"), add);
+router.post(
+  "/add",
+  auth,
+  upload.fields([
+    { name: "addressFile" },
+    { name: "greetingFile" },
+    { name: "notificationFile" },
+  ]),
+  add
+);
 router.get("/get", auth, get);
-router.put("/edit", auth, upload.single("file"), edit);
+router.put(
+  "/edit",
+  auth,
+  upload.fields([
+    { name: "addressFile" },
+    { name: "greetingFile" },
+    { name: "notificationFile" },
+  ]),
+  edit
+);
 
 module.exports = router;

@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { Header } from "../../components/header/Header";
-import { Wrapper } from "../../components/wrapper/Wrapper";
 import { ServicesBox } from "../../components/servicesBox/ServicesBox";
 import { getServices } from "../../modules/api_requests";
 import { ServiceEditModal } from "../../components/serviceModule/ServiceEditModal";
@@ -36,8 +34,7 @@ export const Services = () => {
   }, [isModalEditOpen, isModalAddOpen, isModalConfirmOpen]);
 
   return (
-    <Wrapper wrapperClass={"wrapperForMobile"}>
-      <Header firstLetter={"Г"} />
+    <>
       <div className={styles.titleBox}>
         <h2 className={styles.title}>Мои услуги</h2>
         <img
@@ -78,6 +75,6 @@ export const Services = () => {
         isOpen={isModalConfirmOpen}
         setIsModalOpen={setIsModalConfirmOpen}
       />
-    </Wrapper>
+    </>
   );
 };

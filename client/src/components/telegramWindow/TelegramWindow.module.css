@@ -1,0 +1,144 @@
+/* BOT TG WINDOW */
+
+.telegramWindowExample {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  background-color: #191d1c;
+  min-height: 440px;
+  width: 207px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 5px 4px 5px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headerText {
+  font-size: 9px;
+  font-weight: 500;
+  color: #fff;
+  font-weight: 500;
+}
+
+.headerUnderText {
+  font-size: 7px;
+  font-weight: 500;
+  color: rgb(130, 132, 137);
+}
+
+.headerImg {
+  width: 20px;
+  height: 20px;
+  border-radius: 30px;
+}
+
+.content {
+  height: 360px;
+  overflow: auto;
+  background: url("/icons/tgWindow/tgBackground.jpeg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 5px;
+}
+
+.myMessage {
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
+
+.myMessageBlock {
+  padding: 3px 5px;
+  background-color: #02a2ba;
+  border-radius: 15px;
+  display: flex;
+  align-items: end;
+  gap: 3px;
+}
+
+.messageText {
+  font-size: 9px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.messageTime {
+  font-size: 6px;
+  font-weight: 100;
+  color: #ffffff81;
+}
+
+.answer {
+  margin-top: 5px;
+  width: 160px;
+  border-radius: 7px;
+  background-color: #182126fb;
+}
+
+.answerPhotoBox {
+  width: 160px;
+}
+
+.answerPhoto {
+  width: 100%;
+  border-radius: 7px;
+}
+
+.answerTextBox {
+  padding: 6px;
+}
+
+.messageAnswer {
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: -0.3px;
+  color: #fff;
+  font-weight: 400;
+  white-space: pre-line;
+}
+
+.inlineBtnExample {
+  width: 160px;
+  margin-top: 2px;
+  background-color: #182126fb;
+  padding: 7px;
+  display: flex;
+  justify-content: center;
+  border-radius: 7px 7px 10px 10px;
+  margin-bottom: 5px;
+}
+
+.footer {
+  padding: 4px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footerText {
+  font-size: 9px;
+  font-weight: 500;
+  color: rgb(130, 132, 137);
+}
+
+.centerFooter {
+  width: 163px;
+  padding: 5px;
+  background-color: #070707;
+  border-radius: 10px;
+}

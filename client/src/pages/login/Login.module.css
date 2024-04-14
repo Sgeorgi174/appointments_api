@@ -1,7 +1,6 @@
 .title {
   font-size: 36px;
   font-weight: 700;
-  margin-top: 45px;
 }
 
 .icon {
@@ -27,12 +26,12 @@
 }
 
 .link {
-  margin-top: 120px;
+  margin-top: 30px;
   color: #333;
 }
 
 .errorBox {
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
 
 .error {

@@ -1,0 +1,12 @@
+<svg width="15.000000" height="15.000000" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<pattern id="pattern_46_70" patternContentUnits="objectBoundingBox" width="1.000000" height="1.000000">
+			<use xlink:href="#image46_7_0" transform="matrix(0.020833,0,0,0.020833,0,0)"/>
+		</pattern>
+		<image id="image46_7_0" width="48.000000" height="48.000000" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAABNNJREFUaIHtWV1sFFUYPefuIqVdGgOJCdDiD/JCDCQm2hfBCL6IxPokCYmJJlhjqmJndtooJo4vBnZ22HYTFNJITDAa6gsYoj5YSOQv9MEHgyEkooKIaILhp7Vbtns/H7ozuzR197aztRr2vOx3737f+c7J3Lk7eweoY27BWhNmvMyTGvIcBGsBtBanfwFxDEoO2LY9WMt+NTOQSvWtJAv9Cni8Up4QR5VCh2VZP9Sib00MpNPpx6DVIRKLTPJF8CeUbk8mk8ej9lZRCVKpvpWTxOcA9lKjTaOQ0CgkqNFGQd/EdwCJRRAcTKVSK6L2j0clIAv9RCBeLmropx3HOTMpbQjAkOf17lOiD4NoJdRipVQ/gPWR+kcp9n1/AzS/Lg5zGoVHphB/GzyvdzWlMERyPgBocIPjdB2ZqYZoS0hzc2nAPdXEA4DjvPEdhXuDcUxkc6X8aohkQKDXhTH5iWmdVirMFWBdpdxqiHgTc1kQLVgw76xpVWPjvO+DWCgtURREMkAwEcSdnZ3DpnXlueUcM0HkbXSuUTcw16gbmGvUDcw16gbmGkaP076X8UV0J8hs0rG6Z1OQ72XeE+jXlDBrdVvbq+UbXgF5leR8AtuiCjTo1UUwIYRlkm26hO6a9DmbaJj0WRH/+3vgzjAgkPDxd/fu3Ylq89WQzWabQw6RG1PNA7hpwmV4BXgliHK53NLSvPwaRGPDY6vMuIB8Ph/mChFy6FG9JOwIXJlcNxWMDLDMgIhaUZpX35QlbTHhmiApzy1x5JU8GKZo+c2EynQJnQpiimwsVcuBMId42fN6V1fj8n1/jWh0hBRahxxEObc6BQMYGuAXZYP2gYGBGADYtj0oxNHiNw1K9OFKJnzfX0PNw8GRCgSDdo99FABc140r4JmwDct6VoDRL3Fzc+OJ4esjf4C4B0TrpQuXXgDwIQAohQ49jtMkFoFopRSG/J279iIunzY0NJwBgFwu9xAEW6SADhDzJ7Trq7F5sfBKLGxa+KIALQAgIr8Pj1w7aaLN+GBrV3qXLYJ0sehSXudX9fT03ASKZ6OCg4RabMIl0FdjEmvv6u46AUzsPvmxwllAlgKAEFYyaWVMuIx/B5qGmz5AcWcQoCWu4vtd11UAkEwmj2vRbRRUP2ETDMbisUcD8a7rqlu5Wx8H4gFeVgp7THVN62jRT/mbBPicJAGAgr4bf92wXNfVQY7nZdbHRDYXKGtZfD9A4UVNHlNaHwjWfCB+4YLmDBReBwAREQKb7G7baP1P2wAA+F5mByA9pRk5NK7Hnw+Wkymy2WxzPlfYD0p445LYYSWtN6fDM+1HidZ7l20H+VFphu0xxM+l05mtwe5UCQMDAzHf81/Kj42fKxcPyr6W5S1vT1fPjE6nRYR+OrOTgDOJ7rJADlLkS1Hyo4hcaGxs5Ojo6HJqPgCqjaL1s1RcclsVsaPL7nqLpPwrBgKk05mnAP0+hffNpF4oPyvNV6xu66uZaoj8isnzvCZKbBuBrSDuNyoS/ARKv4bOOo4zEqV/zV7yua6rEonEBkrsCUA/LII2kncDgIhcI3EaUN8q4Mj1ketHyneuKKj5a9YAvue7AN+ZGMm7tmO7s9HnzvhD819G3UAFjP5DXFPMmgEVV58BPA/w/ERcx5T4G3E01GIzAJ0NAAAAAElFTkSuQmCC"/>
+	</defs>
+	<rect id="icons8-microphone-48" width="15.000000" height="15.000000" fill="url(#pattern_46_70)" fill-opacity="1.000000"/>
+</svg>

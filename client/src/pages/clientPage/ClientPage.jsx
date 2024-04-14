@@ -23,7 +23,6 @@ export const ClientPage = () => {
   const [userId, setUserId] = useState(null);
 
   const { id } = useParams();
-  telegram.expand();
 
   useEffect(() => {
     setIsLoading(true);
@@ -38,9 +37,13 @@ export const ClientPage = () => {
         });
     });
 
+    telegram.expand();
+
     // Get user id after expanding the Telegram object
-    const userId = telegram.initDataUnsafe.user.id;
-    setUserId(userId); // Save user id in state
+    if (telegram.initDataUnsafe.user) {
+      const userId = telegram.initDataUnsafe.user.id;
+      setUserId(userId); // Save user id in state
+    }
   }, []);
 
   const handleClickNextStep = () => {

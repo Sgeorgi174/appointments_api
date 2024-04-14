@@ -18,7 +18,7 @@ export const Regitser = () => {
 
   return (
     <div>
-      <Wrapper wrapperClass={"wrapperForMobile"}>
+      <Wrapper wrapperClass={"wrapperForMobile_auth"}>
         <p className={styles.title}>Welcome</p>
         <img className={styles.icon} src={icon} alt="icon" />
         <div className={styles.inputsGap}>

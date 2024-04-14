@@ -14,14 +14,25 @@ const storage = multer.diskStorage({
     }
 
     cb(null, userFolderPath);
-
-    req.file = file;
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    const userId = req.user.id;
+    const fileName = `${file.fieldname}_${userId}${path.extname(
+      file.originalname
+    )}`;
+    cb(null, fileName);
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    // Проверяем тип и размер файла
+    if (file.mimetype !== "image/jpeg" || file.size > 10 * 1024 * 1024) {
+      return cb(new Error("Неверный тип файла или слишком большой размер"));
+    }
+    cb(null, true);
+  },
+});
 
 module.exports = upload;

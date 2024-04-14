@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import Calendar from "../../components/calendar/Calendar";
-import { Header } from "../../components/header/Header";
-import { Wrapper } from "../../components/wrapper/Wrapper";
 import { getSchedule } from "../../modules/api_requests";
 import { CreateCalendar } from "../../components/createCalendar/CreateCalendar";
 import { Loader } from "../../components/loader/Loader";
@@ -34,8 +32,7 @@ export const Schedule = () => {
   }, []);
 
   return (
-    <Wrapper wrapperClass={"wrapperForMobile"}>
-      <Header firstLetter="Г" />
+    <>
       {isLoading ? (
         <Loader />
       ) : created ? (
@@ -43,6 +40,6 @@ export const Schedule = () => {
       ) : (
         <CreateCalendar setCreated={setCreated} setIsLoading={setIsLoading} />
       )}
-    </Wrapper>
+    </>
   );
 };
