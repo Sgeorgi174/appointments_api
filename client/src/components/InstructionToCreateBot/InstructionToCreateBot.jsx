@@ -64,6 +64,7 @@ export const InstructionToCreateBot = ({
       <div className={styles.checkboxContainer}>
         <input
           type="checkbox"
+          className={styles.checkbox}
           id="readInstructions"
           checked={isCheckboxChecked}
           onChange={handleCheckboxChange}

@@ -6,6 +6,7 @@ import styles from "./ClientPage.module.css";
 import { GradientButton } from "../../components/gradientButton/GradientButton";
 import Calendar from "../../components/calendar/Calendar";
 import {
+  createOrGetClient,
   getCurrentSchedule,
   getCurrentServices,
 } from "../../modules/api_requests";
@@ -14,15 +15,29 @@ import { Loader } from "../../components/loader/Loader";
 const telegram = window.Telegram.WebApp;
 
 export const ClientPage = () => {
-  const [clientInfo, setClientInfo] = useState({ name: "", telNumber: "" });
+  const [clientInfo, setClientInfo] = useState({
+    name: "",
+    telNumber: "",
+    telegramId: "",
+    queryId: "",
+    userId: "",
+  });
   const [isError, setIsError] = useState(false);
   const [step, setStep] = useState(1);
   const [servicesList, setServicesList] = useState([]);
+  const [appointmentInfo, setAppointmentInfo] = useState({
+    service: {},
+    client: {},
+    date: "",
+    time: {},
+    query_id: "",
+  });
   const [schedule, setSchedule] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const [serviceDuration, setServiceDuration] = useState(0);
 
   const { id } = useParams();
+  console.log(id);
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,21 +56,43 @@ export const ClientPage = () => {
 
     // Get user id after expanding the Telegram object
     if (telegram.initDataUnsafe.user) {
-      const userId = telegram.initDataUnsafe.user.id;
-      setUserId(userId); // Save user id in state
+      console.log("tut");
+      const telegramId = telegram.initDataUnsafe.user.id;
+      const queryId = telegram.initDataUnsafe.query_id;
+      setClientInfo({ ...clientInfo, telegramId, queryId, userId: id }); // Save user id in state
     }
   }, []);
 
-  const handleClickNextStep = () => {
+  useEffect(() => {}, []);
+
+  console.log(clientInfo);
+
+  const handleCreateClientOnFirstStep = () => {
+    // createOrGetClient(clientInfo)
+    //   .then((data) => {
+    //     setAppointmentInfo({ ...appointmentInfo, client: data });
+    //     setStep(2);
+    //   })
+    //   .catch(() => {
+    //     return;
+    //   });
+    setStep(2);
+  };
+
+  const handleClickNextStep = (service) => {
+    console.log(service);
+    setServiceDuration(service.duration);
+    setAppointmentInfo({ ...appointmentInfo, service });
     setStep(3);
   };
 
   const handleClickComplete = () => {
+    console.log(appointmentInfo);
     setStep(4);
   };
 
   const handleCloseWindow = () => {
-    telegram.close();
+    telegram.answerWebAppQuery();
   };
 
   return (
@@ -99,7 +136,7 @@ export const ClientPage = () => {
               />
               <GradientButton
                 buttonName={"Далее"}
-                onClick={() => setStep(2)}
+                onClick={handleCreateClientOnFirstStep}
                 isdDsabled={isError}
               />
             </div>
@@ -128,7 +165,11 @@ export const ClientPage = () => {
           )}
           {step === 3 && (
             <>
-              <Calendar isUser={false} data={schedule} />
+              <Calendar
+                serviceDuration={serviceDuration}
+                isUser={false}
+                data={schedule}
+              />
               <div className={styles.completeButtonBox}>
                 <GradientButton
                   buttonName={"Записаться"}
@@ -140,7 +181,6 @@ export const ClientPage = () => {
           {step === 4 && (
             <div className={styles.congratsBox}>
               <h1 className={styles.title}>Отлично!</h1>
-              <p>{userId}</p>
               <div className={styles.completeButtonBox}>
                 <GradientButton
                   buttonName={"OK"}

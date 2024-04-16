@@ -74,7 +74,7 @@
   margin: 35px 0 15px 0;
 }
 
-input[type="checkbox"] {
+.checkboxContainer input[type="checkbox"] {
   display: none;
 }
 

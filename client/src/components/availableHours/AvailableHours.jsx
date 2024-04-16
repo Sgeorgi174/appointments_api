@@ -11,8 +11,10 @@ const AvailableHours = ({
   typeToChanges,
   setSchedule,
   setIsAvailable,
+  serviceDuration,
 }) => {
   const [selectedHour, setSelectedHour] = useState({ index: "", id: "" });
+
   const [hoursList, setHoursList] = useState([]);
 
   useEffect(() => {
@@ -44,17 +46,22 @@ const AvailableHours = ({
       <div className={styles.clockContainer}>
         <div className={styles.clock}>
           {hoursList.map((hour, index) => {
+            // Проверьте, доступны ли следующие часы
+            const nextHoursAvailable = hoursList
+              .slice(index, index + serviceDuration)
+              .every((hour) => hour.isAvailable);
+
             return (
               <button
                 key={index}
                 className={`${styles.hour} ${
-                  !hour.isAvailable
+                  !hour.isAvailable || !nextHoursAvailable
                     ? `${styles.inactive} ${!isUser ? styles.disabled : ""}`
                     : ""
                 } ${selectedHour.index === index ? styles.selectedHour : ""}`}
                 onClick={(event) =>
                   handleHourClick({ event, id: hour.id, index })
-                } //можно отдавать по айди
+                }
               >
                 {hour.hour}:00
               </button>

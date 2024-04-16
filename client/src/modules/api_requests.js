@@ -40,6 +40,13 @@ export const register = async (registerData) => {
   });
 };
 
+export const getUser = async () => {
+  return sendRequest({
+    method: "GET",
+    url: `${BASE_URL}/user/get`,
+  });
+};
+
 //SCHEDULE
 export const getSchedule = async () => {
   return sendRequest({ method: "GET", url: `${BASE_URL}/timetable/get` });
@@ -127,5 +134,54 @@ export const editSettings = async (settingsData) => {
     method: "PUT",
     url: `${BASE_URL}/bot/setting/edit`,
     data: settingsData,
+  });
+};
+
+//BOT
+
+export const startBot = async () => {
+  return sendRequest({
+    method: "GET",
+    url: `${BASE_URL}/bot/start`,
+  });
+};
+
+export const stopBot = async () => {
+  return sendRequest({
+    method: "GET",
+    url: `${BASE_URL}/bot/stop`,
+  });
+};
+
+//CLIENT
+export const createOrGetClient = async (clientData) => {
+  return sendRequest({
+    method: "POST",
+    url: `${BASE_URL}/client/add`,
+    data: clientData,
+  });
+};
+
+//APPOINTMENT
+export const getAppointments = async () => {
+  return sendRequest({
+    method: "GET",
+    url: `${BASE_URL}/appointment/get`,
+  });
+};
+
+export const confirmAppointment = async (id) => {
+  return sendRequest({
+    method: "PUT",
+    url: `${BASE_URL}/appointment/confirm`,
+    data: id,
+  });
+};
+
+export const deleteAppointment = async (id) => {
+  return sendRequest({
+    method: "DELETE",
+    url: `${BASE_URL}/appointment/delete`,
+    data: id,
   });
 };

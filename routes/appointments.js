@@ -1,17 +1,16 @@
 var express = require("express");
 const {
   addAppointment,
-  createCalendar,
-  getToday,
-  getTomorrow,
-  getTime,
+  deleteAppointment,
+  getAllAppointments,
+  confirmAppointment,
 } = require("../controllers/appointments");
+const { auth } = require("../middleware/auth");
 var router = express.Router();
 
 router.post("/add", addAppointment);
-router.post("/createCalendar", createCalendar);
-router.get("/getToday", getToday);
-router.post("/getTomorrow", getTomorrow);
-router.get("/getTime", getTime);
+router.delete("/delete", auth, deleteAppointment);
+router.put("/confirm", auth, confirmAppointment);
+router.get("/get", auth, getAllAppointments);
 
 module.exports = router;

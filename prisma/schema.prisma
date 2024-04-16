@@ -20,20 +20,22 @@ model User {
   services     Services[]
   availability HourAvailability[]
   hours        Hour[]
+  isStartBot   Boolean            @default(false)
+  clients      Client[]
 }
 
 model UserBotSettings {
-  id                   Int     @id @default(autoincrement())
-  botToken             String
-  address              String
-  addressFileUrl       String?
-  greetingText         String
-  greetingFileUrl      String?
-  notificationText     String
+  id                  Int     @id @default(autoincrement())
+  botToken            String
+  address             String
+  addressFileUrl      String?
+  greetingText        String
+  greetingFileUrl     String?
+  notificationText    String
   notificationFileUrl String?
-  port                 Int
-  user                 User    @relation(fields: [userId], references: [id])
-  userId               Int
+  port                Int
+  user                User    @relation(fields: [userId], references: [id])
+  userId              Int
 }
 
 model Bots {
@@ -44,25 +46,25 @@ model Bots {
 
 model Client {
   id           Int           @id @default(autoincrement())
-  telegramId   String?       @unique
+  telegramId   Int?          @unique
   name         String?
   telNumber    String?
-  appointments Appointment[] // Клиент может иметь множество записей на прием
+  appointments Appointment[]
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int // Клиент может иметь множество записей на прием
 }
 
 model Appointment {
-  id          Int      @id @default(autoincrement())
-  day         DateTime
-  hour        Int
-  client      Client   @relation(fields: [clientId], references: [id]) // Связь с клиентом по ID
-  clientId    Int // ID клиента
-  clientName  String
-  service     Services @relation(fields: [serviceId], references: [id]) // Связь с услугой по ID
-  serviceId   Int // ID услуги
-  serviceName String
-  duration    Int
-  user        User     @relation(fields: [userId], references: [id])
-  userId      Int
+  id        Int      @id @default(autoincrement())
+  day       String
+  hour      Int
+  client    Client   @relation(fields: [clientId], references: [id]) // Связь с клиентом по ID
+  clientId  Int // ID клиента
+  service   Services @relation(fields: [serviceId], references: [id]) // Связь с услугой по ID
+  serviceId Int // ID услуги
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  status    String
 }
 
 model Services {
@@ -78,7 +80,7 @@ model Services {
 // Определение модели доступности часов
 model HourAvailability {
   id     Int    @id @default(autoincrement())
-  date   String @unique
+  date   String 
   hours  Hour[] // Связь с моделью часов
   User   User   @relation(fields: [userId], references: [id])
   userId Int

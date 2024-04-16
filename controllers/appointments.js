@@ -1,148 +1,195 @@
 const { prisma } = require("../prisma/prisma_client");
 
-const createCalendar = async (req, res) => {
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth() + 1; // Месяцы в JavaScript начинаются с 0
+//there are 3 type of status : 'pending' || 'confirmed' || 'passed'
 
-  for (let month = currentMonth; month <= 12; month++) {
-    const daysInMonth = new Date(currentYear, month, 0).getDate();
-    const existingDates = await prisma.availability.findMany({
-      where: {
-        month: `${currentYear}-${month.toString().padStart(2, "0")}`,
+const addAppointment = async (req, res) => {
+  try {
+    const { serviceId, clientId, date, time, query_id, userId } = req.body;
+
+    // Проверка обязательных полей
+    if (
+      ![serviceId, clientId, date, time, query_id, userId].every(
+        (param) => param !== undefined
+      )
+    ) {
+      throw new Error("Не заполнены обязательные поля");
+    }
+
+    // Получение продолжительности услуги
+    const service = await prisma.services.findUnique({
+      where: { id: parseInt(serviceId) },
+    });
+
+    if (!service) {
+      throw new Error("Услуга не найдена");
+    }
+
+    const { duration } = service;
+
+    // Поиск доступности на указанную дату и время
+    const availability = await prisma.hourAvailability.findFirst({
+      where: { date, userId: parseInt(userId) },
+      include: { hours: true },
+    });
+
+    if (!availability) {
+      throw new Error("Нет доступности на указанную дату");
+    }
+
+    for (let i = 0; i < duration; i++) {
+      const currentHour = availability.hours.find((h) => {
+        return h.hour === parseInt(time) + i;
+      });
+
+      console.log(currentHour);
+
+      if (currentHour || currentHour.isAvailable) {
+        await prisma.hour.update({
+          where: { id: currentHour.id },
+          data: { isAvailable: false },
+        });
+      } else {
+        throw new Error("Время уже занято");
+      }
+    }
+
+    //Создание новой записи
+    const appointment = await prisma.appointment.create({
+      data: {
+        day: date,
+        hour: parseInt(time),
+        clientId: parseInt(clientId),
+        serviceId: parseInt(serviceId),
+        userId: parseInt(userId),
+        status: "pending",
       },
     });
 
-    const existingDateSet = new Set(existingDates.map((date) => date.day));
+    return res.status(201).json(appointment);
+  } catch (error) {
+    console.error("Error adding appointment:", error);
+    return res
+      .status(500)
+      .json({ message: error.message || "Ошибка при добавлении записи" });
+  }
+};
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      if (existingDateSet.has(day)) {
-        continue; // Если дата уже существует в базе данных, пропускаем создание
-      }
+const deleteAppointment = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.body;
 
-      for (let hour = 9; hour <= 18; hour++) {
-        await prisma.availability.create({
-          data: {
-            month: `${currentYear}-${month.toString().padStart(2, "0")}`,
-            day: day,
-            hour: hour,
-            isAvailable: true,
-          },
+    // Проверка обязательных полей
+    if (!id) {
+      throw new Error("Не заполнены обязательные поля");
+    }
+
+    if (!userId) {
+      throw new Error("Не авторизован");
+    }
+
+    // Получение информации о записи
+    const appointment = await prisma.appointment.findUnique({
+      where: { id: parseInt(id) },
+      include: { service: true },
+    });
+
+    if (!appointment) {
+      throw new Error("Запись не найдена");
+    }
+
+    const { day, hour, service } = appointment;
+    const { duration } = service;
+
+    // Поиск доступности на указанную дату
+    const availability = await prisma.hourAvailability.findFirst({
+      where: { date: day, userId: appointment.userId },
+      include: { hours: true },
+    });
+
+    if (!availability) {
+      throw new Error("Нет доступности на указанную дату");
+    }
+
+    for (let i = 0; i < duration; i++) {
+      const currentHour = availability.hours.find((h) => {
+        return h.hour === hour + i;
+      });
+
+      if (currentHour) {
+        await prisma.hour.update({
+          where: { id: currentHour.id },
+          data: { isAvailable: true },
         });
       }
     }
 
-    console.log(
-      `График доступности для мастера на месяц ${currentYear}-${month} создан успешно.`
-    );
+    // Удаление записи
+    await prisma.appointment.delete({
+      where: { id: parseInt(id) },
+    });
+
+    return res.status(200).json({ message: "Запись успешно удалена" });
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+    return res
+      .status(500)
+      .json({ message: error.message || "Ошибка при удалении записи" });
   }
-  return res.status(200).json({ message: "расписание создано" });
 };
 
-const addAppointment = async (req, res) => {
-  const { month, day, hour, telegramId, serviceId } = req.body;
+const confirmAppointment = async (req, res) => {
+  const { id } = req.body;
 
-  const client = await prisma.client.findFirst({
-    where: {
-      telegramId,
-    },
-  });
-  const clientId = client.id;
-  const clientName = client.name;
+  try {
+    const appointment = await prisma.appointment.findUnique({
+      where: { id: parseInt(id) },
+    });
 
-  const service = await prisma.services.findFirst({
-    where: {
-      id: parseInt(serviceId),
-    },
-  });
-  const serviceName = service.name;
-  const duration = service.duration;
-
-  const apointment = await prisma.appointment.create({
-    data: {
-      month: month,
-      day: parseInt(day),
-      hour: parseInt(hour),
-      duration: parseInt(duration),
-      serviceId: parseInt(serviceId),
-      clientId,
-      clientName,
-      serviceName,
-    },
-  });
-
-  const findTimeSlot = await prisma.availability.findFirst({
-    where: {
-      month: month,
-      day: parseInt(day),
-      hour: parseInt(hour),
-    },
-  });
-
-  if (findTimeSlot) {
-    const hour = duration / 60;
-    for (let i = 0; i < hour; i++) {
-      await prisma.availability.update({
-        where: {
-          id: findTimeSlot.id + i,
-        },
-        data: {
-          isAvailable: false,
-        },
-      });
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
     }
-  }
 
-  return res.status(201).json(apointment);
-  // try {
-
-  // } catch {
-  //   return res.status(500).json("Не удалось сделать запись");
-  // }
-};
-
-const getToday = async (req, res) => {
-  try {
-    const date = new Date().getDate();
-
-    const todayList = await prisma.appointment.findMany({
-      where: {
-        day: date,
-      },
+    const updatedAppointment = await prisma.appointment.update({
+      where: { id: parseInt(id) },
+      include: { client: true, service: true },
+      data: { status: "confirmed" },
     });
 
-    return res.status(200).json(todayList);
-  } catch {
-    res.status(500).json("wrong");
+    return res.status(200).json(updatedAppointment);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while confirming the appointment" });
   }
 };
 
-const getTomorrow = async (req, res) => {
+const getAllAppointments = async (req, res) => {
   try {
-    const date = new Date().getDate() + 1;
+    const userId = req.user.id;
 
-    const todayList = await prisma.appointment.findMany({
-      where: {
-        day: date,
-      },
+    const appointments = await prisma.appointment.findMany({
+      where: { userId: userId, status: { not: "passed" } },
+      include: { client: true, service: true },
     });
 
-    return res.status(200).json(todayList);
-  } catch {
-    res.status(500).json("wrong");
+    if (!appointments) {
+      throw new Error("У вас нет записей");
+    }
+
+    return res.status(200).json(appointments);
+  } catch (error) {
+    console.error("Error getting appointment:", error);
+    return res
+      .status(500)
+      .json({ message: error.message || "Ошибка при получении записей" });
   }
-};
-
-const getTime = async (req, res) => {
-  const event = await prisma.availability.findMany();
-
-  return res.status(200).json(event);
 };
 
 module.exports = {
   addAppointment,
-  createCalendar,
-  getToday,
-  getTomorrow,
-  getTime,
+  deleteAppointment,
+  getAllAppointments,
+  confirmAppointment,
 };

@@ -33,7 +33,7 @@ export const CreateCalendar = ({ setCreated, setIsLoading }) => {
         setIsError(false);
         setIsСonfigured(!isСonfigured);
         setCreated(true);
-        setIsLoading(true);
+        setIsLoading(false);
       })
       .catch(() => {
         setIsСonfigured(false);

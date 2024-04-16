@@ -210,7 +210,7 @@ const changeDay = async (req, res) => {
     }
 
     // Находим день по его дате с часами
-    const day = await prisma.hourAvailability.findUnique({
+    const day = await prisma.hourAvailability.findFirst({
       where: {
         date: dayDate,
       },

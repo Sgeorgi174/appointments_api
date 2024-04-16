@@ -12,7 +12,7 @@ export const Header = ({ firstLetter }) => {
         </Link>
         <div className={styles.headerRight}>
           <div className={styles.avatar}>
-            <p className={styles.avatarText}>{firstLetter}</p>
+            <p className={styles.avatarText}>{firstLetter[0]}</p>
           </div>
           <Link
             onClick={() => {

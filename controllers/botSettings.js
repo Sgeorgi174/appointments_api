@@ -66,6 +66,22 @@ const get = async (req, res) => {
   return res.status(200).json(botSettings);
 };
 
+const getCurrent = async (req, res) => {
+  const { userId } = req.params;
+
+  const botSettings = await prisma.userBotSettings.findFirst({
+    where: {
+      userId,
+    },
+  });
+
+  if (!botSettings) {
+    return res.status(400).json({ message: "Настройки не найдены" });
+  }
+
+  return res.status(200).json(botSettings);
+};
+
 const edit = async (req, res) => {
   try {
     const data = req.body;
@@ -101,4 +117,4 @@ const edit = async (req, res) => {
   }
 };
 
-module.exports = { add, get, edit };
+module.exports = { add, get, edit, getCurrent };

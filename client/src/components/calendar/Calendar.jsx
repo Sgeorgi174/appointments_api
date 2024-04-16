@@ -6,7 +6,7 @@ import { changeType } from "../../utils/changeTypes";
 import { formatDateYYYYMMDD, sliceDate } from "../../utils/slicers";
 import styles from "./Calendar.module.css";
 
-const Calendar = ({ data, isUser }) => {
+const Calendar = ({ data, isUser, serviceDuration }) => {
   const [schedule, setSchedule] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentDay, setCurrentDay] = useState([]);
@@ -171,6 +171,7 @@ const Calendar = ({ data, isUser }) => {
         </div>
       )}
       <AvailableHours
+        serviceDuration={serviceDuration}
         setSchedule={setSchedule}
         setIsAvailable={setIsAvailable}
         isUser={isUser}
