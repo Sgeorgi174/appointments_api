@@ -12,7 +12,14 @@ const authorizationPage = async ({ bot, chatId }) => {
   );
 };
 
-const sendAuthorizationData = async (email, password, chatId, bot, States) => {
+const sendAuthorizationData = async (
+  email,
+  password,
+  chatId,
+  bot,
+  States,
+  userSetting
+) => {
   const url = "https://мои-записи.рф/api/user/login";
   const data = { email, password };
 

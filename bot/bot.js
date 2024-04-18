@@ -56,6 +56,7 @@ const start = async () => {
   };
 
   let States = { email: "", password: "", status: "unauthorized" };
+  console.log(States);
 
   // Обработка сообщений для каждого бота
   bot.on("message", async (msg) => {
@@ -66,7 +67,14 @@ const start = async () => {
       States = { ...States, email: text, status: "awaiting_password" };
       await bot.sendMessage(chatId, "Введите пароль");
     } else if (States.status === "awaiting_password") {
-      await sendAuthorizationData(States.email, text, chatId, bot, States);
+      await sendAuthorizationData(
+        States.email,
+        text,
+        chatId,
+        bot,
+        States,
+        userSetting
+      );
     } else if (!userChatId) {
       authorizationPage({ bot, chatId });
     } else {
