@@ -171,21 +171,25 @@ const confirmAppointment = async (req, res) => {
   }
 
   try {
+    console.log(id);
     const appointment = await getAppointmentById({ id });
 
     if (!appointment) {
       return res.status(404).json({ error: "Appointment not found" });
     }
+    console.log(appointment);
 
     const updatedAppointment = await prisma.appointment.update({
       where: { id: parseInt(appointment.id) },
       include: { client: true, service: true },
       data: { status: "confirmed" },
     });
+    console.log(updatedAppointment);
 
     if (updatedAppointment.client.telegramId) {
       const botSetting = await getBotSettingByUserId(updatedAppointment.userId);
       const client = updatedAppointment.client;
+      console.log(client);
       const bot = new TelegramBot(botSetting.botToken, { polling: false });
 
       await bot.sendMessage(client.telegramId, "🎉");
