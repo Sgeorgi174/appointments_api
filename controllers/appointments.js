@@ -1,14 +1,20 @@
 const { prisma } = require("../prisma/prisma_client");
+const TelegramBot = require("node-telegram-bot-api");
+const { getServiceById } = require("../utils/getServiceById");
+const { getClientById } = require("../utils/getClientById");
+const { getBotSettingByUserId } = require("../utils/getBotSettingByUserId");
+const { getAppointmentById } = require("../utils/getAppointmentById");
+const { sendNotification } = require("../utils/sendNotifation");
 
 //there are 3 type of status : 'pending' || 'confirmed' || 'passed'
 
 const addAppointment = async (req, res) => {
   try {
-    const { serviceId, clientId, date, time, query_id, userId } = req.body;
+    const { serviceId, clientId, date, time, userId } = req.body;
 
     // Проверка обязательных полей
     if (
-      ![serviceId, clientId, date, time, query_id, userId].every(
+      ![serviceId, clientId, date, time, userId].every(
         (param) => param !== undefined
       )
     ) {
@@ -16,14 +22,7 @@ const addAppointment = async (req, res) => {
     }
 
     // Получение продолжительности услуги
-    const service = await prisma.services.findUnique({
-      where: { id: parseInt(serviceId) },
-    });
-
-    if (!service) {
-      throw new Error("Услуга не найдена");
-    }
-
+    const service = await getServiceById(serviceId);
     const { duration } = service;
 
     // Поиск доступности на указанную дату и время
@@ -40,8 +39,6 @@ const addAppointment = async (req, res) => {
       const currentHour = availability.hours.find((h) => {
         return h.hour === parseInt(time) + i;
       });
-
-      console.log(currentHour);
 
       if (currentHour || currentHour.isAvailable) {
         await prisma.hour.update({
@@ -65,6 +62,47 @@ const addAppointment = async (req, res) => {
       },
     });
 
+    if (appointment) {
+      const client = await getClientById(clientId);
+      const botSetting = await getBotSettingByUserId(userId);
+      const botToken = botSetting.botToken;
+
+      if (botToken) {
+        const bot = new TelegramBot(botToken, { polling: false });
+
+        if (client.telegramId) {
+          await bot.sendMessage(
+            client.telegramId,
+            `Привет, ${client.name}! 👋
+Ваша заявка принята и ожидает подтверждения мастера. 
+Не переживайте, это не займет много времени.`
+          );
+        }
+
+        await bot.sendMessage(
+          botSetting.telegramId,
+          `⚠️ *У вас новая запись!* ⚠️
+          
+📆 *${appointment.day.split("-")[2]}.${appointment.day.split("-")[1]} - ${
+            appointment.hour
+          }:00*
+🧑 ${client.name}
+☎️ ${client.telNumber}
+💼 ${service.name}
+
+*Подтвердите или отмените в личном кабинете*
+`,
+          {
+            parse_mode: "Markdown",
+          }
+        );
+        bot.sendSticker(
+          botSetting.telegramId,
+          "CAACAgIAAxkBAAEEzVBmILAmhnUU7iJV4Qj-_efzQVA-qwACAQEAAvcCyA--Bt0rrVjiJDQE"
+        );
+      }
+    }
+
     return res.status(201).json(appointment);
   } catch (error) {
     console.error("Error adding appointment:", error);
@@ -76,7 +114,6 @@ const addAppointment = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
   try {
-    const userId = req.user.id;
     const { id } = req.body;
 
     // Проверка обязательных полей
@@ -84,20 +121,8 @@ const deleteAppointment = async (req, res) => {
       throw new Error("Не заполнены обязательные поля");
     }
 
-    if (!userId) {
-      throw new Error("Не авторизован");
-    }
-
     // Получение информации о записи
-    const appointment = await prisma.appointment.findUnique({
-      where: { id: parseInt(id) },
-      include: { service: true },
-    });
-
-    if (!appointment) {
-      throw new Error("Запись не найдена");
-    }
-
+    const appointment = await getAppointmentById({ id });
     const { day, hour, service } = appointment;
     const { duration } = service;
 
@@ -126,7 +151,7 @@ const deleteAppointment = async (req, res) => {
 
     // Удаление записи
     await prisma.appointment.delete({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(appointment.id) },
     });
 
     return res.status(200).json({ message: "Запись успешно удалена" });
@@ -141,20 +166,51 @@ const deleteAppointment = async (req, res) => {
 const confirmAppointment = async (req, res) => {
   const { id } = req.body;
 
+  if (!id) {
+    throw new Error("Не заполнены обязательные поля");
+  }
+
   try {
-    const appointment = await prisma.appointment.findUnique({
-      where: { id: parseInt(id) },
-    });
+    const appointment = await getAppointmentById({ id });
 
     if (!appointment) {
       return res.status(404).json({ error: "Appointment not found" });
     }
 
     const updatedAppointment = await prisma.appointment.update({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(appointment.id) },
       include: { client: true, service: true },
       data: { status: "confirmed" },
     });
+
+    if (updatedAppointment.client.telegramId) {
+      const botSetting = await getBotSettingByUserId(updatedAppointment.userId);
+      const client = updatedAppointment.client;
+      const bot = new TelegramBot(botSetting.botToken, { polling: false });
+
+      await bot.sendMessage(client.telegramId, "🎉");
+      await bot.sendMessage(
+        client.telegramId,
+        `✅*Ваш мастер подтвердил запись!*✅
+
+*${client.name}*, жду вас 📆 *${updatedAppointment.day.split("-")[2]}.${
+          updatedAppointment.day.split("-")[1]
+        }* в *${updatedAppointment.hour}:00*
+
+Пожалуйста не опаздывайте.
+Если что-то изменится дайте мне знать.`,
+        {
+          parse_mode: "Markdown",
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: "Вернуться на главную ↩️", callback_data: "back" }],
+            ],
+          },
+        }
+      );
+
+      sendNotification({ updatedAppointment, bot, client, botSetting });
+    }
 
     return res.status(200).json(updatedAppointment);
   } catch (error) {

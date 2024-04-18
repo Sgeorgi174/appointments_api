@@ -6,6 +6,7 @@ import styles from "./ClientPage.module.css";
 import { GradientButton } from "../../components/gradientButton/GradientButton";
 import Calendar from "../../components/calendar/Calendar";
 import {
+  addAppointment,
   createOrGetClient,
   getCurrentSchedule,
   getCurrentServices,
@@ -19,7 +20,6 @@ export const ClientPage = () => {
     name: "",
     telNumber: "",
     telegramId: "",
-    queryId: "",
     userId: "",
   });
   const [isError, setIsError] = useState(false);
@@ -29,15 +29,14 @@ export const ClientPage = () => {
     service: {},
     client: {},
     date: "",
-    time: {},
-    query_id: "",
+    time: 0,
   });
   const [schedule, setSchedule] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [serviceDuration, setServiceDuration] = useState(0);
 
   const { id } = useParams();
-  console.log(id);
+  telegram.expand();
 
   useEffect(() => {
     setIsLoading(true);
@@ -46,53 +45,60 @@ export const ClientPage = () => {
       await getCurrentServices(id)
         .then((servicesList) => {
           setServicesList(servicesList);
+          setClientInfo({
+            ...clientInfo,
+            userId: id,
+          });
         })
         .finally(() => {
           setIsLoading(false);
         });
     });
 
-    telegram.expand();
-
     // Get user id after expanding the Telegram object
     if (telegram.initDataUnsafe.user) {
-      console.log("tut");
       const telegramId = telegram.initDataUnsafe.user.id;
-      const queryId = telegram.initDataUnsafe.query_id;
-      setClientInfo({ ...clientInfo, telegramId, queryId, userId: id }); // Save user id in state
+      setClientInfo({
+        ...clientInfo,
+        telegramId,
+      }); // Save user id in state
     }
   }, []);
 
-  useEffect(() => {}, []);
-
-  console.log(clientInfo);
-
   const handleCreateClientOnFirstStep = () => {
-    // createOrGetClient(clientInfo)
-    //   .then((data) => {
-    //     setAppointmentInfo({ ...appointmentInfo, client: data });
-    //     setStep(2);
-    //   })
-    //   .catch(() => {
-    //     return;
-    //   });
+    createOrGetClient(clientInfo)
+      .then((data) => {
+        setAppointmentInfo({ ...appointmentInfo, client: data });
+        setStep(2);
+      })
+      .catch(() => {
+        return;
+      });
     setStep(2);
   };
 
   const handleClickNextStep = (service) => {
-    console.log(service);
     setServiceDuration(service.duration);
     setAppointmentInfo({ ...appointmentInfo, service });
     setStep(3);
   };
 
   const handleClickComplete = () => {
-    console.log(appointmentInfo);
     setStep(4);
   };
 
   const handleCloseWindow = () => {
-    telegram.answerWebAppQuery();
+    addAppointment({
+      userId: id,
+      serviceId: appointmentInfo.service.id,
+      clientId: appointmentInfo.client.id,
+      date: appointmentInfo.date,
+      time: appointmentInfo.time,
+    })
+      .then(() => {
+        telegram.close();
+      })
+      .catch(() => {});
   };
 
   return (
@@ -166,6 +172,8 @@ export const ClientPage = () => {
           {step === 3 && (
             <>
               <Calendar
+                appointmentInfo={appointmentInfo}
+                setAppointmentInfo={setAppointmentInfo}
                 serviceDuration={serviceDuration}
                 isUser={false}
                 data={schedule}

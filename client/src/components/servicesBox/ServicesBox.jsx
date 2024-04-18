@@ -12,7 +12,7 @@ export const ServicesBox = ({ name, time, price, editClick, deleteClick }) => {
       </div>
       <div className={styles.row}>
         <img className={styles.icon} src={iconTimer} alt="works_icon" />
-        <p className={styles.text}>{time} мин</p>
+        <p className={styles.text}>{time} ч</p>
       </div>
       <div className={styles.row}>
         <img className={styles.icon} src={iconRuble} alt="works_icon" />

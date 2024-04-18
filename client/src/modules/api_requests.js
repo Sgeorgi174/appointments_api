@@ -185,3 +185,11 @@ export const deleteAppointment = async (id) => {
     data: id,
   });
 };
+
+export const addAppointment = async (appointmentData) => {
+  return sendRequest({
+    method: "POST",
+    url: `${BASE_URL}/appointment/add`,
+    data: appointmentData,
+  });
+};

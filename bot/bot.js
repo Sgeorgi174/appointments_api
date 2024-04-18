@@ -5,6 +5,10 @@ const { getSettings } = require("./utils/getSettings");
 const { getServices } = require("./utils/getServices");
 const { createServicesList } = require("./utils/createServicesMessage");
 const { startPage } = require("./utils/startPage");
+const {
+  authorizationPage,
+  sendAuthorizationData,
+} = require("./utils/authorizationPage");
 
 const app = express();
 
@@ -43,38 +47,44 @@ const start = async () => {
   const greetingFile = userSetting.greetingFileUrl;
   const contactInform = userSetting.address;
   const contactInformFile = userSetting.addressFileUrl;
-  const notificationText = userSetting.notificationText;
-  const notificationFile = userSetting.notificationFileUrl;
+  let userChatId = userSetting.telegramId;
 
   const returnButton = {
     reply_markup: JSON.stringify({
-      inline_keyboard: [[{ text: "🔙 Вернуться", callback_data: "back" }]],
+      inline_keyboard: [[{ text: "Вернуться ↩️", callback_data: "back" }]],
     }),
   };
+
+  let States = { email: "", password: "", status: "unauthorized" };
 
   // Обработка сообщений для каждого бота
   bot.on("message", async (msg) => {
     const text = msg.text;
     const chatId = msg.chat.id;
 
-    if (text === "Я победил, тебя") {
-      await bot.sendMessage(chatId, "нет я победил");
-    }
-
-    if (text === "/start") {
-      await startPage({
-        bot,
-        greetingFile,
-        greetingText,
-        chatId,
-        userId,
-      });
+    if (States.status === "awaiting_email") {
+      States = { ...States, email: text, status: "awaiting_password" };
+      await bot.sendMessage(chatId, "Введите пароль");
+    } else if (States.status === "awaiting_password") {
+      await sendAuthorizationData(States.email, text, chatId);
+    } else if (!userChatId) {
+      authorizationPage({ bot, chatId });
+    } else {
+      if (text === "/start") {
+        await startPage({ bot, greetingFile, greetingText, chatId, userId });
+      }
     }
   });
 
   bot.on("callback_query", async (msg) => {
     const data = msg.data;
     const chatId = msg.message.chat.id;
+
+    //AUTH
+    if (data === "auth" && States.status === "unauthorized") {
+      await bot.sendMessage(chatId, "Введите email");
+      States.status = "awaiting_email";
+    }
 
     if (data === "contacts") {
       await bot.sendPhoto(chatId, `.${contactInformFile}`, {

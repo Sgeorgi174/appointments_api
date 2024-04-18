@@ -117,4 +117,29 @@ const edit = async (req, res) => {
   }
 };
 
-module.exports = { add, get, edit, getCurrent };
+const addTelegramId = async (req, res) => {
+  const { telegramId, id } = req.body;
+
+  if (!id || !telegramId) {
+    throw new Error("Не переданы обязательные поля");
+  }
+
+  const bot = await prisma.userBotSettings.findUnique({
+    where: { id: parseInt(id) },
+  });
+
+  if (!bot) {
+    throw new Error("Не найден бот");
+  }
+
+  await prisma.userBotSettings.update({
+    where: { id: parseInt(id) },
+    data: {
+      telegramId: parseInt(telegramId),
+    },
+  });
+
+  return res.status(200).json({ message: "ok" });
+};
+
+module.exports = { add, get, edit, getCurrent, addTelegramId };

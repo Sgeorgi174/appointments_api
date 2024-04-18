@@ -17,7 +17,7 @@ const startPage = async ({
           {
             text: "📆 Записаться",
             web_app: {
-              url: `https://9901-176-226-202-168.ngrok-free.app/appointment/${userId}`,
+              url: `https://5655-176-226-202-168.ngrok-free.app/appointment/${userId}`,
             },
           },
         ],

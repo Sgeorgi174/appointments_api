@@ -10,7 +10,7 @@ const startBot = async (req, res) => {
   });
 
   exec(
-    `pm2 start ./bot/bot.js --watch --name "Bot_${userId}" -- --token=${settings.botToken} --userId=${userId} --port=${settings.port}`,
+    `pm2 start ./bot/bot.js --name "Bot_${userId}" -- --token=${settings.botToken} --userId=${userId} --port=${settings.port}`,
     (error, stdout, stderr) => {
       if (error) {
         console.error(`Ошибка: ${error.message}`);

@@ -12,6 +12,8 @@ const AvailableHours = ({
   setSchedule,
   setIsAvailable,
   serviceDuration,
+  setAppointmentInfo,
+  appointmentInfo,
 }) => {
   const [selectedHour, setSelectedHour] = useState({ index: "", id: "" });
 
@@ -22,8 +24,11 @@ const AvailableHours = ({
     setSelectedHour("");
   }, [currentDay]);
 
-  const handleHourClick = ({ event, id, index }) => {
-    setSelectedHour({ id, index });
+  const handleHourClick = ({ event, index, hour }) => {
+    setSelectedHour({ id: hour.id, index });
+    setAppointmentInfo
+      ? setAppointmentInfo({ ...appointmentInfo, time: hour.hour })
+      : "";
 
     changeType({
       event,
@@ -60,7 +65,11 @@ const AvailableHours = ({
                     : ""
                 } ${selectedHour.index === index ? styles.selectedHour : ""}`}
                 onClick={(event) =>
-                  handleHourClick({ event, id: hour.id, index })
+                  handleHourClick({
+                    event,
+                    index,
+                    hour: hour,
+                  })
                 }
               >
                 {hour.hour}:00

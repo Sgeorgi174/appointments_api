@@ -36,6 +36,7 @@ model UserBotSettings {
   port                Int
   user                User    @relation(fields: [userId], references: [id])
   userId              Int
+  telegramId          Int?
 }
 
 model Bots {

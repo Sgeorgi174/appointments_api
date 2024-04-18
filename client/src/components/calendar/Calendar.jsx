@@ -6,7 +6,13 @@ import { changeType } from "../../utils/changeTypes";
 import { formatDateYYYYMMDD, sliceDate } from "../../utils/slicers";
 import styles from "./Calendar.module.css";
 
-const Calendar = ({ data, isUser, serviceDuration }) => {
+const Calendar = ({
+  data,
+  isUser,
+  serviceDuration,
+  appointmentInfo,
+  setAppointmentInfo,
+}) => {
   const [schedule, setSchedule] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentDay, setCurrentDay] = useState([]);
@@ -29,6 +35,12 @@ const Calendar = ({ data, isUser, serviceDuration }) => {
       (object) => sliceDate(object.date) === dateString
     );
     setCurrentDay(availableDay ? availableDay.hours : []);
+    setAppointmentInfo
+      ? setAppointmentInfo({
+          ...appointmentInfo,
+          date: formatDateYYYYMMDD(selectedDate),
+        })
+      : "";
   }, [data, schedule, selectedDate]);
 
   useEffect(() => {
@@ -37,7 +49,6 @@ const Calendar = ({ data, isUser, serviceDuration }) => {
 
   const handleDayClick = (date, event) => {
     setSelectedDate(date);
-    console.log(date);
 
     changeType({
       date,
@@ -171,6 +182,8 @@ const Calendar = ({ data, isUser, serviceDuration }) => {
         </div>
       )}
       <AvailableHours
+        appointmentInfo={appointmentInfo}
+        setAppointmentInfo={setAppointmentInfo}
         serviceDuration={serviceDuration}
         setSchedule={setSchedule}
         setIsAvailable={setIsAvailable}

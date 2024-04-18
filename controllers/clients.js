@@ -5,7 +5,7 @@ const addClient = async (req, res) => {
 
   try {
     // Валидация входных данных
-    if (!name || !telegramId || !telNumber || !userId) {
+    if (!name || !telNumber || !userId) {
       return res.status(400).json({ error: "Не все данные предоставлены" });
     }
 
@@ -14,7 +14,7 @@ const addClient = async (req, res) => {
     // Поиск клиента в базе данных
     client = await prisma.client.findFirst({
       where: {
-        telegramId,
+        userId: parseInt(userId),
         telNumber,
       },
     });
@@ -23,9 +23,20 @@ const addClient = async (req, res) => {
       return res.status(200).json(client);
     }
 
-    // Создание нового клиента
+    // Создание нового клиента с учетом необязательного параметра telegramId
+    const clientData = {
+      name,
+      telNumber,
+      userId: parseInt(userId),
+    };
+
+    // Добавляем telegramId в данные клиента, если он предоставлен
+    if (telegramId) {
+      clientData.telegramId = telegramId;
+    }
+
     client = await prisma.client.create({
-      data: { name, telegramId, telNumber, userId: parseInt(userId) },
+      data: clientData,
     });
 
     return res.status(200).json(client);
