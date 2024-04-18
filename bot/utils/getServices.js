@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const getServices = async (userId) => {
-  const services = axios.get(`http://localhost:8000/api/service/get/${userId}`);
+  const services = axios.get(`https://мои-записи.рф/api/service/get/${userId}`);
   return services;
 };
 
