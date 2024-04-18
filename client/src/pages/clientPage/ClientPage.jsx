@@ -45,9 +45,14 @@ export const ClientPage = () => {
       await getCurrentServices(id)
         .then((servicesList) => {
           setServicesList(servicesList);
+          const telegramId = telegram.initDataUnsafe.user
+            ? telegram.initDataUnsafe.user.id
+            : null;
+
           setClientInfo({
             ...clientInfo,
             userId: id,
+            telegramId,
           });
         })
         .finally(() => {
