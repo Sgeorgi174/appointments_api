@@ -66,7 +66,7 @@ const start = async () => {
       States = { ...States, email: text, status: "awaiting_password" };
       await bot.sendMessage(chatId, "Введите пароль");
     } else if (States.status === "awaiting_password") {
-      await sendAuthorizationData(States.email, text, chatId, bot);
+      await sendAuthorizationData(States.email, text, chatId, bot, States);
     } else if (!userChatId) {
       authorizationPage({ bot, chatId });
     } else {
