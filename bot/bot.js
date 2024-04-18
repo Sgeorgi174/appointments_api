@@ -8,6 +8,7 @@ const { startPage } = require("./utils/startPage");
 const {
   authorizationPage,
   sendAuthorizationData,
+  editSetting,
 } = require("./utils/authorizationPage");
 
 const app = express();
@@ -56,7 +57,6 @@ const start = async () => {
   };
 
   let States = { email: "", password: "", status: "unauthorized" };
-  console.log(States);
 
   // Обработка сообщений для каждого бота
   bot.on("message", async (msg) => {
@@ -67,15 +67,31 @@ const start = async () => {
       States = { ...States, email: text, status: "awaiting_password" };
       await bot.sendMessage(chatId, "Введите пароль");
     } else if (States.status === "awaiting_password") {
-      await sendAuthorizationData(
-        States.email,
-        text,
-        chatId,
-        bot,
-        States,
-        userSetting,
-        userChatId
-      );
+      await sendAuthorizationData(States.email, text)
+        .then(() => {
+          States = { email: "", password: "", status: "authorized" };
+          userChatId = chatId;
+          editSetting(chatId, userSetting.id).then(async () => {
+            userChatId = chatId;
+            await bot.sendMessage(chatId, "Авторизация прошла успешно", {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: "Отлично! Начать работу!", callback_data: "back" }],
+                ],
+              },
+            });
+          });
+        })
+        .catch(async () => {
+          States = { email: "", password: "", status: "unauthorized" };
+          await bot.sendMessage(chatId, "Неверный email или пароль", {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Попробовать снова", callback_data: "auth" }],
+              ],
+            },
+          });
+        });
     } else if (!userChatId) {
       authorizationPage({ bot, chatId });
     } else {
@@ -96,10 +112,12 @@ const start = async () => {
     }
 
     if (data === "contacts") {
-      await bot.sendPhoto(chatId, `.${contactInformFile}`, {
-        ...returnButton,
-        caption: contactInform,
-      });
+      contactInformFile
+        ? await bot.sendPhoto(chatId, `.${contactInformFile}`, {
+            ...returnButton,
+            caption: contactInform,
+          })
+        : await bot.sendMessage(chatId, contactInform, { ...returnButton });
     }
 
     if (data == "services") {

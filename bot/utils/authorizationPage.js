@@ -12,50 +12,20 @@ const authorizationPage = async ({ bot, chatId }) => {
   );
 };
 
-const sendAuthorizationData = async (
-  email,
-  password,
-  chatId,
-  bot,
-  States,
-  userSetting,
-  userChatId
-) => {
+const sendAuthorizationData = async (email, password) => {
   const url = "https://мои-записи.рф/api/user/login";
   const data = { email, password };
 
-  try {
-    const response = await axios.post(url, data);
-    editSetting(chatId, userSetting.id, userChatId, bot);
-    States.status = "authorized";
-  } catch (error) {
-    States = { email: "", password: "", status: "unauthorized" };
-    await bot.sendMessage(chatId, "Неверный email или пароль", {
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: "Попробовать снова", callback_data: "auth" }],
-        ],
-      },
-    });
-  }
+  const response = await axios.post(url, data);
+  return response;
 };
 
-const editSetting = async (chatId, settingId, userChatId, bot) => {
+const editSetting = async (chatId, settingId) => {
   const url = "https://мои-записи.рф/api/bot/setting/addTid";
   const data = { telegramId: chatId, id: settingId };
-  try {
-    const response = await axios.put(url, data);
-    userChatId = chatId;
-    await bot.sendMessage(chatId, "Авторизация прошла успешно", {
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: "Отлично! Начать работу!", callback_data: "back" }],
-        ],
-      },
-    });
-  } catch (error) {
-    throw new Error("что-то пошло не так");
-  }
+
+  const response = await axios.put(url, data);
+  return response;
 };
 
 module.exports = { authorizationPage, editSetting, sendAuthorizationData };
