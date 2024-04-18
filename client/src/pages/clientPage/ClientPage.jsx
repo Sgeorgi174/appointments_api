@@ -82,6 +82,7 @@ export const ClientPage = () => {
   };
 
   const handleClickNextStep = (service) => {
+    console.log(appointmentInfo);
     setServiceDuration(service.duration);
     setAppointmentInfo({ ...appointmentInfo, service });
     setStep(3);
