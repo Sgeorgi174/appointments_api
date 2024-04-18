@@ -55,9 +55,12 @@ export const ClientPage = () => {
         });
     });
 
+    console.log(telegram.initDataUnsafe.user);
+
     // Get user id after expanding the Telegram object
     if (telegram.initDataUnsafe.user) {
       const telegramId = telegram.initDataUnsafe.user.id;
+      console.log(telegramId);
       setClientInfo({
         ...clientInfo,
         telegramId,
@@ -66,6 +69,7 @@ export const ClientPage = () => {
   }, []);
 
   const handleCreateClientOnFirstStep = () => {
+    console.log(clientInfo);
     createOrGetClient(clientInfo)
       .then((data) => {
         setAppointmentInfo({ ...appointmentInfo, client: data });
