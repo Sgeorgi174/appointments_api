@@ -73,7 +73,8 @@ const start = async () => {
         chatId,
         bot,
         States,
-        userSetting
+        userSetting,
+        userChatId
       );
     } else if (!userChatId) {
       authorizationPage({ bot, chatId });

@@ -18,14 +18,15 @@ const sendAuthorizationData = async (
   chatId,
   bot,
   States,
-  userSetting
+  userSetting,
+  userChatId
 ) => {
   const url = "https://мои-записи.рф/api/user/login";
   const data = { email, password };
 
   try {
     const response = await axios.post(url, data);
-    editSetting(chatId, userSetting.id);
+    editSetting(chatId, userSetting.id, userChatId, bot);
     States.status = "authorized";
   } catch (error) {
     States = { email: "", password: "", status: "unauthorized" };
@@ -39,7 +40,7 @@ const sendAuthorizationData = async (
   }
 };
 
-const editSetting = async (chatId, settingId) => {
+const editSetting = async (chatId, settingId, userChatId, bot) => {
   const url = "https://мои-записи.рф/api/bot/setting/addTid";
   const data = { telegramId: chatId, id: settingId };
   try {
