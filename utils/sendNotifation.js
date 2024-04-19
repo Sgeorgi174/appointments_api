@@ -16,7 +16,7 @@ const sendNotification = async ({
 
   // Установите время уведомления на 20:00 предыдущего дня
   notificationDate.setDate(notificationDate.getDate() - 1);
-  notificationDate.setHours(18, 38, 0, 0);
+  notificationDate.setHours(18, 30, 0, 0);
   console.log(notificationDate);
 
   if (notificationDate >= new Date()) {
