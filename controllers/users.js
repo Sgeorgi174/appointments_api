@@ -56,6 +56,10 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   const { email, firstName, password } = req.body;
 
+  console.log(email);
+  console.log(firstName);
+  console.log(password);
+
   try {
     // Проверка обязательных полей
     if (!email || !password || !firstName) {
