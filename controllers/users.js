@@ -108,6 +108,7 @@ const register = async (req, res) => {
     const token = jwt.sign({ id: user.id }, secret, { expiresIn: "2d" });
 
     // Отправка ответа с данными пользователя и токеном
+    console.log(user);
     res.status(201).json({
       id: user.id,
       email: user.email,
