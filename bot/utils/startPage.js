@@ -12,6 +12,7 @@ const startPage = async ({
           inline_keyboard: [
             [
               { text: "☎️ Контакты", callback_data: "contacts" },
+              { text: "Отменить запись", callback_data: "services" },
               { text: "Услуги и цены", callback_data: "services" },
             ],
             [
