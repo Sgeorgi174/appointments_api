@@ -216,6 +216,7 @@ const changeDay = async (req, res) => {
     const day = await prisma.hourAvailability.findFirst({
       where: {
         date: dayDate,
+        userId,
       },
       include: { hours: true },
     });
