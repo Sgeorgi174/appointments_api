@@ -15,10 +15,7 @@ const startPage = async ({
 
               { text: "Услуги и цены", callback_data: "services" },
             ],
-            [
-              { text: "❌ Отменить запись", callback_data: "services" },
-              { text: "❓ еще кнопка", callback_data: "services" },
-            ],
+            [{ text: "❌ Отменить запись", callback_data: "services" }],
             [
               {
                 text: "📆 Записаться",
