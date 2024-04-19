@@ -6,6 +6,9 @@ const generateSchedule = async (req, res) => {
   try {
     const { startHour, endHour, weekdays } = req.body;
     const userId = req.user.id;
+    console.log(startHour);
+    console.log(endHour);
+    console.log(weekdays);
 
     if (![startHour, endHour, weekdays].every((param) => param !== undefined)) {
       throw new Error("Не заполнены обязательные поля");
