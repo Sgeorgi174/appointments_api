@@ -10,6 +10,8 @@ export const InputForSettings = ({
   setBotSetting,
   name,
   botSetting,
+  localError,
+  setLocalErrorState,
 }) => {
   const [blurError, setBlurError] = useState(false);
   const [textareaValue, setTextareaValue] = useState(value); // Состояние для обработки переходов на новую строку
@@ -27,7 +29,9 @@ export const InputForSettings = ({
     const { name, value } = event.target;
     setBotSetting({ ...botSetting, [name]: value });
     setBlurError(false);
-    setTextareaValue(value); // Обновляем состояние значения textarea
+    setTextareaValue(value);
+    setLocalErrorState(false); // Обновляем состояние значения textarea
+    console.log(localError);
   };
 
   const onBlur = () => {
@@ -50,6 +54,9 @@ export const InputForSettings = ({
       {blurError && (
         <span className={styles.errorText}>Заполните обязательные поля</span>
       )}
+      {localError && (
+        <div className={styles.errorText}>Неверный формат токена</div>
+      )}
     </div>
   ) : (
     <div className={styles.inputWrapper}>
@@ -66,6 +73,9 @@ export const InputForSettings = ({
       />
       {blurError && (
         <span className={styles.errorText}>Заполните обязательные поля</span>
+      )}
+      {localError && (
+        <div className={styles.errorText}>Неверный формат токена</div>
       )}
     </div>
   );

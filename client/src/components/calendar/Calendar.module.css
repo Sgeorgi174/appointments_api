@@ -36,6 +36,18 @@
   font-weight: 800;
 }
 
+.deleteBox {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.deleteIcon svg {
+  width: 25px;
+  height: 25px;
+}
+
 .headerBox {
   width: 300px;
   display: flex;

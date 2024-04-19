@@ -1,34 +1,43 @@
-import { InputForSettings } from "../../components/inputForSettings/InputForSettings";
-import ImageUploader from "../../components/uploadImage/ImageUploader";
-import { TelegramWindow } from "../../components/telegramWindow/TelegramWindow";
-import { InstructionToCreateBot } from "../../components/InstructionToCreateBot/InstructionToCreateBot";
-import { useEffect, useState } from "react";
-import styles from "./StepComponent.module.css";
-import { createSettings } from "../../modules/api_requests";
 import { createFormDateForSetting } from "../../utils/createFormDateForSetting";
+import { createSettings } from "../../modules/api_requests";
+import { useSteps } from "../../hooks/useSteps";
+import { useEffect, useState } from "react";
+import { Step_1 } from "./Step_1";
+import { Step_2 } from "./Step_2";
+import { Step_3 } from "./Step_3";
+import { Step_4 } from "./Step_4";
+import { Step_5 } from "./Step_5";
+import styles from "./StepComponent.module.css";
 
 export const StepComponent = ({ botSetting, setIsCreated, setBotSetting }) => {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  const [step, setStep] = useState(1);
-  const [error, setError] = useState(false);
+  const {
+    step,
+    nextStep,
+    prevStep,
+    error,
+    setErrorState,
+    localError,
+    setLocalErrorState,
+  } = useSteps(0);
 
   useEffect(() => {
+    if (step === 0) {
+      !isCheckboxChecked ? setErrorState(true) : setErrorState(false);
+    }
     if (step === 1) {
-      !isCheckboxChecked ? setError(true) : setError(false);
+      !botSetting.botToken ? setErrorState(true) : setErrorState(false);
     }
     if (step === 2) {
-      !botSetting.botToken ? setError(true) : setError(false);
+      !botSetting.address ? setErrorState(true) : setErrorState(false);
     }
     if (step === 3) {
-      !botSetting.address ? setError(true) : setError(false);
+      !botSetting.greetingText ? setErrorState(true) : setErrorState(false);
     }
     if (step === 4) {
-      !botSetting.greetingText ? setError(true) : setError(false);
+      !botSetting.notificationText ? setErrorState(true) : setErrorState(false);
     }
-    if (step === 5) {
-      !botSetting.notificationText ? setError(true) : setError(false);
-    }
-  }, [isCheckboxChecked, step, botSetting]);
+  }, [isCheckboxChecked, step, botSetting, setErrorState]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -39,12 +48,29 @@ export const StepComponent = ({ botSetting, setIsCreated, setBotSetting }) => {
   };
 
   const handleBackClick = () => {
-    setStep((prev) => prev - 1);
+    prevStep();
   };
 
   const handleContinueClick = () => {
-    if (step < 5) {
-      setStep((prev) => prev + 1);
+    if (step === 1) {
+      fetch(`https://api.telegram.org/bot${botSetting.botToken}/getMe`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.ok) {
+            setLocalErrorState(false);
+            setErrorState(false);
+            nextStep();
+          } else {
+            setLocalErrorState(true);
+            console.log(localError);
+            setErrorState(true);
+          }
+        })
+        .catch((error) => {
+          console.error("Ошибка:", error);
+        });
+    } else if (step < 4) {
+      nextStep();
     } else {
       createSettings(createFormDateForSetting(botSetting)).then((data) => {
         console.log(data);
@@ -52,163 +78,67 @@ export const StepComponent = ({ botSetting, setIsCreated, setBotSetting }) => {
       setIsCreated(true);
     }
   };
+
+  const steps = [
+    <Step_1
+      key={"step_1"}
+      isCheckboxChecked={isCheckboxChecked}
+      handleCheckboxChange={handleCheckboxChange}
+    />,
+    <Step_2
+      key={"step_2"}
+      localError={localError}
+      setBotSetting={setBotSetting}
+      botSetting={botSetting}
+      setLocalErrorState={setErrorState}
+    />,
+    <Step_3
+      key={"step_3"}
+      localError={localError}
+      botSetting={botSetting}
+      setBotSetting={setBotSetting}
+      setLocalErrorState={setLocalErrorState}
+    />,
+    <Step_4
+      key={"step_4"}
+      localError={localError}
+      botSetting={botSetting}
+      setBotSetting={setBotSetting}
+      setLocalErrorState={setLocalErrorState}
+    />,
+    <Step_5
+      key={"step_5"}
+      localError={localError}
+      botSetting={botSetting}
+      setBotSetting={setBotSetting}
+      setLocalErrorState={setLocalErrorState}
+    />,
+  ];
+
   return (
     <div className={styles.settingsBox}>
-      {/* Step 1: Checkbox */}
-      {step === 1 && (
-        <div className={`${styles.settingBox} ${styles.slideInRight}`}>
-          <InstructionToCreateBot
-            isCheckboxChecked={isCheckboxChecked}
-            handleCheckboxChange={handleCheckboxChange}
-          />
-        </div>
-      )}
-
-      {/* Step 2: Bot Token */}
-      {step === 2 && (
-        <div className={`${styles.settingBox} ${styles.slideInRight}`}>
-          <p className={styles.title}>1. Скопируйте ваш token</p>
-          <InputForSettings
-            error={error}
-            setError={setError}
-            placeHolder={"token"}
-            value={botSetting.botToken}
-            setBotSetting={setBotSetting}
-            name={"botToken"}
-            botSetting={botSetting}
-          />
-        </div>
-      )}
-
-      {/* Step 3: Address */}
-      {step === 3 && (
-        <div className={`${styles.settingBox} ${styles.slideInRight}`}>
-          <p className={styles.title}>2. Введите ваши контактные данные</p>
-          <TelegramWindow text={botSetting.address} command={"address"} />
-          <InputForSettings
-            error={error}
-            setError={setError}
-            placeHolder={"Адрес"}
-            value={botSetting.address}
-            setBotSetting={setBotSetting}
-            name={"address"}
-            botSetting={botSetting}
-          />
-          <div className={styles.addressImgBox}>
-            <p className={`${styles.title}`}>
-              3. Добавьте фото с карт<span>(*необязательно)</span>
-            </p>
-            <TelegramWindow
-              text={botSetting.address}
-              file={botSetting.addressFile}
-              command={"address"}
-            />
-            <ImageUploader
-              name={"addressFile"}
-              botSetting={botSetting}
-              setBotSetting={setBotSetting}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Step 4: Greeting Message */}
-
-      {step === 4 && (
-        <div className={`${styles.settingBox} ${styles.slideInRight}`}>
-          <p className={styles.title}>4. Настроим приветственное сообщение</p>
-          <TelegramWindow text={botSetting.greetingText} command={"start"} />
-          <InputForSettings
-            error={error}
-            setError={setError}
-            placeHolder={"Приветственное сообщение"}
-            value={botSetting.greetingText}
-            setBotSetting={setBotSetting}
-            name={"greetingText"}
-            botSetting={botSetting}
-          />
-          <div className={styles.addImgBox}>
-            <p className={styles.title}>
-              5. Настроим картинку для приветствия
-              <span>(*необязательно)</span>
-            </p>
-            <TelegramWindow
-              text={botSetting.greetingText}
-              file={botSetting.greetingFile}
-              command={"start"}
-            />
-            <ImageUploader
-              name={"greetingFile"}
-              botSetting={botSetting}
-              setBotSetting={setBotSetting}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Step 5: Notification Message */}
-
-      {step === 5 && (
-        <div className={`${styles.settingBox} ${styles.slideInRight}`}>
-          <p className={styles.title}>6. Настроим сообщение для уведомлений</p>
-          <TelegramWindow
-            text={botSetting.notificationText}
-            command={"notification"}
-          />
-          <InputForSettings
-            error={error}
-            setError={setError}
-            placeHolder={"Текст уведомления"}
-            value={botSetting.notificationText}
-            setBotSetting={setBotSetting}
-            name={"notificationText"}
-            botSetting={botSetting}
-          />
-          <p className={styles.additionalText}>
-            Вы можете использовать конструкцию <span>-время-</span> , которая
-            будет автоматически заменена на соответствующее время при отправке
-            уведомления. <br /> Например: У вас запись на завтра в{" "}
-            <span>-время-</span>. <br /> Станет: У вас запись на завтра в 18:00.
-          </p>
-          <div className={styles.addImgBox}>
-            <p className={styles.title}>
-              7. Настроим картинку для уведомления
-              <span>(*необязательно)</span>
-            </p>
-            <TelegramWindow
-              text={botSetting.notificationText}
-              file={botSetting.notificationFile}
-              command={"notification"}
-            />
-            <ImageUploader
-              name={"notificationFile"}
-              botSetting={botSetting}
-              setBotSetting={setBotSetting}
-            />
-          </div>
-        </div>
-      )}
+      {steps[step]}
 
       <div className={styles.buttonsRow}>
         {/* Back Button */}
-        {step !== 1 && (
+        {step !== 0 && (
           <button
             onClick={handleBackClick}
             className={`${styles.button} ${styles.buttonBack}`}
-            disabled={!isCheckboxChecked || step === 1}
+            disabled={!isCheckboxChecked || step === 0}
           >
             <span>Назад</span>
           </button>
         )}
 
         {/* Continue Button */}
-        {step === 1 && <div></div>}
+        {step === 0 && <div></div>}
         <button
           onClick={handleContinueClick}
           className={`${styles.button} ${styles.buttonNext}`}
           disabled={error}
         >
-          <span>{step === 5 ? "Сохранить" : "Далее"}</span>
+          <span>{step === 4 ? "Сохранить" : "Далее"}</span>
         </button>
       </div>
     </div>

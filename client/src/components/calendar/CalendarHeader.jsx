@@ -1,6 +1,7 @@
 import { formattedDateForHeader } from "../../utils/slicers";
 import arrowIcon from "/icons/arrow_for_calendar.svg";
 import styles from "./Calendar.module.css";
+import { DeleteFilled } from "@ant-design/icons";
 
 export const CalendarHeader = ({ setSelectedDate, selectedDate }) => {
   const handlePrevMonth = () => {
@@ -27,19 +28,24 @@ export const CalendarHeader = ({ setSelectedDate, selectedDate }) => {
   };
 
   return (
-    <div className={styles.header}>
-      <div className={styles.headerBox}>
-        <button className={styles.switchButton} onClick={handlePrevMonth}>
-          <img
-            className={`${styles.arrowIcon} ${styles.arrowIcon_left}`}
-            src={arrowIcon}
-          />
-        </button>
-        {formattedDateForHeader(selectedDate)}
-        <button className={styles.switchButton} onClick={handleNextMonth}>
-          <img className={`${styles.arrowIcon}`} src={arrowIcon} />
-        </button>
+    <>
+      <div className={styles.deleteBox}>
+        <DeleteFilled onClick={() => {}} className={styles.deleteIcon} />
       </div>
-    </div>
+      <div className={styles.header}>
+        <div className={styles.headerBox}>
+          <button className={styles.switchButton} onClick={handlePrevMonth}>
+            <img
+              className={`${styles.arrowIcon} ${styles.arrowIcon_left}`}
+              src={arrowIcon}
+            />
+          </button>
+          {formattedDateForHeader(selectedDate)}
+          <button className={styles.switchButton} onClick={handleNextMonth}>
+            <img className={`${styles.arrowIcon}`} src={arrowIcon} />
+          </button>
+        </div>
+      </div>
+    </>
   );
 };

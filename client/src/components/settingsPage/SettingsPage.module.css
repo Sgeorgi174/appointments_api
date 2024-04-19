@@ -4,9 +4,28 @@
   align-items: center;
 }
 
-.settingsTitle {
+.titleBox {
   margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 15px;
+  position: relative;
+}
+
+.settingsTitle {
   font-weight: 800;
+}
+
+.helpIcon {
+  position: absolute;
+  top: 0;
+  right: -40px;
+}
+
+.helpIcon svg {
+  width: 20px;
+  height: 20px;
 }
 
 .settingsTabsBox {

@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { TelegramWindow } from "../telegramWindow/TelegramWindow";
 import { GradientButton } from "../gradientButton/GradientButton";
 import { InputForSettings } from "../inputForSettings/InputForSettings";
-import ImageUploader from "../uploadImage/ImageUploader";
-import styles from "./SettingsPage.module.css";
 import { editSettings } from "../../modules/api_requests";
 import { createFormDateForSetting } from "../../utils/createFormDateForSetting";
+import { ModalSettings } from "../modalSettings/ModalSettings";
+import { ImageUploader } from "../uploadImage/ImageUploader";
+import { QuestionCircleFilled } from "@ant-design/icons";
+import styles from "./SettingsPage.module.css";
 
 const tabsButtons = ["Токен", "Контакты", "Приветствие", "Уведомления"];
 
@@ -13,6 +15,7 @@ export const SettingsPage = ({ botSetting, setBotSetting }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const [error, setError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handelClickEdit = () => {
     if (isEdit) {
@@ -39,7 +42,19 @@ export const SettingsPage = ({ botSetting, setBotSetting }) => {
 
   return (
     <div className={styles.settingsBox}>
-      <h1 className={styles.settingsTitle}>Настройки бота</h1>
+      <ModalSettings
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
+      <div className={styles.titleBox}>
+        <h1 className={styles.settingsTitle}>Настройки бота </h1>
+        <QuestionCircleFilled
+          role="button"
+          className={styles.helpIcon}
+          onClick={() => setIsModalOpen(true)}
+        />
+      </div>
+
       <div className={styles.settingsTabsBox}>
         {tabsButtons.map((el, index) => {
           return (

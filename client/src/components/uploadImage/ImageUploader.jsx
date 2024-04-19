@@ -2,13 +2,13 @@ import { FileInputButton, FileCard } from "@files-ui/react";
 import { useState } from "react";
 import styles from "./ImageUploader.module.css";
 
-export default function ImageUploader({
+export const ImageUploader = ({
   name,
   botSetting,
   setBotSetting,
   imageUrl,
   currentKey,
-}) {
+}) => {
   const [value, setValue] = useState(botSetting[name] || undefined);
 
   const updateFiles = (incommingFiles) => {
@@ -55,4 +55,4 @@ export default function ImageUploader({
       )}
     </div>
   );
-}
+};

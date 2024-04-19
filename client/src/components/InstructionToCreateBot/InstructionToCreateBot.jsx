@@ -3,23 +3,23 @@ import styles from "./InstructionToCreateBot.module.css";
 const instructionsList = [
   {
     text: "Откройте Telegram и найдите бота <span>@BotFather</span>.",
-    imgUrl: "/img/instruction/step_1.jpeg",
+    imgUrl: "/img/instruction/step_1.jpg",
   },
   {
     text: "Напишите ему <span>/newbot</span> и следуйте инструкциям для создания нового бота.",
-    imgUrl: "/img/instruction/step_2.jpeg",
+    imgUrl: "/img/instruction/step_2.jpg",
   },
   {
     text: "<span>@BotFather</span> предложит вам ввести <span>имя</span> вашего бота (это <span>имя</span> будет отображаться в списке контактов).",
-    imgUrl: "/img/instruction/step_3.jpeg",
+    imgUrl: "/img/instruction/step_3.jpg",
   },
   {
     text: '<span>@BotFather</span> предложит вам ввести уникальную <span>ссылку</span> для вашего бота, которая должна заканчиваться на <span>"bot"</span> (пример: <span>"example_bot"</span>)',
-    imgUrl: "/img/instruction/step_4.jpeg",
+    imgUrl: "/img/instruction/step_4.jpg",
   },
   {
     text: "После успешного создания бота <span>@BotFather</span> выдаст вам <span>token</span>. Это — ключ, который вы будете использовать для создания вашего бота.",
-    imgUrl: "/img/instruction/step_5.jpeg",
+    imgUrl: "/img/instruction/step_5.jpg",
   },
   {
     text: "Сохраните <span>токен</span>, полученный от <span>@BotFather</span>. Он будет необходим для создания бота.",
