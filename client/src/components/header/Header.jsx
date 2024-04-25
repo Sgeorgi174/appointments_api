@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import iconLogo from "/icons/header_icon.svg";
-import iconLogout from "/icons/logout.svg";
+import LogoutIcon from "@mui/icons-material/Logout";
 import styles from "./Header.module.css";
 
-export const Header = ({ firstLetter }) => {
+export const Header = () => {
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
@@ -11,21 +11,14 @@ export const Header = ({ firstLetter }) => {
           <img className={styles.iconLogo} src={iconLogo}></img>
         </Link>
         <div className={styles.headerRight}>
-          <div className={styles.avatar}>
-            <p className={styles.avatarText}>{firstLetter[0]}</p>
-          </div>
           <Link
             onClick={() => {
-              localStorage.removeItem("token");
+              localStorage.removeItem("user");
             }}
             to="/login"
             className={styles.link}
           >
-            <img
-              className={styles.iconLogout}
-              src={iconLogout}
-              alt="icon_logout"
-            />
+            <LogoutIcon sx={{ color: "#fff" }} />
           </Link>
         </div>
       </nav>

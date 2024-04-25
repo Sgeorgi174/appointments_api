@@ -1,8 +1,9 @@
 import { Navigate } from "react-router-dom";
 
 const isAuthenticated = () => {
-  const token = localStorage.getItem("token");
-  return token ? true : false;
+  const userData = localStorage.getItem("user");
+  const user = JSON.parse(userData);
+  return user.token ? true : false;
 };
 
 export const PrivateRoute = ({ element }) => {

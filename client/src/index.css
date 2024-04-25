@@ -26,13 +26,9 @@ button {
   color: #333;
 }
 
-button:active {
-  transform: scale(1.1);
-}
-
 body {
-  background-color: #f2f2f2;
-  color: #333;
+  background-color: #141c33;
+  color: #fff;
 
   font-family: "Golos Text", sans-serif;
   font-style: normal;
@@ -49,4 +45,16 @@ textarea {
 
 input file-upload-button {
   background-color: blue;
+}
+
+.Mui-selected svg {
+  color: #20c997;
+}
+
+.MuiLoadingButton-loading {
+  background-color: #babbbb !important;
+}
+
+.files-ui-file-card-main-container {
+  background-color: rgb(232, 231, 231);
 }

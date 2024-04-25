@@ -1,10 +1,12 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-// const BASE_URL = "http://localhost:8000/api";
+// const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = "http://localhost:8000/api";
 
 const getToken = () => {
-  return localStorage.getItem("token");
+  const userData = localStorage.getItem("user");
+  const user = JSON.parse(userData);
+  return user.token;
 };
 
 const sendRequest = async ({ method, url, data }) => {

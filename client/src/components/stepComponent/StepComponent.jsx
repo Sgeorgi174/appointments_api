@@ -8,18 +8,12 @@ import { Step_3 } from "./Step_3";
 import { Step_4 } from "./Step_4";
 import { Step_5 } from "./Step_5";
 import styles from "./StepComponent.module.css";
+import { useCheckTokenMutation } from "../../redux/botTokenApi";
 
 export const StepComponent = ({ botSetting, setIsCreated, setBotSetting }) => {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  const {
-    step,
-    nextStep,
-    prevStep,
-    error,
-    setErrorState,
-    localError,
-    setLocalErrorState,
-  } = useSteps(0);
+  const { step, nextStep, prevStep, error, setErrorState } = useSteps(0);
+  const [checkToken, { isLoading }] = useCheckTokenMutation();
 
   useEffect(() => {
     if (step === 0) {
@@ -51,24 +45,15 @@ export const StepComponent = ({ botSetting, setIsCreated, setBotSetting }) => {
     prevStep();
   };
 
-  const handleContinueClick = () => {
+  const handleContinueClick = async () => {
     if (step === 1) {
-      fetch(`https://api.telegram.org/bot${botSetting.botToken}/getMe`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.ok) {
-            setLocalErrorState(false);
-            setErrorState(false);
-            nextStep();
-          } else {
-            setLocalErrorState(true);
-            console.log(localError);
-            setErrorState(true);
-          }
-        })
-        .catch((error) => {
-          console.error("Ошибка:", error);
-        });
+      try {
+        await checkToken(botSetting.botToken).unwrap();
+        setErrorState(false);
+        nextStep();
+      } catch (error) {
+        setErrorState(true);
+      }
     } else if (step < 4) {
       nextStep();
     } else {
@@ -87,31 +72,23 @@ export const StepComponent = ({ botSetting, setIsCreated, setBotSetting }) => {
     />,
     <Step_2
       key={"step_2"}
-      localError={localError}
       setBotSetting={setBotSetting}
       botSetting={botSetting}
-      setLocalErrorState={setErrorState}
     />,
     <Step_3
       key={"step_3"}
-      localError={localError}
       botSetting={botSetting}
       setBotSetting={setBotSetting}
-      setLocalErrorState={setLocalErrorState}
     />,
     <Step_4
       key={"step_4"}
-      localError={localError}
       botSetting={botSetting}
       setBotSetting={setBotSetting}
-      setLocalErrorState={setLocalErrorState}
     />,
     <Step_5
       key={"step_5"}
-      localError={localError}
       botSetting={botSetting}
       setBotSetting={setBotSetting}
-      setLocalErrorState={setLocalErrorState}
     />,
   ];
 

@@ -13,7 +13,7 @@ import { UserLayout } from "./components/userLayout/UserLayout";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <PrivateRoute path="/" element={<UserLayout />} />,
+    element: <PrivateRoute path="/" element={<UserLayout />} />, //element: <UserLayout />,
     errorElement: <Login />,
     children: [
       { path: "", element: <Home /> },

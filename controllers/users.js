@@ -44,7 +44,7 @@ const login = async (req, res) => {
     res.status(200).json({
       id: user.id,
       email: user.email,
-      name: user.name,
+      name: user.firstName,
       token,
     });
   } catch (error) {
@@ -55,10 +55,6 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   const { email, firstName, password } = req.body;
-
-  console.log(email);
-  console.log(firstName);
-  console.log(password);
 
   try {
     // Проверка обязательных полей

@@ -1,28 +1,37 @@
 import { useEffect, useState } from "react";
 import { TelegramWindow } from "../telegramWindow/TelegramWindow";
-import { GradientButton } from "../gradientButton/GradientButton";
 import { InputForSettings } from "../inputForSettings/InputForSettings";
 import { editSettings } from "../../modules/api_requests";
 import { createFormDateForSetting } from "../../utils/createFormDateForSetting";
 import { ModalSettings } from "../modalSettings/ModalSettings";
 import { ImageUploader } from "../uploadImage/ImageUploader";
-import { QuestionCircleFilled } from "@ant-design/icons";
+import HelpIcon from "@mui/icons-material/Help";
 import styles from "./SettingsPage.module.css";
-
-const tabsButtons = ["Токен", "Контакты", "Приветствие", "Уведомления"];
+import { SettingsTabs } from "../settingsTabs/SettingsTabs";
+import { useCheckTokenMutation } from "../../redux/botTokenApi";
+import { CustomGradientButton } from "../customGradientButton/CustomGradientButton";
 
 export const SettingsPage = ({ botSetting, setBotSetting }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [checkToken, { isLoading }] = useCheckTokenMutation();
 
-  const handelClickEdit = () => {
+  const handelClickEdit = async () => {
     if (isEdit) {
-      editSettings(createFormDateForSetting(botSetting)).then((data) => {
-        setBotSetting({ ...botSetting, data });
-        setIsEdit(!isEdit);
-      });
+      if (activeTab === 0) {
+        try {
+          await checkToken(botSetting.botToken).unwrap();
+          setError(false);
+          const data = await editSettings(createFormDateForSetting(botSetting));
+          setBotSetting({ ...botSetting, data });
+          setIsEdit(!isEdit);
+        } catch (error) {
+          setError(true);
+          return;
+        }
+      }
     } else {
       setIsEdit(!isEdit);
     }
@@ -34,10 +43,10 @@ export const SettingsPage = ({ botSetting, setBotSetting }) => {
 
   const [prevBotSetting, setPrevBotSetting] = useState(botSetting);
 
-  const handleClickActiveTab = (index) => {
+  const handleChange = (event, newValue) => {
     setBotSetting(prevBotSetting);
-    setActiveTab(index);
     setIsEdit(false);
+    setActiveTab(newValue);
   };
 
   return (
@@ -48,28 +57,13 @@ export const SettingsPage = ({ botSetting, setBotSetting }) => {
       />
       <div className={styles.titleBox}>
         <h1 className={styles.settingsTitle}>Настройки бота </h1>
-        <QuestionCircleFilled
+        <HelpIcon
           role="button"
           className={styles.helpIcon}
           onClick={() => setIsModalOpen(true)}
         />
       </div>
-
-      <div className={styles.settingsTabsBox}>
-        {tabsButtons.map((el, index) => {
-          return (
-            <button
-              key={index}
-              onClick={() => handleClickActiveTab(index)}
-              className={`${styles.settingTab} ${
-                activeTab === index ? styles.activeTab : ""
-              }`}
-            >
-              {el}
-            </button>
-          );
-        })}
-      </div>
+      <SettingsTabs value={activeTab} handleChange={handleChange} />
       {activeTab !== 0 ? (
         <TelegramWindow
           imageLink={
@@ -189,9 +183,10 @@ export const SettingsPage = ({ botSetting, setBotSetting }) => {
         </div>
       )}
       <div className={styles.buttonRow}>
-        <GradientButton
-          buttonName={isEdit ? "Сохранить" : "Редактировать"}
+        <CustomGradientButton
+          isLoading={isLoading}
           onClick={handelClickEdit}
+          buttonName={isEdit ? "Сохранить" : "Редактировать"}
         />
       </div>
     </div>

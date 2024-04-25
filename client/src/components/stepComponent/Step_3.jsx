@@ -5,17 +5,14 @@ import styles from "./StepComponent.module.css";
 
 export const Step_3 = ({
   botSetting,
-  localError,
+
   setBotSetting,
-  setLocalErrorState,
 }) => {
   return (
     <div className={`${styles.settingBox} ${styles.slideInRight}`}>
       <p className={styles.title}>2. Введите ваши контактные данные</p>
       <TelegramWindow text={botSetting.address} command={"address"} />
       <InputForSettings
-        localError={localError}
-        setLocalErrorState={setLocalErrorState}
         placeHolder={"Адрес"}
         value={botSetting.address}
         setBotSetting={setBotSetting}

@@ -1,51 +1,55 @@
-import { Link } from "react-router-dom";
-import { ControlButton } from "../../components/controlButton/ControlButton";
-import { GradientButton } from "../../components/gradientButton/GradientButton";
-import { useEffect, useState } from "react";
-import { startBot, stopBot } from "../../modules/api_requests";
+import { Zoom } from "@mui/material";
+import { currentTime } from "../../utils/slicers";
 import styles from "./Home.module.css";
-import { useUser } from "../../hooks/useUser";
+import { useState, useEffect } from "react";
 
 export const Home = () => {
-  const [isStartedbot, setIsStartedBot] = useState(false);
-  const { user } = useUser();
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      setIsStartedBot(user.isStartBot);
-    }
-  }, [user]);
+    const timer = setTimeout(() => {
+      setChecked(true);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const handleStartBot = () => {
-    if (isStartedbot) {
-      stopBot();
-      setIsStartedBot(!isStartedbot);
-    } else {
-      startBot();
-      setIsStartedBot(!isStartedbot);
-    }
-  };
   return (
-    <div className={styles.buttons}>
-      <Link to="/appointments">
-        <ControlButton buttonName={"Мои записи"} />
-      </Link>
-      <Link to="/bot-setting">
-        <ControlButton buttonName={"Настроить бота"} />
-      </Link>
-      <Link to="/schedule">
-        <ControlButton buttonName={"Расписание"} />
-      </Link>
-      <Link to="/services">
-        <ControlButton buttonName={"Услуги"} />
-      </Link>
-
-      <div className={styles.botButtonBox}>
-        <GradientButton
-          buttonName={isStartedbot ? "Остановить бота" : "Запустить бота"}
-          stopBot={isStartedbot}
-          onClick={handleStartBot}
-        />
+    <div className={styles.content}>
+      <h1 className={styles.title}>Добро пожаловать!</h1>
+      <div className={styles.dialogBox}>
+        <div className={styles.firstRow}>
+          <Zoom in={checked} timeout={500}>
+            {
+              <div className={styles.startMessage}>
+                <p className={styles.text}>/start</p>
+                <p className={styles.time}>{currentTime()}</p>
+              </div>
+            }
+          </Zoom>
+        </div>
+        <Zoom in={checked} timeout={1000}>
+          <div className={styles.secondRow}>
+            <img className={styles.imgBot} src="./img/bot_mobile.jpeg" alt="" />
+            <div className={styles.secondMessage}>
+              <p className={styles.text}>
+                Всего 3 простых шага<br></br> и мы можем начинать работу !
+              </p>
+              <div className={styles.timeRow}>
+                <p className={styles.time}>{currentTime()}</p>
+              </div>
+            </div>
+            <div className={styles.thirdMessage}>
+              <p className={styles.text}>
+                1. Добавьте свои услуги <br />
+                2. Создайте свое расписание <br />
+                3. Настройте своего бота
+              </p>
+              <div className={styles.timeRow}>
+                <p className={styles.time}>{currentTime()}</p>
+              </div>
+            </div>
+          </div>
+        </Zoom>
       </div>
     </div>
   );

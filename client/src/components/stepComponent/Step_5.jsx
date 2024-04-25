@@ -5,9 +5,8 @@ import styles from "./StepComponent.module.css";
 
 export const Step_5 = ({
   botSetting,
-  localError,
+
   setBotSetting,
-  setLocalErrorState,
 }) => {
   return (
     <div className={`${styles.settingBox} ${styles.slideInRight}`}>
@@ -17,8 +16,6 @@ export const Step_5 = ({
         command={"notification"}
       />
       <InputForSettings
-        localError={localError}
-        setLocalErrorState={setLocalErrorState}
         placeHolder={"Текст уведомления"}
         value={botSetting.notificationText}
         setBotSetting={setBotSetting}

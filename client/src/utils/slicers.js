@@ -23,3 +23,8 @@ export function formatDateYYYYMMDD(date) {
   const formatDate = format(date, "yyyy-MM-dd", { formatStr: "string" });
   return String(formatDate);
 }
+
+export const currentTime = () => {
+  const now = new Date();
+  return format(now, "HH:mm");
+};

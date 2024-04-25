@@ -3,11 +3,10 @@
 .telegramWindowExample {
   margin-top: 10px;
   margin-bottom: 15px;
-  background-color: #191d1c;
+  background-color: #fff;
   min-height: 440px;
   width: 207px;
   border-radius: 15px;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .header {
@@ -26,7 +25,7 @@
 .headerText {
   font-size: 9px;
   font-weight: 500;
-  color: #fff;
+  color: #333;
   font-weight: 500;
 }
 
@@ -133,12 +132,12 @@
 .footerText {
   font-size: 9px;
   font-weight: 500;
-  color: rgb(130, 132, 137);
+  color: #333;
 }
 
 .centerFooter {
   width: 163px;
   padding: 5px;
-  background-color: #070707;
+  background-color: #d3d3d3;
   border-radius: 10px;
 }

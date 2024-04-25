@@ -1,65 +1,71 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../modules/api_requests";
-import { GradientButton } from "../../components/gradientButton/GradientButton";
 import { Wrapper } from "../../components/wrapper/Wrapper";
-import { InputForAuth } from "../../components/inputForAuth/InputForAuth";
-import icon from "/icons/header_icon.svg";
+import { TextField } from "@mui/material";
+import { useLoginUserMutation } from "../../redux/authApi";
+import { CustomGradientButton } from "../../components/customGradientButton/CustomGradientButton";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/authSlice";
 import styles from "./Login.module.css";
 
 export const Login = () => {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const [isError, setIsError] = useState(false);
+  const [loginUser, { data: user, isLoading, isError }] =
+    useLoginUserMutation();
+
+  const dispatch = useDispatch();
   let navigate = useNavigate();
 
-  // useEffect(() => {
-  //   setIsError(false);
-  // }, [loginData]);
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      dispatch(setUser({ token: user.token, name: user.name }));
+      navigate("/");
+    }
+  }, [user]);
+
+  const onChangeInput = (event) => {
+    const { name, value } = event.target;
+    setLoginData({ ...loginData, [name]: value });
+  };
+
+  const handleLoginClick = async () => {
+    await loginUser({
+      email: loginData.email,
+      password: loginData.password,
+    });
+  };
 
   return (
     <div>
       <Wrapper wrapperClass={"wrapperForMobile_auth"}>
         <p className={styles.title}>Welcome</p>
-        <img className={styles.icon} src={icon} alt="icon" />
-        <InputForAuth
-          setIsError={setIsError}
+        <TextField
+          id="email-input"
+          label="Email"
+          variant="standard"
+          sx={{ width: 250, mb: 3, mt: 5 }}
+          name="email"
+          type="text"
           value={loginData.email}
-          data={loginData}
-          setData={setLoginData}
-          name={"email"}
-          type={"text"}
-          placeHolder={"Email"}
+          onChange={(e) => onChangeInput(e)}
         />
-        <div className={styles.spaceInput}>
-          <InputForAuth
-            setIsError={setIsError}
-            value={loginData.password}
-            data={loginData}
-            setData={setLoginData}
-            name={"password"}
-            className={styles.input}
-            type={"password"}
-            placeHolder={"Пароль"}
-          />
-        </div>
-        <div className={styles.spaceButton}>
-          <GradientButton
-            isdDsabled={isError}
-            buttonName={"Войти"}
-            onClick={() => {
-              login(loginData)
-                .then((responseData) => {
-                  localStorage.setItem("token", responseData.token);
-                  navigate("/");
-                })
-                .catch(() => {
-                  setIsError(true);
-                  setLoginData({ email: "", password: "" });
-                  console.log("err");
-                });
-            }}
-          />
-        </div>
+        <TextField
+          id="password-input"
+          label="Пароль"
+          variant="standard"
+          sx={{ width: 250 }}
+          name="password"
+          type="password"
+          value={loginData.password}
+          onChange={(e) => onChangeInput(e)}
+        />
+        <CustomGradientButton
+          buttonName={"Войти"}
+          onClick={handleLoginClick}
+          isLoading={isLoading}
+        />
+
         <div className={styles.errorBox}>
           <p className={styles.error}>
             {isError ? `* (неверная почта или пароль)` : <br></br>}

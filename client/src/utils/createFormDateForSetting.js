@@ -1,6 +1,6 @@
 export const createFormDateForSetting = (botSettings) => {
   const formDate = new FormData();
-  formDate.append("botToken", botSettings.botToken);
+  formDate.append("botToken", botSettings.botToken.replace(/\s/g, ""));
   formDate.append("address", botSettings.address);
   formDate.append("greetingText", botSettings.greetingText);
   formDate.append("notificationText", botSettings.notificationText);

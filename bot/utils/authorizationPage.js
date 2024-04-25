@@ -13,7 +13,7 @@ const authorizationPage = async ({ bot, chatId }) => {
 };
 
 const sendAuthorizationData = async (email, password) => {
-  const url = "https://мои-записи.рф/api/user/login";
+  const url = "http://localhost:8000/api/user/login";
   const data = { email, password };
 
   const response = await axios.post(url, data);
@@ -21,7 +21,7 @@ const sendAuthorizationData = async (email, password) => {
 };
 
 const editSetting = async (chatId, settingId) => {
-  const url = "https://мои-записи.рф/api/bot/setting/addTid";
+  const url = "http://localhost:8000/api/bot/setting/addTid";
   const data = { telegramId: chatId, id: settingId };
 
   const response = await axios.put(url, data);

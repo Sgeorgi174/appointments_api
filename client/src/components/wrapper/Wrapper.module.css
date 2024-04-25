@@ -9,13 +9,12 @@
 
 .wrapper {
   max-width: 1200px;
-  background-color: #fff;
-  padding: 35px 15px 50px 15px;
   transition: all 0.3s ease;
 }
 
 .wrapperForMobile {
-  width: 100%;
+  padding: 15px 15px 100px 15px;
+  width: 100vw;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -23,6 +22,8 @@
 }
 
 .wrapperForMobile_auth {
+  padding: 35px 15px 50px 15px;
+  background-color: #fff;
   width: 90%;
   max-height: 650px;
   display: flex;
