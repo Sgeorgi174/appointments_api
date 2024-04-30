@@ -18,6 +18,7 @@ export const SelectsForSetTime = ({
         isDisabled={disabled}
         label="Начало"
         isRequired
+        defaultSelectedKeys={["10:00"]}
         name="start"
         selectedKeys={startTime}
         onSelectionChange={setStartTime}

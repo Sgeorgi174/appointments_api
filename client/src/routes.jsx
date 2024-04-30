@@ -9,7 +9,7 @@ import { Auth } from "./pages/login/Auth";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <UserLayout />, // element: <PrivateRoute path="/" element={<UserLayout />} />, //element: <UserLayout />,
+    element: <PrivateRoute path="/" element={<UserLayout />} />, //element: <UserLayout />, element: <UserLayout />,
     errorElement: <Auth />,
     children: [
       { path: "", element: <Appointments /> },

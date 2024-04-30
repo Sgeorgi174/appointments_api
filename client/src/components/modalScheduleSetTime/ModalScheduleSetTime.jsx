@@ -9,6 +9,11 @@ import {
 } from "@nextui-org/react";
 import { SelectsForSetTime } from "../selectsForSetTime/SelectsForSetTime";
 import { useState } from "react";
+import { timeToMinutes } from "../../utils/timeToMinutes";
+import {
+  useAddDaysMutation,
+  useDeleteDaysMutation,
+} from "../../redux/scheduleApi";
 
 let data = { dates: [], times: [] };
 
@@ -16,14 +21,16 @@ export const ModalScheduleSetTime = ({
   isOpen,
   onOpenChange,
   selectedDays,
-  setSchedule,
   setSelectedDays,
+  setSchedule,
 }) => {
-  const [startTime, setStartTime] = useState(new Set([]));
-  const [endTime, setEndTime] = useState(new Set([]));
-  const [startRest, setStartRest] = useState(new Set([]));
-  const [endRest, setEndRest] = useState(new Set([]));
+  const [startTime, setStartTime] = useState(new Set(["10:00"]));
+  const [endTime, setEndTime] = useState(new Set(["20:00"]));
+  const [startRest, setStartRest] = useState(new Set(["13:00"]));
+  const [endRest, setEndRest] = useState(new Set(["14:00"]));
   const [isRest, setIsRest] = useState(false);
+  const [addDays, { isLoading: isAddLoading }] = useAddDaysMutation();
+  const [deleteDays, { isLoading: isDeleteLoading }] = useDeleteDaysMutation();
   return (
     <Modal
       isOpen={isOpen}
@@ -63,26 +70,50 @@ export const ModalScheduleSetTime = ({
                 setEndTime={setEndRest}
               />
               <div className="flex justify-center mt-6">
-                <Button variant="bordered" color="danger">
+                <Button
+                  onPress={async () => {
+                    const schedule = await deleteDays(selectedDays).unwrap();
+                    setSchedule(schedule);
+                    setIsRest(false);
+                    setSelectedDays([]);
+                    onClose();
+                  }}
+                  variant="bordered"
+                  color="danger"
+                  isLoading={isDeleteLoading}
+                >
                   Сделать дни не рабочими
                 </Button>
               </div>
             </ModalBody>
             <ModalFooter className="flex justify-between">
-              <Button color="primary" variant="light" onPress={onClose}>
+              <Button
+                isDisabled={isAddLoading || isDeleteLoading}
+                color="primary"
+                variant="light"
+                onPress={onClose}
+              >
                 Отменить
               </Button>
               <Button
+                isDisabled={isDeleteLoading}
+                isLoading={isAddLoading}
                 color="secondary"
-                onPress={() => {
-                  data = selectedDays.map((el) => {
+                onPress={async () => {
+                  data = selectedDays.map((day) => {
                     return {
-                      date: el,
-                      startTime: startTime.anchorKey,
-                      endTime: endTime.anchorKey,
+                      date: day,
+                      startTime: timeToMinutes(startTime),
+                      endTime: timeToMinutes(endTime),
+                      startRest: isRest ? timeToMinutes(startRest) : null,
+                      endRest: isRest ? timeToMinutes(endRest) : null,
                     };
                   });
-                  setSchedule(data);
+                  console.log(data);
+                  const schedule = await addDays(data).unwrap();
+
+                  setSchedule(schedule);
+                  setIsRest(false);
                   setSelectedDays([]);
                   onClose();
                 }}

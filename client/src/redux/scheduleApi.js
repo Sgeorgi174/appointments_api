@@ -25,11 +25,21 @@ export const scheduleApi = createApi({
         };
       },
     }),
-    getCurrentSchedule: builder.query({
-      query: (id) => {
+    addDays: builder.mutation({
+      query: (body) => {
         return {
-          url: `get/${id}`,
-          method: "get",
+          url: "add",
+          method: "post",
+          body,
+        };
+      },
+    }),
+    deleteDays: builder.mutation({
+      query: (body) => {
+        return {
+          url: "delete",
+          method: "delete",
+          body,
         };
       },
     }),
@@ -37,10 +47,7 @@ export const scheduleApi = createApi({
 });
 
 export const {
-  useChangeAvailabilityDayMutation,
-  useChangeAvailabilityHourMutation,
-  useCreateScheduleMutation,
-  useDeleteScheduleMutation,
-  useGetCurrentScheduleQuery,
   useGetScheduleQuery,
+  useAddDaysMutation,
+  useDeleteDaysMutation,
 } = scheduleApi;

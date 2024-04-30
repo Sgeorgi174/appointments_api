@@ -12,8 +12,8 @@ datasource db {
 
 model User {
   id           Int               @id @default(autoincrement())
-  firstName    String            
-  email        String             @unique
+  firstName    String
+  email        String            @unique
   password     String
   botSettings  UserBotSettings[]
   appointments Appointment[]
@@ -59,7 +59,7 @@ model Client {
 model Appointment {
   id        Int      @id @default(autoincrement())
   day       String
-  hour      Int
+  startTime Int
   client    Client   @relation(fields: [clientId], references: [id]) // Связь с клиентом по ID
   clientId  Int // ID клиента
   service   Services @relation(fields: [serviceId], references: [id]) // Связь с услугой по ID
@@ -73,7 +73,7 @@ model Services {
   id           Int           @id @default(autoincrement())
   name         String
   cost         Int
-  duration     Int // Длительность услуги
+  duration     Int // Длительность услуги в минутах
   appointments Appointment[]
   user         User          @relation(fields: [userId], references: [id])
   userId       Int
@@ -85,7 +85,10 @@ model Date {
   date      String
   startTime Int
   endTime   Int
+  startRest Int?
+  endRest   Int?  
   User      User   @relation(fields: [userId], references: [id])
   userId    Int
-}
 
+  @@unique([date, userId])
+}
