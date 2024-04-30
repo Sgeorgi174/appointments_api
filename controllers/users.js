@@ -108,7 +108,7 @@ const register = async (req, res) => {
     res.status(201).json({
       id: user.id,
       email: user.email,
-      firstName: user.firstName,
+      name: user.firstName,
       token,
     });
   } catch (error) {

@@ -1,106 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
-import { AppointmentCard } from "../../components/appointmentCard/AppointmentCard";
 import {
-  confirmAppointment,
-  deleteAppointment,
-  getAppointments,
-} from "../../modules/api_requests";
-import { filterByOption } from "../../utils/sortAndFiltersForAppointments";
-import styles from "./Appointments.module.css";
-
-const tabsButtons = ["Сегодня", "Завтра", "Все", "В ожидании"];
+  useConfirmAppointmentMutation,
+  useDeleteAppointmentMutation,
+  useGetAppointmentsQuery,
+} from "../../redux/appointmentsApi";
+import { Loader } from "../../components/loader/Loader";
+import { useDispatch } from "react-redux";
+import { decrementNewAppointments } from "../../redux/appointmentsSlice";
 
 export const Appointments = () => {
-  const [activeTab, setActiveTab] = useState(0);
-  const [appointments, setAppointments] = useState([]);
-  const [filteredAppointments, setFilteredAppointments] = useState([]);
+  // const dispatch = useDispatch();
+  // const {
+  //   refetch,
+  //   data: appointmentsList,
+  //   isLoading: isAppointmentsListLoading,
+  //   isError,
+  // } = useGetAppointmentsQuery();
+  // const [confirmAppointment, { isLoading: isConfirmAppointmentLoading }] =
+  //   useConfirmAppointmentMutation();
+  // const [deleteAppointment, { isLoading: isDeleteAppointmentLoading }] =
+  //   useDeleteAppointmentMutation();
 
-  useEffect(() => {
-    getAppointments().then((data) => {
-      setAppointments(data);
-    });
-  }, []);
+  // if (isAppointmentsListLoading) return <Loader />;
 
-  useEffect(() => {
-    setFilteredAppointments(filterByOption(activeTab, appointments));
-  }, [activeTab, appointments]);
+  // if (isError) return <div>У вас пока нет записей</div>;
 
-  const handleClickActiveTab = (index) => {
-    setActiveTab(index);
-  };
-
-  const handleApprove = useCallback(async ({ appointment }) => {
-    try {
-      const data = await confirmAppointment({ id: appointment.id });
-      setAppointments((prevAppointments) =>
-        prevAppointments.map((item) =>
-          item.id === appointment.id ? data : item
-        )
-      );
-      setFilteredAppointments((prevFilteredAppointments) =>
-        prevFilteredAppointments.map((item) =>
-          item.id === appointment.id ? data : item
-        )
-      );
-    } catch (error) {
-      console.error(error);
-      // Обработка ошибок
-    }
-  }, []);
-
-  const handleDecline = useCallback(async ({ appointment }) => {
-    try {
-      await deleteAppointment({ id: appointment.id });
-      setAppointments((prevAppointments) =>
-        prevAppointments.filter((item) => item.id !== appointment.id)
-      );
-      setFilteredAppointments((prevFilteredAppointments) =>
-        prevFilteredAppointments.filter((item) => item.id !== appointment.id)
-      );
-    } catch (error) {
-      console.error(error);
-      // Обработка ошибок
-    }
-  }, []);
-
-  return (
-    <>
-      <h2 className={styles.title}>Мои записи</h2>
-      <div className={styles.daysButtonsBox}>
-        <div className={styles.settingsTabsBox}>
-          {tabsButtons.map((el, index) => {
-            return (
-              <button
-                key={index}
-                onClick={() => handleClickActiveTab(index)}
-                className={`${styles.settingTab} ${
-                  activeTab === index ? styles.activeTab : ""
-                }`}
-              >
-                {el}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-      <div className={styles.appointmentsBox}>
-        {filteredAppointments.map((appointment, index) => {
-          return (
-            <AppointmentCard
-              appointmentInfo={appointment}
-              key={appointment.id}
-              name={appointment.client.name}
-              relation={appointment.client.telNumber}
-              message={appointment.service.name}
-              date={`${appointment.day.split("-")[2]}.${
-                appointment.day.split("-")[1]
-              } - ${appointment.hour}:00`}
-              onApprove={() => handleApprove({ appointment, index })}
-              onDecline={() => handleDecline({ appointment, index })}
-            />
-          );
-        })}
-      </div>
-    </>
-  );
+  return <div>Мои Записи</div>;
 };

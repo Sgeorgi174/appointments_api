@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   margin: 0;
@@ -6,28 +9,13 @@
   box-sizing: border-box;
 }
 
-body,
-html,
-body > div {
-  height: 100%;
-}
-
 a {
   text-decoration: none;
   display: block;
 }
 
-button {
-  outline: none;
-  border: none;
-  font-family: "Golos Text", sans-serif;
-  font-style: normal;
-  background-color: transparent;
-  color: #333;
-}
-
 body {
-  background-color: #141c33;
+  background-color: #333;
   color: #fff;
 
   font-family: "Golos Text", sans-serif;
@@ -53,6 +41,10 @@ input file-upload-button {
 
 .MuiLoadingButton-loading {
   background-color: #babbbb !important;
+}
+
+.MuiDialog-paper {
+  background-color: #252525 !important;
 }
 
 .files-ui-file-card-main-container {

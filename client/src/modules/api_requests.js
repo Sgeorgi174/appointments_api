@@ -1,13 +1,8 @@
 import axios from "axios";
+import { getToken } from "../utils/getToken";
 
 // const BASE_URL = import.meta.env.VITE_BASE_URL;
 const BASE_URL = "http://localhost:8000/api";
-
-const getToken = () => {
-  const userData = localStorage.getItem("user");
-  const user = JSON.parse(userData);
-  return user.token;
-};
 
 const sendRequest = async ({ method, url, data }) => {
   try {
@@ -113,30 +108,6 @@ export const addService = async (addData) => {
     method: "POST",
     url: `${BASE_URL}/service/add`,
     data: addData,
-  });
-};
-
-//BOT SETTINGS
-export const createSettings = async (settingsData) => {
-  return sendRequest({
-    method: "POST",
-    url: `${BASE_URL}/bot/setting/add`,
-    data: settingsData,
-  });
-};
-
-export const getSettings = async () => {
-  return sendRequest({
-    method: "GET",
-    url: `${BASE_URL}/bot/setting/get`,
-  });
-};
-
-export const editSettings = async (settingsData) => {
-  return sendRequest({
-    method: "PUT",
-    url: `${BASE_URL}/bot/setting/edit`,
-    data: settingsData,
   });
 };
 

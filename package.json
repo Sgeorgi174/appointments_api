@@ -10,10 +10,7 @@
     "dev": "concurrently \"npm run server\" \"npm run studio\" \"npm run vite\""
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/material": "^5.15.15",
-    "@prisma/client": "^5.12.0",
+    "@prisma/client": "^5.13.0",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
@@ -28,8 +25,7 @@
     "multer": "^1.4.5-lts.1",
     "node-schedule": "^2.1.1",
     "node-telegram-bot-api": "^0.65.1",
-    "pm2": "^5.3.1",
-    "telegraf": "^4.16.3"
+    "pm2": "^5.3.1"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",

@@ -1,45 +1,47 @@
-import { useEffect, useState } from "react";
-import Calendar from "../../components/calendar/Calendar";
-import { getSchedule } from "../../modules/api_requests";
-import { CreateCalendar } from "../../components/createCalendar/CreateCalendar";
-import { Loader } from "../../components/loader/Loader";
-
-const createdOrNot = async () => {
-  const data = await getSchedule();
-  if (data.length === 0) {
-    // Здесь исправлено на data.length
-    return false;
-  }
-  return data;
-};
+import { useState } from "react";
+import { Calendar } from "../../components/calendar/Calendar";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { Button, useDisclosure } from "@nextui-org/react";
+import { ModalScheduleSetTime } from "../../components/modalScheduleSetTime/ModalScheduleSetTime";
 
 export const Schedule = () => {
-  const [created, setCreated] = useState(false);
-  const [userSchedule, setUserSchedule] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    setIsLoading(true);
-    createdOrNot().then((res) => {
-      if (res) {
-        setCreated(true);
-        setUserSchedule(res);
-        setIsLoading(false);
-      } else {
-        setCreated(false);
-        setIsLoading(false);
-      }
-    });
-  }, []);
-
+  const [selectedDays, setSelectedDays] = useState([]);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [schedule, setSchedule] = useState([]);
   return (
-    <>
-      {isLoading ? (
-        <Loader />
-      ) : created ? (
-        <Calendar isUser={true} data={userSchedule} />
-      ) : (
-        <CreateCalendar setCreated={setCreated} setIsLoading={setIsLoading} />
-      )}
-    </>
+    <div className="">
+      <div className={`p-3 h-16 flex justify-between items-center`}>
+        {selectedDays.length ? (
+          <Button
+            onClick={() => setSelectedDays([])}
+            variant="light"
+            color="primary"
+          >
+            Отменить
+          </Button>
+        ) : (
+          <div></div>
+        )}
+        {selectedDays.length ? (
+          <Button onClick={onOpen} color="secondary">
+            Править
+          </Button>
+        ) : (
+          <HelpOutlineIcon />
+        )}
+      </div>
+      <Calendar
+        selectedDays={selectedDays}
+        setSelectedDays={setSelectedDays}
+        schedule={schedule}
+      />
+      <ModalScheduleSetTime
+        setSelectedDays={setSelectedDays}
+        setSchedule={setSchedule}
+        selectedDays={selectedDays}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      />
+    </div>
   );
 };

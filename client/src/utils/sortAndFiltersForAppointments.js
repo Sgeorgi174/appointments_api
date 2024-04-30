@@ -1,7 +1,10 @@
 import { formatDateYYYYMMDD } from "./slicers.js";
 
 export const sortAppointments = (appointmentsArray) => {
-  return appointmentsArray.sort((a, b) => {
+  // Создаем копию массива
+  const copyOfAppointments = [...appointmentsArray];
+
+  return copyOfAppointments.sort((a, b) => {
     const dateComparison = new Date(a.day) - new Date(b.day);
     return dateComparison === 0 ? a.hour - b.hour : dateComparison;
   });

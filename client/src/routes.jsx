@@ -1,49 +1,32 @@
 import { createBrowserRouter } from "react-router-dom";
 import { PrivateRoute } from "./components/privateRoutes/PrivateRoutes";
-import { Home } from "./pages/home/Home";
-import { Login } from "./pages/login/Login";
-import { Regitser } from "./pages/register/Register";
 import { Schedule } from "./pages/schedule/Schedule";
 import { Appointments } from "./pages/appointments/Appointments";
-import { Services } from "./pages/services/Services";
 import { ClientPage } from "./pages/clientPage/ClientPage";
-import { BotSetting } from "./pages/botSetting/BotSetting";
 import { UserLayout } from "./components/userLayout/UserLayout";
+import { Auth } from "./pages/login/Auth";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <PrivateRoute path="/" element={<UserLayout />} />, //element: <UserLayout />,
-    errorElement: <Login />,
+    element: <UserLayout />, // element: <PrivateRoute path="/" element={<UserLayout />} />, //element: <UserLayout />,
+    errorElement: <Auth />,
     children: [
-      { path: "", element: <Home /> },
+      { path: "", element: <Appointments /> },
       {
         path: "/schedule",
         element: <Schedule />,
       },
       {
-        path: "/appointments",
-        element: <Appointments />,
-      },
-      {
-        path: "/services",
-        element: <Services />,
-      },
-      {
-        path: "/bot-setting",
-        element: <BotSetting />,
+        path: "/settings",
+        element: <div>Settings</div>,
       },
     ],
   },
   {
     path: "/login",
-    element: <Login />,
+    element: <Auth />,
   },
-  {
-    path: "/register",
-    element: <Regitser />,
-  },
-
   {
     path: "/appointment/:id",
     element: <ClientPage />,
