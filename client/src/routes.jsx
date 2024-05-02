@@ -5,6 +5,7 @@ import { Appointments } from "./pages/appointments/Appointments";
 import { ClientPage } from "./pages/clientPage/ClientPage";
 import { UserLayout } from "./components/userLayout/UserLayout";
 import { Auth } from "./pages/login/Auth";
+import { Settings } from "./pages/settings/Settings";
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/settings",
-        element: <div>Settings</div>,
+        element: <Settings />,
       },
     ],
   },
@@ -31,7 +32,6 @@ export const router = createBrowserRouter([
     path: "/appointment/:id",
     element: <ClientPage />,
   },
-
   {
     path: "*",
     element: <div>404</div>,

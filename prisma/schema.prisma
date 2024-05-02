@@ -19,18 +19,25 @@ model User {
   appointments Appointment[]
   services     Services[]
   dates        Date[]
-  isStartBot   Boolean           @default(false)
   clients      Client[]
+  bot          Bots[]
+  contactInfo  ContactInfo[]
+}
+
+model ContactInfo {
+  id        Int     @id @default(autoincrement())
+  address   String?
+  telNumber String?
+  instagram String?
+  vk        String?
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
 }
 
 model UserBotSettings {
   id                  Int     @id @default(autoincrement())
   botToken            String?
   telegramId          Int?
-  address             String?
-  telNumber           String?
-  socialNetwork       String?
-  addressFileUrl      String?
   greetingText        String?
   greetingFileUrl     String?
   notificationText    String?
@@ -41,16 +48,18 @@ model UserBotSettings {
 }
 
 model Bots {
-  id       Int      @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   exec     String
-  isActive Boolean?
+  isActive Boolean @default(false)
+  user     User    @relation(fields: [userId], references: [id])
+  userId   Int
 }
 
 model Client {
   id           Int           @id @default(autoincrement())
-  telegramId   Int?          @unique
-  name         String?
-  telNumber    String?
+  telegramId   Int?
+  name         String
+  telNumber    String
   appointments Appointment[]
   user         User          @relation(fields: [userId], references: [id])
   userId       Int // Клиент может иметь множество записей на прием
@@ -86,7 +95,7 @@ model Date {
   startTime Int
   endTime   Int
   startRest Int?
-  endRest   Int?  
+  endRest   Int?
   User      User   @relation(fields: [userId], references: [id])
   userId    Int
 

@@ -30,6 +30,7 @@ export const Schedule = () => {
           "0"
         )}`
     );
+    console.log(allDaysArray);
     return allDaysArray;
   };
 

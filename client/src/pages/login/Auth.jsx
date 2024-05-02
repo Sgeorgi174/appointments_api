@@ -29,14 +29,26 @@ export const Auth = () => {
 
   useEffect(() => {
     if (userLogin) {
-      dispatch(setUser({ token: userLogin.token, name: userLogin.name }));
+      dispatch(
+        setUser({
+          token: userLogin.token,
+          name: userLogin.name,
+          email: userLogin.email,
+        })
+      );
       navigate("/");
     }
   }, [userLogin]);
 
   useEffect(() => {
     if (userRegister) {
-      dispatch(setUser({ token: userRegister.token, name: userRegister.name }));
+      dispatch(
+        setUser({
+          token: userRegister.token,
+          name: userRegister.name,
+          email: userRegister.email,
+        })
+      );
       navigate("/");
     }
   }, [userRegister]);

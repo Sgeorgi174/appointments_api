@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   name: null,
   token: null,
+  email: null,
 };
 
 export const authSlice = createSlice({
@@ -15,10 +16,12 @@ export const authSlice = createSlice({
         JSON.stringify({
           name: action.payload.name,
           token: action.payload.token,
+          email: action.payload.email,
         })
       );
       state.name = action.payload.name;
       state.token = action.payload.token;
+      state.email = action.payload.email;
     },
   },
 });
