@@ -1,7 +1,7 @@
 const { prisma } = require("../prisma/prisma_client");
 
 const getServiceById = async (serviceId) => {
-  const service = await prisma.services.findUnique({
+  const service = await prisma.service.findUnique({
     where: { id: parseInt(serviceId) },
   });
 

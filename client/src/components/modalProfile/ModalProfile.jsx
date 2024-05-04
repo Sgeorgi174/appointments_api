@@ -38,6 +38,26 @@ export const ModalProfile = ({ isOpen, onOpenChange }) => {
       placement="top-center"
       onOpenChange={onOpenChange}
       className="min-h-screen"
+      motionProps={{
+        variants: {
+          enter: {
+            x: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          },
+          exit: {
+            x: 300,
+            opacity: 0,
+            transition: {
+              duration: 0.2,
+              ease: "easeIn",
+            },
+          },
+        },
+      }}
     >
       <ModalContent className="bg-[#2c2c2c]">
         {(onClose) => (

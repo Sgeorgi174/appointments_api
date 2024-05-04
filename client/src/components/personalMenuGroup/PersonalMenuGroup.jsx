@@ -4,9 +4,16 @@ import Person2Icon from "@mui/icons-material/Person2";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { ModalProfile } from "../modalProfile/ModalProfile";
+import { ModalServices } from "../modalSevices/ModalServices";
 
 export const PersonalMenuGroup = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isOpenServices,
+    onOpen: onOpenServices,
+    onOpenChange: onOpenChangeSevices,
+  } = useDisclosure();
+
   return (
     <div>
       <p className="mt-6 text-lg font-bold">Основные</p>
@@ -27,7 +34,10 @@ export const PersonalMenuGroup = () => {
         <div className="h-[1px] flex justify-end w-full">
           <div className="bg-[#454545] w-[80%] h-[1px]"></div>
         </div>
-        <Button className=" bg-transparent p-0 rounded-none">
+        <Button
+          onClick={onOpenServices}
+          className=" bg-transparent p-0 rounded-none"
+        >
           <div className="flex w-full justify-between  items-center p-2">
             <div className="flex  items-center gap-2">
               <div className="flex justify-center items-center w-[28px] h-[28px] bg-[#d1b20e] rounded">
@@ -60,6 +70,10 @@ export const PersonalMenuGroup = () => {
         </Button>
       </div>
       <ModalProfile isOpen={isOpen} onOpenChange={onOpenChange} />
+      <ModalServices
+        isOpen={isOpenServices}
+        onOpenChange={onOpenChangeSevices}
+      />
     </div>
   );
 };
