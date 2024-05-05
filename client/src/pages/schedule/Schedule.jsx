@@ -16,7 +16,18 @@ export const Schedule = () => {
     onOpenChange: onOpenChangeHelp,
   } = useDisclosure();
   const [schedule, setSchedule] = useState([]);
-  const { data: scheduleData, isLoading } = useGetScheduleQuery();
+  const {
+    refetch,
+    isFetching,
+    data: scheduleData,
+    isLoading,
+  } = useGetScheduleQuery();
+
+  useEffect(() => {
+    if (scheduleData) {
+      setSchedule(scheduleData);
+    }
+  }, [scheduleData]);
 
   const chooseAllDays = () => {
     const year = new Date().getFullYear();
@@ -30,15 +41,8 @@ export const Schedule = () => {
           "0"
         )}`
     );
-    console.log(allDaysArray);
     return allDaysArray;
   };
-
-  useEffect(() => {
-    if (scheduleData) {
-      setSchedule(scheduleData);
-    }
-  }, [scheduleData]);
 
   if (isLoading) return <Loader />;
 
@@ -79,8 +83,9 @@ export const Schedule = () => {
         schedule={schedule}
       />
       <ModalScheduleSetTime
+        isFetching={isFetching}
+        refetch={refetch}
         setSelectedDays={setSelectedDays}
-        setSchedule={setSchedule}
         selectedDays={selectedDays}
         isOpen={isOpen}
         onOpenChange={onOpenChange}

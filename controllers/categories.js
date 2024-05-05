@@ -21,9 +21,7 @@ const addCategory = async (req, res) => {
       return res.status(500).json({ error: "Не получилось создать категории" });
     }
 
-    const categories = await getCategoriesByUserId(userId);
-
-    return res.status(201).json(categories);
+    return res.status(201).json(category);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Произошла ошибка на сервере" });
@@ -61,9 +59,7 @@ const editCategory = async (req, res) => {
       return res.status(400).json({ error: "Не удалось обновить категорию" });
     }
 
-    const categories = await getCategoriesByUserId(userId);
-
-    return res.status(201).json(categories);
+    return res.status(201).json(category);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Произошла ошибка на сервере" });
@@ -97,9 +93,7 @@ const deleteCategory = async (req, res) => {
       return res.status(400).json({ error: "Не удалось удалить категорию" });
     }
 
-    const categories = await getCategoriesByUserId(userId);
-
-    return res.status(201).json(categories);
+    return res.status(201).json(category);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Произошла ошибка на сервере" });

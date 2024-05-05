@@ -8,38 +8,35 @@ import {
 } from "@nextui-org/react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddIcon from "@mui/icons-material/Add";
-import { ModalAddCategory } from "../modalAddCategory/ModalAddCategory";
-import { ModalCurrentCategory } from "../modalCurrentCategory/ModalCurrentCategory";
-import { useCallback, useState } from "react";
+import { ModalAddService } from "../modalAddService/modalAddService";
+import { ModalCurrentService } from "../modalCurrentService/ModalCurrentService";
+import { useState } from "react";
 
-export const ModalServicesCategory = ({
+export const ModalSelectedCategory = ({
   isOpen,
   onOpenChange,
-  categories,
+  category,
   refetch,
   isFetching,
 }) => {
-  const [selectCategory, setSelectCategory] = useState({});
-
   const {
-    isOpen: isOpenAddCategory,
-    onOpen: onOpenAddCategory,
-    onOpenChange: onOpenChangeAddCategory,
+    isOpen: isOpenAddService,
+    onOpen: onOpenAddService,
+    onOpenChange: onOpenChangeAddService,
   } = useDisclosure();
 
   const {
-    isOpen: isOpenCurrentCategory,
-    onOpen: onOpenCurrentCategory,
-    onOpenChange: onOpenChangeCurrentCategory,
+    isOpen: isOpenSelectedService,
+    onOpen: onOpenSelectedService,
+    onOpenChange: onOpenChangeSelectedService,
   } = useDisclosure();
 
-  const handleClickEdit = useCallback(
-    (category) => {
-      setSelectCategory(category);
-      onOpenCurrentCategory(true);
-    },
-    [onOpenCurrentCategory]
-  );
+  const [selectedService, setSelectedService] = useState({});
+
+  const handleClickSelectService = (service) => {
+    setSelectedService(service);
+    onOpenSelectedService(true);
+  };
 
   return (
     <Modal
@@ -76,29 +73,29 @@ export const ModalServicesCategory = ({
               <div>
                 <ArrowBackIosIcon onClick={onClose} />
               </div>
-              <p className="text-center">Категории</p>
+              <p className="text-center">{category.name}</p>
               <Button
                 size="sm"
                 className=" rounded-full p-0 min-w-8"
                 color="secondary"
-                onClick={onOpenAddCategory}
+                onClick={onOpenAddService}
               >
                 <AddIcon />
               </Button>
             </ModalHeader>
             <ModalBody className="flex mt-5 flex-col items-start">
-              <p className=" mt-3">Категории</p>
+              <p className=" mt-3">Услуги</p>
               <div className="flex flex-col w-full gap-2">
-                {categories.map((el, index) => {
+                {category.services.map((service) => {
                   return (
                     <Button
-                      key={`${el.name}-${index}`}
+                      onClick={() => handleClickSelectService(service)}
+                      key={service.id}
                       className=" bg-[#313131] w-full p-0 rounded-lg"
-                      onClick={() => handleClickEdit(el)}
                     >
                       <div className="flex w-full justify-between  items-center p-3">
                         <div className="flex  items-center gap-2">
-                          <p className="text-white">{el.name}</p>
+                          <p className="text-white">{service.name}</p>
                         </div>
                       </div>
                     </Button>
@@ -109,18 +106,19 @@ export const ModalServicesCategory = ({
           </>
         )}
       </ModalContent>
-      <ModalAddCategory
+      <ModalAddService
         isFetching={isFetching}
         refetch={refetch}
-        isOpen={isOpenAddCategory}
-        onOpenChange={onOpenChangeAddCategory}
+        category={category}
+        isOpen={isOpenAddService}
+        onOpenChange={onOpenChangeAddService}
       />
-      <ModalCurrentCategory
+      <ModalCurrentService
         isFetching={isFetching}
         refetch={refetch}
-        isOpen={isOpenCurrentCategory}
-        onOpenChange={onOpenChangeCurrentCategory}
-        category={selectCategory}
+        isOpen={isOpenSelectedService}
+        onOpenChange={onOpenChangeSelectedService}
+        service={selectedService}
       />
     </Modal>
   );

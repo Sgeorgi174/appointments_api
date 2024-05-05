@@ -10,15 +10,19 @@ import {
 import { useState } from "react";
 import { useAddCategoryMutation } from "../../redux/categoriesApi";
 
-export const ModalAddCategory = ({ isOpen, onOpenChange, setCategories }) => {
+export const ModalAddCategory = ({
+  isOpen,
+  onOpenChange,
+  refetch,
+  isFetching,
+}) => {
   const [name, setName] = useState("");
   const [addCategory, { isLoading }] = useAddCategoryMutation();
 
   const handleClickAdd = async () => {
     try {
-      const categories = await addCategory({ name }).unwrap();
-      console.log(categories);
-      setCategories(categories);
+      await addCategory({ name });
+      await refetch();
       setName("");
       onOpenChange(false);
     } catch (error) {
@@ -29,7 +33,9 @@ export const ModalAddCategory = ({ isOpen, onOpenChange, setCategories }) => {
   return (
     <Modal
       isOpen={isOpen}
-      placement="bottom-center"
+      backdrop="blur"
+      isDismissable={false}
+      placement="top-center"
       onOpenChange={onOpenChange}
     >
       <ModalContent className="bg-[#18181b]">
@@ -42,7 +48,7 @@ export const ModalAddCategory = ({ isOpen, onOpenChange, setCategories }) => {
             </ModalBody>
             <ModalFooter className="flex justify-between">
               <Button
-                isDisabled={isLoading}
+                isDisabled={isLoading || isFetching}
                 color="primary"
                 variant="light"
                 onPress={onClose}
@@ -50,7 +56,7 @@ export const ModalAddCategory = ({ isOpen, onOpenChange, setCategories }) => {
                 Отменить
               </Button>
               <Button
-                isLoading={isLoading}
+                isLoading={isLoading || isFetching}
                 color="secondary"
                 onClick={handleClickAdd}
               >

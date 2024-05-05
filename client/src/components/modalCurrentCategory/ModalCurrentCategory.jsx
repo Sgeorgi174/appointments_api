@@ -7,7 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   useDeleteCategoryMutation,
   useEditCategoryMutation,
@@ -17,57 +17,59 @@ export const ModalCurrentCategory = ({
   isOpen,
   onOpenChange,
   category,
-  setCategories,
+  refetch,
+  isFetching,
 }) => {
   const [name, setName] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [editCategory, { isLoading: isLoadingEditCatgory }] =
+  const [editCategory, { isLoading: isLoadingEditCategory }] =
     useEditCategoryMutation();
-  const [deleteCategory, { isLoading: isLoadingDeleteCatgory }] =
+  const [deleteCategory, { isLoading: isLoadingDeleteCategory }] =
     useDeleteCategoryMutation();
 
   useEffect(() => {
-    setName(category.name);
+    setName(category.name || "");
   }, [category.name]);
 
   useEffect(() => {
     setConfirmDelete(false);
   }, [isOpen]);
 
-  const handleClickEdit = async () => {
+  const handleClickEdit = useCallback(async () => {
     try {
-      const categories = await editCategory({
+      await editCategory({
         id: category.id,
         name: name,
-      }).unwrap();
-      setCategories(categories);
+      });
+      await refetch();
       onOpenChange(false);
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [editCategory, category.id, name, onOpenChange, refetch]);
 
   const handleClickConfirm = () => {
     setConfirmDelete(!confirmDelete);
   };
 
-  const handleClickDelete = async () => {
+  const handleClickDelete = useCallback(async () => {
     try {
-      console.log(category.id);
-      const categories = await deleteCategory({
+      await deleteCategory({
         id: category.id,
-      }).unwrap();
-      setCategories(categories);
+      });
+      await refetch();
       onOpenChange(false);
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [deleteCategory, category.id, onOpenChange, refetch]);
 
   return (
     <Modal
       isOpen={isOpen}
-      placement="bottom-center"
+      backdrop="blur"
+      isDismissable={false}
+      placement="top-center"
       onOpenChange={onOpenChange}
     >
       <ModalContent className="bg-[#18181b]">
@@ -83,7 +85,7 @@ export const ModalCurrentCategory = ({
               {!confirmDelete ? (
                 <Button
                   onClick={handleClickConfirm}
-                  isDisabled={isLoadingEditCatgory}
+                  isDisabled={isFetching || isLoadingEditCategory}
                   color="danger"
                 >
                   Удалить выбранную категорию
@@ -97,14 +99,14 @@ export const ModalCurrentCategory = ({
                 <div className="w-full">
                   <div className="flex justify-between mt-4">
                     <Button
-                      isDisabled={isLoadingDeleteCatgory}
+                      isDisabled={isFetching || isLoadingDeleteCategory}
                       onClick={handleClickConfirm}
                       color="primary"
                     >
                       Нет
                     </Button>
                     <Button
-                      isLoading={isLoadingDeleteCatgory}
+                      isLoading={isFetching || isLoadingDeleteCategory}
                       onClick={handleClickDelete}
                       color="danger"
                     >
@@ -117,7 +119,7 @@ export const ModalCurrentCategory = ({
                   <div className="flex justify-between">
                     <Button
                       isDisabled={
-                        isLoadingEditCatgory || isLoadingDeleteCatgory
+                        isLoadingEditCategory || isLoadingDeleteCategory
                       }
                       color="primary"
                       variant="light"
@@ -126,8 +128,8 @@ export const ModalCurrentCategory = ({
                       Отменить
                     </Button>
                     <Button
-                      isDisabled={isLoadingDeleteCatgory}
-                      isLoading={isLoadingEditCatgory}
+                      isDisabled={isLoadingDeleteCategory}
+                      isLoading={isFetching || isLoadingEditCategory}
                       color="secondary"
                       onClick={handleClickEdit}
                     >

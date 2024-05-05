@@ -12,6 +12,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ModalServicesCategory } from "../modalServicesCategory/ModalServicesCategory";
 import { useGetCategoriesQuery } from "../../redux/categoriesApi";
 import { useEffect, useState } from "react";
+import { ModalSelectedCategory } from "../modalSelectedCategory/ModalSelectedCategory";
 
 export const ModalServices = ({ isOpen, onOpenChange }) => {
   const {
@@ -19,14 +20,34 @@ export const ModalServices = ({ isOpen, onOpenChange }) => {
     onOpen: onOpenCategory,
     onOpenChange: onOpenChangeCategory,
   } = useDisclosure();
-  const { data: categoriesData } = useGetCategoriesQuery();
+
+  const {
+    isOpen: isOpenSelectedCategory,
+    onOpen: onOpenSelectedCategory,
+    onOpenChange: onOpenChangeSelectedCategory,
+  } = useDisclosure();
+  const { refetch, isFetching, data: categoriesData } = useGetCategoriesQuery();
   const [categories, setCategories] = useState([]);
+  const [setectedCategory, setSelectedCategory] = useState({});
 
   useEffect(() => {
     if (categoriesData) {
       setCategories(categoriesData);
+      setSelectedCategory((prevValue) => {
+        if (prevValue) {
+          const newCategory = categoriesData.find(
+            (category) => category.id === prevValue.id
+          );
+          return newCategory;
+        }
+      });
     }
   }, [categoriesData]);
+
+  const handleClickSelectCategory = (category) => {
+    setSelectedCategory(category);
+    onOpenSelectedCategory(true);
+  };
 
   return (
     <Modal
@@ -92,18 +113,21 @@ export const ModalServices = ({ isOpen, onOpenChange }) => {
 
               <p className=" mt-3">Список категорий</p>
               <div className="flex flex-col w-full gap-2">
-                {categories.map((el, index) => {
+                {categories.map((category) => {
                   return (
                     <Button
-                      key={`${el.name}-${index}`}
+                      key={category.id}
+                      onClick={() => handleClickSelectCategory(category)}
                       className=" bg-[#313131] w-full p-0 rounded-lg"
                     >
                       <div className="flex w-full justify-between  items-center p-3">
                         <div className="flex  items-center gap-2">
-                          <p className="text-white">{el.name}</p>
+                          <p className="text-white">{category.name}</p>
                         </div>
                         <div className=" flex items-center gap-2">
-                          <p className="text-[#939393]">{el.services.length}</p>
+                          <p className="text-[#939393]">
+                            {category.services.length}
+                          </p>
                           <ArrowForwardIosIcon
                             sx={{ width: 15, height: 15, color: "#ffff" }}
                           />
@@ -118,10 +142,18 @@ export const ModalServices = ({ isOpen, onOpenChange }) => {
         )}
       </ModalContent>
       <ModalServicesCategory
-        setCategories={setCategories}
+        isFetching={isFetching}
+        refetch={refetch}
         categories={categories}
         isOpen={isOpenCategory}
         onOpenChange={onOpenChangeCategory}
+      />
+      <ModalSelectedCategory
+        isFetching={isFetching}
+        refetch={refetch}
+        isOpen={isOpenSelectedCategory}
+        onOpenChange={onOpenChangeSelectedCategory}
+        category={setectedCategory}
       />
     </Modal>
   );

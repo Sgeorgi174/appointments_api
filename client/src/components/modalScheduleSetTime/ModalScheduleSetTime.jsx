@@ -22,7 +22,8 @@ export const ModalScheduleSetTime = ({
   onOpenChange,
   selectedDays,
   setSelectedDays,
-  setSchedule,
+  refetch,
+  isFetching,
 }) => {
   const [startTime, setStartTime] = useState(new Set(["10:00"]));
   const [endTime, setEndTime] = useState(new Set(["20:00"]));
@@ -72,15 +73,15 @@ export const ModalScheduleSetTime = ({
               <div className="flex justify-center mt-6">
                 <Button
                   onPress={async () => {
-                    const schedule = await deleteDays(selectedDays).unwrap();
-                    setSchedule(schedule);
+                    await deleteDays(selectedDays);
+                    await refetch();
                     setIsRest(false);
                     setSelectedDays([]);
                     onClose();
                   }}
                   variant="bordered"
                   color="danger"
-                  isLoading={isDeleteLoading}
+                  isLoading={isDeleteLoading || isFetching}
                 >
                   Сделать дни не рабочими
                 </Button>
@@ -88,7 +89,7 @@ export const ModalScheduleSetTime = ({
             </ModalBody>
             <ModalFooter className="flex justify-between">
               <Button
-                isDisabled={isAddLoading || isDeleteLoading}
+                isDisabled={isAddLoading || isDeleteLoading || isFetching}
                 color="primary"
                 variant="light"
                 onPress={onClose}
@@ -97,7 +98,7 @@ export const ModalScheduleSetTime = ({
               </Button>
               <Button
                 isDisabled={isDeleteLoading}
-                isLoading={isAddLoading}
+                isLoading={isAddLoading || isFetching}
                 color="secondary"
                 onPress={async () => {
                   data = selectedDays.map((day) => {
@@ -109,10 +110,8 @@ export const ModalScheduleSetTime = ({
                       endRest: isRest ? timeToMinutes(endRest) : null,
                     };
                   });
-                  console.log(data);
-                  const schedule = await addDays(data).unwrap();
-
-                  setSchedule(schedule);
+                  await addDays(data);
+                  await refetch();
                   setIsRest(false);
                   setSelectedDays([]);
                   onClose();
