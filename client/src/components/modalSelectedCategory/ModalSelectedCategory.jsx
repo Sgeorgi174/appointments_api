@@ -11,6 +11,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { ModalAddService } from "../modalAddService/modalAddService";
 import { ModalCurrentService } from "../modalCurrentService/ModalCurrentService";
 import { useState } from "react";
+import { convertTimeToString } from "../../utils/convertTimeToString";
+import Grid3x3Icon from "@mui/icons-material/Grid3x3";
+import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 
 export const ModalSelectedCategory = ({
   isOpen,
@@ -91,11 +95,40 @@ export const ModalSelectedCategory = ({
                     <Button
                       onClick={() => handleClickSelectService(service)}
                       key={service.id}
-                      className=" bg-[#313131] w-full p-0 rounded-lg"
+                      className=" bg-[#313131] w-full p-3 h-[65px] rounded-lg"
                     >
-                      <div className="flex w-full justify-between  items-center p-3">
-                        <div className="flex  items-center gap-2">
-                          <p className="text-white">{service.name}</p>
+                      <div className="flex flex-col w-full items-start">
+                        <div className="flex items-center">
+                          <div className="flex gap-1 items-center">
+                            <Grid3x3Icon
+                              sx={{ color: "#fff", width: 20, height: 20 }}
+                            />
+                            <p className="text-white">{service.name}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-5 mt-2 ml-7">
+                          <div className="flex gap-2 items-center">
+                            <div className="w-[17px] h-[17px] rounded-full bg-white flex justify-center items-center">
+                              <CurrencyRubleIcon
+                                sx={{
+                                  color: "#000",
+                                  width: 12,
+                                  height: 12,
+                                }}
+                              />
+                            </div>
+                            <p className="text-[#9d9d9d]">
+                              {service.cost.toLocaleString("ru-RU")} руб.
+                            </p>
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <AccessTimeFilledIcon
+                              sx={{ color: "#fff", width: 20, height: 20 }}
+                            />
+                            <p className="text-[#9d9d9d]">
+                              {convertTimeToString(service.duration)}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </Button>

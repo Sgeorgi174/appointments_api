@@ -59,7 +59,7 @@ export const ModalProfile = ({ isOpen, onOpenChange }) => {
         },
       }}
     >
-      <ModalContent className="bg-[#2c2c2c]">
+      <ModalContent className="bg-black">
         {(onClose) => (
           <>
             <ModalHeader className="flex justify-between items-center">
@@ -111,6 +111,7 @@ export const ModalProfile = ({ isOpen, onOpenChange }) => {
                   input: "group-data-[has-value=true]:text-white",
                 }}
               />
+              <div className="mt-10">В РАЗРАБОТКЕ!</div>
             </ModalBody>
           </>
         )}

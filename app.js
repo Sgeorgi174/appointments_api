@@ -38,6 +38,7 @@ app.use("/api/service", require("./routes/services"));
 app.use("/api/bot/setting", require("./routes/botSettings"));
 app.use("/api/bot", require("./routes/bot"));
 app.use("/api/category", require("./routes/categories"));
+app.use("/api/contact", require("./routes/contacts"));
 
 // // Указываем порт, на котором сервер будет слушать запросы
 // https.createServer(options, app).listen(443, () => {

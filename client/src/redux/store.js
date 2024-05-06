@@ -9,6 +9,7 @@ import { appointmentsApi } from "./appointmentsApi";
 import { scheduleApi } from "./scheduleApi";
 import { categoriesApi } from "./categoriesApi";
 import { servicesApi } from "./servicesApi";
+import { contactsInfoApi } from "./contactsInfoApi";
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     [scheduleApi.reducerPath]: scheduleApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [servicesApi.reducerPath]: servicesApi.reducer,
+    [contactsInfoApi.reducerPath]: contactsInfoApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -30,7 +32,8 @@ export const store = configureStore({
       appointmentsApi.middleware,
       scheduleApi.middleware,
       categoriesApi.middleware,
-      servicesApi.middleware
+      servicesApi.middleware,
+      contactsInfoApi.middleware
     ),
 });
 

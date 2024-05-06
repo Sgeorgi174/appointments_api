@@ -14,6 +14,7 @@ import {
   useDeleteServiceMutation,
   useEditServiceMutation,
 } from "../../redux/servicesApi";
+import { convertTimeToString } from "../../utils/convertTimeToString";
 
 const timeArr = [
   "30 мин",
@@ -63,12 +64,6 @@ export const ModalCurrentService = ({
     useEditServiceMutation();
   const [deleteService, { isLoading: isLoadingDeleteService }] =
     useDeleteServiceMutation();
-
-  const convertTimeToString = (time) => {
-    const hours = Math.floor(time / 60);
-    const minutes = time % 60;
-    return `${hours} ч${minutes === 0 ? "" : ` ${minutes} мин`}`;
-  };
 
   useEffect(() => {
     if (service.duration) {

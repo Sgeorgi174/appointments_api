@@ -5,6 +5,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { ModalProfile } from "../modalProfile/ModalProfile";
 import { ModalServices } from "../modalSevices/ModalServices";
+import { ModalContacts } from "../modalContacts/ModalContacts";
 
 export const PersonalMenuGroup = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -12,6 +13,11 @@ export const PersonalMenuGroup = () => {
     isOpen: isOpenServices,
     onOpen: onOpenServices,
     onOpenChange: onOpenChangeSevices,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenContacts,
+    onOpen: onOpenContacts,
+    onOpenChange: onOpenChangeContacts,
   } = useDisclosure();
 
   return (
@@ -55,7 +61,10 @@ export const PersonalMenuGroup = () => {
         <div className="h-[1px] flex justify-end w-full">
           <div className="bg-[#454545] w-[80%] h-[1px]"></div>
         </div>
-        <Button className=" bg-transparent p-0 rounded-none">
+        <Button
+          onClick={onOpenContacts}
+          className=" bg-transparent p-0 rounded-none"
+        >
           <div className="flex w-full justify-between items-center  p-2">
             <div className="flex items-center  gap-2">
               <div className="flex justify-center items-center w-[28px] h-[28px] bg-[#0064ff] rounded">
@@ -73,6 +82,10 @@ export const PersonalMenuGroup = () => {
       <ModalServices
         isOpen={isOpenServices}
         onOpenChange={onOpenChangeSevices}
+      />
+      <ModalContacts
+        isOpen={isOpenContacts}
+        onOpenChange={onOpenChangeContacts}
       />
     </div>
   );
