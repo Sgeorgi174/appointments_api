@@ -7,7 +7,12 @@ export default {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        iphoneBack: "url('/icons/tgWindow/iphoneBack.png')",
+        chatBackground: "url('/icons/tgWindow/chatBackground.jpeg')",
+      },
+    },
   },
   darkMode: "class",
   plugins: [nextui()],

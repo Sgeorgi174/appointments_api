@@ -17,20 +17,11 @@ export const botSettingsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    createSetting: builder.mutation({
+    addOrEditSetting: builder.mutation({
       query: (body) => {
         return {
           url: "add",
           method: "post",
-          body,
-        };
-      },
-    }),
-    editSetting: builder.mutation({
-      query: (body) => {
-        return {
-          url: "edit",
-          method: "put",
           body,
         };
       },
@@ -46,8 +37,5 @@ export const botSettingsApi = createApi({
   }),
 });
 
-export const {
-  useCreateSettingMutation,
-  useEditSettingMutation,
-  useGetSettingsQuery,
-} = botSettingsApi;
+export const { useAddOrEditSettingMutation, useGetSettingsQuery } =
+  botSettingsApi;

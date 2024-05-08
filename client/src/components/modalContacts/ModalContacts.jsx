@@ -17,19 +17,21 @@ import { Loader } from "../loader/Loader";
 import { formatPhoneNumber } from "../../utils/formatPhoneNumber";
 
 export const ModalContacts = ({ isOpen, onOpenChange }) => {
-  const {
-    refetch,
-    isFetching,
-    data: contactsData,
-    isLoading,
-  } = useGetContactQuery();
+  const [selectedItem, setSelectedItem] = useState({});
   const [contactsInfo, setContactsInfo] = useState({
     address: "",
     telNumber: "",
     instagram: "",
     vk: "",
   });
-  const [selectedItem, setSelectedItem] = useState({});
+
+  const {
+    refetch,
+    isFetching,
+    data: contactsData,
+    isLoading,
+  } = useGetContactQuery();
+
   const {
     isOpen: isOpenEditContacts,
     onOpen: onOpenEditContacts,

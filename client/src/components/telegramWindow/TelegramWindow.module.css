@@ -1,12 +1,10 @@
 /* BOT TG WINDOW */
 
 .telegramWindowExample {
-  margin-top: 10px;
-  margin-bottom: 15px;
   background-color: #fff;
   min-height: 440px;
   width: 207px;
-  border-radius: 15px;
+  border-radius: 20px;
 }
 
 .header {
@@ -44,7 +42,7 @@
 .content {
   height: 360px;
   overflow: auto;
-  background: url("/icons/tgWindow/tgBackground.jpeg");
+  background: url("/icons/tgWindow/chatBackground.jpeg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

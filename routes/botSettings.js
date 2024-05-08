@@ -1,37 +1,16 @@
 var express = require("express");
 const {
-  add,
+  addOrEditBotSettings,
   get,
-  edit,
   getCurrent,
   addTelegramId,
 } = require("../controllers/botSettings");
 const { auth } = require("../middleware/auth");
-const upload = require("../middleware/upload");
 var router = express.Router();
 
-router.post(
-  "/add",
-  auth,
-  upload.fields([
-    { name: "addressFile" },
-    { name: "greetingFile" },
-    { name: "notificationFile" },
-  ]),
-  add
-);
+router.post("/add", auth, addOrEditBotSettings);
 router.get("/get", auth, get);
 router.get("/get/:id", getCurrent);
-router.put(
-  "/edit",
-  auth,
-  upload.fields([
-    { name: "addressFile" },
-    { name: "greetingFile" },
-    { name: "notificationFile" },
-  ]),
-  edit
-);
 router.put("/addTid", addTelegramId);
 
 module.exports = router;
